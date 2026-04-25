@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RoadTo75 — Arquitectura</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0d0f0e;--surface:#141716;--surface2:#1c1f1d;--border:#2a2e2b;
+  --accent:#b5f037;--accent2:#37f0a8;--accent3:#f0a837;
+  --muted:#6b7068;--text:#e8ede9;--text2:#9fa89d;
+  --red:#f03737;--blue:#37a8f0;--purple:#a855f7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 80px}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:1px;line-height:.95}
+h1 em{color:var(--accent);font-style:normal}
+h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.5px;color:var(--text)}
+h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
+
+/* HERO */
+.hero{max-width:900px;margin:0 auto;padding:60px 24px 40px}
+.hero-sub{color:var(--text2);font-size:.95rem;margin-top:12px;line-height:1.7;max-width:520px}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:3px 10px;border-radius:20px;background:rgba(181,240,55,.12);color:var(--accent);border:1px solid rgba(181,240,55,.25);margin-bottom:16px}
+
+/* TABS */
+.tabs-wrap{max-width:900px;margin:0 auto;padding:0 24px}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);padding-bottom:0;flex-wrap:wrap}
+.tab{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;padding:9px 18px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;transition:all .18s;white-space:nowrap;margin-bottom:-1px}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* CONTENT */
+.content{max-width:900px;margin:0 auto;padding:32px 24px 0}
+.pane{display:none}.pane.active{display:block}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column}
+.step{display:flex;gap:14px}
+.step-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.num.teal{background:rgba(55,240,168,.15);color:var(--accent2);border:1px solid rgba(55,240,168,.3)}
+.num.purple{background:rgba(168,85,247,.15);color:#c084fc;border:1px solid rgba(168,85,247,.3)}
+.num.amber{background:rgba(240,168,55,.15);color:var(--accent3);border:1px solid rgba(240,168,55,.3)}
+.num.coral{background:rgba(240,55,55,.12);color:#f87171;border:1px solid rgba(240,55,55,.25)}
+.num.gray{background:rgba(107,112,104,.15);color:var(--text2);border:1px solid var(--border)}
+.vline{width:1px;flex:1;background:var(--border);margin:3px 0}
+.step-body{padding-bottom:22px;flex:1}
+.step-title{font-size:.9rem;font-weight:700;color:var(--text);line-height:32px}
+.step-desc{font-size:.82rem;color:var(--text2);line-height:1.7;margin-top:1px}
+.step-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px;vertical-align:middle}
+.tag-fb{background:rgba(251,188,4,.12);color:#fbbf24;border:1px solid rgba(251,188,4,.25)}
+.tag-ai{background:rgba(240,168,55,.12);color:var(--accent3);border:1px solid rgba(240,168,55,.25)}
+.tag-new{background:rgba(55,240,168,.12);color:var(--accent2);border:1px solid rgba(55,240,168,.25)}
+
+.box{margin-top:10px;padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--border)}
+.box-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.box-item{font-size:.8rem;color:var(--text2);padding:3px 0 3px 12px;position:relative;line-height:1.5}
+.box-item::before{content:'';position:absolute;left:2px;top:9px;width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.6}
+
+/* COLUMNS */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+@media(max-width:600px){.cols{grid-template-columns:1fr}}
+
+/* SUB-TABS (rutas dentro de Nuevo usuario) */
+.subtabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.subtab{font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:8px 16px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:7px}
+.subtab:hover{border-color:var(--text2);color:var(--text)}
+.subtab.active{background:var(--surface2);border-color:var(--accent);color:var(--accent)}
+.subtab .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.subtab.active .dot{background:var(--accent)}
+.subtab:not(.active) .dot{background:var(--muted)}
+.subpane{display:none}.subpane.active{display:block}
+.iniciopane{display:none}.iniciopane.active{display:block}
+
+/* TEMPLATE PREVIEW */
+.template-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px}
+.tpl-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.tpl-card-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.tpl-card-title .icon{font-size:.85rem}
+.tpl-slot{height:22px;border-radius:5px;background:var(--border);margin-bottom:5px;opacity:.45}
+.tpl-slot.short{width:60%}
+.tpl-slot.med{width:80%}
+.tpl-slot.full{width:100%}
+.tpl-label{font-size:.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px;margin-top:10px}
+.empty-badge{font-size:.65rem;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:10px;background:rgba(107,112,104,.15);color:var(--muted);border:1px solid var(--border);margin-left:auto}
+
+/* DAYS ROW */
+.days-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.day-pill{font-size:.68rem;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+.day-pill.filled{border-color:rgba(181,240,55,.3);color:var(--accent);background:rgba(181,240,55,.08)}
+
+/* TRAINING PLANS */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}
+.plan-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-align:center}
+.plan-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);line-height:1}
+.plan-label{font-size:.68rem;color:var(--text2);line-height:1.4;margin-top:2px}
+
+/* SHOPPING CATS */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.shop-cat{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.shop-cat-name{font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.shop-empty{font-size:.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;font-style:italic}
+
+/* STACK */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.stack-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s}
+.stack-card:hover{border-color:var(--accent)}
+.stack-layer{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.stack-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.5px;color:var(--text);margin-bottom:6px}
+.stack-why{font-size:.8rem;color:var(--text2);line-height:1.6}
+.stack-accent{color:var(--accent);font-weight:700}
+.stack-items{margin-top:10px;display:flex;flex-direction:column;gap:4px}
+.stack-item{font-size:.78rem;color:var(--text2);padding:4px 10px;background:var(--surface2);border-radius:6px;border-left:2px solid var(--accent);font-family:'JetBrains Mono',monospace;word-break:break-all;overflow-wrap:break-word}
+
+/* DIVIDER */
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:32px 0 16px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr}}
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
+.info-card h3{color:var(--accent2);margin-bottom:6px;font-size:1rem}
+.info-card p{font-size:.8rem;color:var(--text2);line-height:1.6}
+
+/* ARCH SINGLE CARD */
+.arch-root-badge{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:2px 8px;border-radius:10px;background:rgba(181,240,55,.1);color:var(--accent);border:1px solid rgba(181,240,55,.2);vertical-align:middle;margin-left:8px;font-weight:400}
+.arch-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.arch-card-header{padding:16px 20px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.arch-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.5px;color:var(--text)}
+.arch-card-body{padding:0}
+.arch-row{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--border)}
+.arch-row:last-child{border-bottom:none}
+.arch-row-left{padding:14px 16px;background:rgba(255,255,255,.015);border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:flex-start;gap:3px}
+.arch-row-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2)}
+.arch-row-path{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);margin-top:1px}
+.arch-row-right{padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.arch-entry{display:flex;align-items:baseline;gap:10px;padding:4px 8px;border-radius:5px;flex-wrap:wrap}
+.arch-entry:hover{background:rgba(255,255,255,.03)}
+.arch-ename{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--text);font-weight:600;flex-shrink:0}
+.arch-ename.is-folder{color:var(--accent2)}
+.arch-ecomment{font-size:.74rem;color:var(--muted);line-height:1.5}
+.arch-ehighlight{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:1px 6px;border-radius:5px;background:rgba(240,168,55,.1);color:var(--accent3);border:1px solid rgba(240,168,55,.2);font-weight:600;flex-shrink:0}
+@media(max-width:600px){.arch-row{grid-template-columns:1fr}.arch-row-left{border-right:none;border-bottom:1px solid var(--border)}}
+
+/* ROADMAP */
+.roadmap{display:flex;flex-direction:column;gap:24px}
+.phase{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.phase-header{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.phase-num{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--accent);line-height:1;width:28px;flex-shrink:0}
+.phase-info{flex:1}
+.phase-title{font-weight:700;font-size:.95rem;color:var(--text)}
+.phase-sub{font-size:.75rem;color:var(--muted);margin-top:1px}
+.phase-progress{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.prog-bar{width:80px;height:5px;background:var(--border);border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:10px;transition:width .3s}
+.prog-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);min-width:28px;text-align:right}
+.phase-steps{padding:6px 0}
+.ck-row{display:flex;align-items:flex-start;gap:12px;padding:10px 18px;cursor:pointer;transition:background .15s;user-select:none}
+.ck-row:hover{background:rgba(255,255,255,.03)}
+.ck-box{width:20px;height:20px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s}
+.ck-row.done .ck-box{background:var(--accent);border-color:var(--accent)}
+.ck-check{font-size:.75rem;color:#0d0f0e;font-weight:900;opacity:0;transition:opacity .2s}
+.ck-row.done .ck-check{opacity:1}
+.ck-content{flex:1}
+.ck-title{font-size:.85rem;font-weight:600;color:var(--text);line-height:1.4;transition:color .2s}
+.ck-row.done .ck-title{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(107,112,104,.5)}
+.ck-note{font-size:.75rem;color:var(--muted);margin-top:2px;line-height:1.5}
+.ck-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:1px 6px;border-radius:6px;margin-left:6px;vertical-align:middle;font-weight:600}
+.ck-tag.cmd{background:rgba(55,168,240,.1);color:var(--blue);border:1px solid rgba(55,168,240,.2)}
+.ck-tag.warn{background:rgba(240,168,55,.1);color:var(--accent3);border:1px solid rgba(240,168,55,.2)}
+.ck-tag.ai{background:rgba(240,168,55,.1);color:var(--accent3);border:1px solid rgba(240,168,55,.2)}
+.ck-tag.new{background:rgba(55,240,168,.1);color:var(--accent2);border:1px solid rgba(55,240,168,.2)}
+.ck-sep{height:1px;background:var(--border);margin:0 18px;opacity:.4}
+.roadmap-reset{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);background:transparent;border:1px solid var(--border);padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .2s}
+.roadmap-reset:hover{border-color:var(--red);color:var(--red)}
+.total-prog{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.total-prog-bar{flex:1;height:7px;background:var(--border);border-radius:10px;overflow:hidden}
+.total-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:10px;transition:width .4s}
+.total-prog-text{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text);flex-shrink:0}
+.total-prog-label{font-size:.8rem;color:var(--text2);flex-shrink:0}
+
+/* PLAN CARDS (Modelo IA) */
+.plan-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:32px}
+.plan-card-wrap{background:var(--surface);border-radius:12px;padding:20px;transition:border-color .2s;border:1px solid var(--border)}
+.plan-card-wrap.plan-free{border-color:var(--border)}
+.plan-card-wrap.plan-free:hover{border-color:var(--text2)}
+.plan-card-wrap.plan-single{border-color:var(--accent3)}
+.plan-card-wrap.plan-single:hover{border-color:#fbbf24}
+.plan-card-wrap.plan-pro{border-color:var(--accent)}
+.plan-card-wrap.plan-pro:hover{border-color:#d4f76e}
+.plan-card-wrap .stack-item.item-free{border-left-color:var(--muted)}
+.plan-card-wrap .stack-item.item-single{border-left-color:var(--accent3)}
+.plan-card-wrap .stack-item.item-pro{border-left-color:var(--accent)}
+
+/* FILE TREE */
+.tree-wrap{display:flex;flex-direction:column;gap:2px;font-family:'JetBrains Mono',monospace}
+.tree-root{font-size:.9rem;font-weight:700;color:var(--text);padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.tree-folder{border-left:1px solid var(--border);margin-left:12px;padding-left:16px;margin-top:2px}
+.tree-folder.tree-nested{margin-left:0;border-left:1px dashed rgba(107,112,104,.35);padding-left:14px;margin-top:4px}
+.tree-folder-label{font-size:.78rem;font-weight:700;color:var(--accent2);padding:6px 10px;background:rgba(55,240,168,.05);border-radius:7px;margin-bottom:4px;line-height:1.4}
+.tree-folder-desc{font-size:.7rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;margin-left:6px}
+.tree-files{display:flex;flex-direction:column;gap:3px;margin-left:14px;margin-bottom:6px}
+.tree-file{padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:7px;transition:border-color .15s}
+.tree-file:hover{border-color:rgba(181,240,55,.3)}
+.tree-file-name{font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:4px}
+.tree-file-desc{font-size:.78rem;color:var(--text2);line-height:1.6;font-family:'DM Sans',sans-serif}
+.tree-file-desc code{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);background:rgba(240,168,55,.1);padding:1px 5px;border-radius:4px}
+.tree-file-desc em{font-style:italic;color:var(--text)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">RoadTo75 — Arquitectura & Flujos</div>
+  <h1>De <em>index.html</em><br>a app real</h1>
+  <p class="hero-sub">Stack definitivo, flujos de usuario y estructura de proyecto para convertir RoadTo75 en una aplicación multi-usuario con IA integrada.</p>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="show('inicio')">🏠 Pantalla inicio</button>
+    <button class="tab" onclick="show('stack')">Stack definitivo</button>
+    <button class="tab" onclick="show('arch')">Estructura</button>
+    <button class="tab" onclick="show('roadmap')">🗺 Hoja de ruta</button>
+    <button class="tab" onclick="show('negocio')">💰 Modelo IA</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- PANTALLA INICIO -->
+<div class="pane active" id="p-inicio">
+
+  <div class="subtabs" style="margin-bottom:24px">
+    <button class="subtab active" onclick="showInicio('new')">
+      <span class="dot"></span>Nuevo usuario
+    </button>
+    <button class="subtab" onclick="showInicio('existing')">
+      <span class="dot"></span>Ya registrado
+    </button>
+    <button class="subtab" onclick="showInicio('guest')">
+      <span class="dot"></span>Modo prueba
+    </button>
+  </div>
+
+  <!-- NUEVO USUARIO -->
+  <div class="iniciopane active" id="ip-new">
+    <div class="section-label">Elige cómo empezar</div>
+
+    <div class="subtabs">
+      <button class="subtab active" onclick="showSub('ia')">
+        <span class="dot"></span>La IA genera mi plan
+      </button>
+      <button class="subtab" onclick="showSub('manual')">
+        <span class="dot"></span>Lo relleno yo mismo
+      </button>
+    </div>
+
+  <!-- SUB: IA -->
+  <div class="subpane active" id="sp-ia">
+    <div class="flow">
+      <div class="step">
+        <div class="step-left"><div class="num teal">01</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Página de bienvenida</div>
+          <div class="step-desc">Landing con tres opciones: <strong>Crear cuenta</strong>, <strong>Iniciar sesión</strong> y <strong>Probar sin cuenta</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">02</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Registro <span class="step-tag tag-fb">Firebase Auth</span></div>
+          <div class="step-desc">Email + contraseña o Google / Apple. Firebase genera el <code>uid</code>. Se crea un documento vacío en <code>Firestore /users/{uid}</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num purple">03</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Onboarding — paso 1 / 3</div>
+          <div class="step-desc">Datos personales: nombre, edad, peso, altura y sexo biológico.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num purple">04</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Onboarding — paso 2 / 3</div>
+          <div class="step-desc">Estilo de vida: nivel de actividad, días de entreno disponibles, equipamiento (gimnasio / casa / sin material).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num purple">05</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Onboarding — paso 3 / 3</div>
+          <div class="step-desc">Objetivo: volumen, definición, recomposición o mantenimiento. Restricciones alimentarias. Se elige <strong>«Generar con IA»</strong>. Todo se guarda en <code>/users/{uid}/profile</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">06</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Dashboard con plantilla vacía</div>
+          <div class="step-desc">Tarjetas en blanco. Banner prominente: <em>«Tu plan está listo para generarse con IA»</em>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num amber">07</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Generación del plan <span class="step-tag tag-ai">Gemini API</span></div>
+          <div class="step-desc">El usuario pulsa «Generar mi plan». La Cloud Function lee el perfil, construye el prompt y llama a <strong>Gemini Flash-Lite</strong>. Devuelve JSON estructurado que se guarda en Firestore. La llamada solo ocurre una vez por plan, no en cada visita.</div>
+          <div class="cols">
+            <div class="box">
+              <div class="box-title">Qué genera Gemini</div>
+              <div class="box-item">Menú semanal con comidas y macros</div>
+              <div class="box-item">Lista de la compra por categorías</div>
+              <div class="box-item">Plan de entreno con ejercicios y series</div>
+            </div>
+            <div class="box">
+              <div class="box-title">Por qué Cloud Function</div>
+              <div class="box-item">API key de Gemini nunca en el frontend</div>
+              <div class="box-item">Verifica que el usuario esté autenticado</div>
+              <div class="box-item">Solo puede generar su propio plan</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">08</div></div>
+        <div class="step-body">
+          <div class="step-title">App completamente funcional</div>
+          <div class="step-desc">Plan guardado en Firestore. Sync cross-device inmediato. Puede editar cualquier dato o regenerar secciones concretas en cualquier momento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUB: MANUAL -->
+  <div class="subpane" id="sp-manual">
+    <div class="flow">
+      <div class="step">
+        <div class="step-left"><div class="num teal">01</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Página de bienvenida</div>
+          <div class="step-desc">Igual que siempre: <strong>Crear cuenta</strong>, <strong>Iniciar sesión</strong> y <strong>Probar sin cuenta</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">02</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Registro <span class="step-tag tag-fb">Firebase Auth</span></div>
+          <div class="step-desc">Email + contraseña o Google / Apple. Firebase genera el <code>uid</code>. Se crea un documento vacío en <code>Firestore /users/{uid}</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num purple">03</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Onboarding — paso 1 / 3</div>
+          <div class="step-desc">Datos personales: nombre, edad, peso, altura y sexo biológico.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num purple">04</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Onboarding — paso 2 / 3</div>
+          <div class="step-desc">Estilo de vida: nivel de actividad, días disponibles, equipamiento.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num purple">05</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Onboarding — paso 3 / 3</div>
+          <div class="step-desc">Objetivo y restricciones. Se elige <strong>«Rellenar yo mismo»</strong>. Se guarda el perfil y se carga la plantilla <code>defaultUser.js</code> en Firestore.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">06</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Dashboard con plantilla lista para rellenar</div>
+          <div class="step-desc">El usuario aterriza en la app con todas las secciones ya creadas y organizadas, sin datos. Solo tiene que ir rellenando a su ritmo.</div>
+
+          <div class="section-label" style="margin-top:16px">Nutrición — 7 días × 4 comidas</div>
+          <div class="days-row">
+            <span class="day-pill filled">Lun</span><span class="day-pill filled">Mar</span><span class="day-pill filled">Mié</span><span class="day-pill filled">Jue</span><span class="day-pill filled">Vie</span><span class="day-pill filled">Sáb</span><span class="day-pill filled">Dom</span>
+          </div>
+          <div class="template-preview" style="margin-top:10px">
+            <div class="tpl-card">
+              <div class="tpl-card-title"><span class="icon">🌅</span> Desayuno <span class="empty-badge">vacío</span></div>
+              <div class="tpl-label">Alimentos</div>
+              <div class="tpl-slot full"></div><div class="tpl-slot med"></div>
+              <div class="tpl-label">Macros</div>
+              <div class="tpl-slot short"></div>
+            </div>
+            <div class="tpl-card">
+              <div class="tpl-card-title"><span class="icon">🍽️</span> Comida <span class="empty-badge">vacío</span></div>
+              <div class="tpl-label">Alimentos</div>
+              <div class="tpl-slot full"></div><div class="tpl-slot med"></div>
+              <div class="tpl-label">Macros</div>
+              <div class="tpl-slot short"></div>
+            </div>
+            <div class="tpl-card">
+              <div class="tpl-card-title"><span class="icon">🍎</span> Merienda <span class="empty-badge">vacío</span></div>
+              <div class="tpl-label">Alimentos</div>
+              <div class="tpl-slot full"></div><div class="tpl-slot med"></div>
+              <div class="tpl-label">Macros</div>
+              <div class="tpl-slot short"></div>
+            </div>
+            <div class="tpl-card">
+              <div class="tpl-card-title"><span class="icon">🌙</span> Cena <span class="empty-badge">vacío</span></div>
+              <div class="tpl-label">Alimentos</div>
+              <div class="tpl-slot full"></div><div class="tpl-slot med"></div>
+              <div class="tpl-label">Macros</div>
+              <div class="tpl-slot short"></div>
+            </div>
+          </div>
+
+          <div class="section-label" style="margin-top:20px">Entrenamiento — planes genéricos</div>
+          <div class="plans-grid">
+            <div class="plan-card"><div class="plan-num">1</div><div class="plan-label">día de<br>entreno</div></div>
+            <div class="plan-card"><div class="plan-num">2</div><div class="plan-label">días de<br>entreno</div></div>
+            <div class="plan-card"><div class="plan-num">3</div><div class="plan-label">días de<br>entreno</div></div>
+            <div class="plan-card"><div class="plan-num">4</div><div class="plan-label">días de<br>entreno</div></div>
+            <div class="plan-card"><div class="plan-num">5</div><div class="plan-label">días de<br>entreno</div></div>
+            <div class="plan-card"><div class="plan-num">6</div><div class="plan-label">días de<br>entreno</div></div>
+            <div class="plan-card"><div class="plan-num">7</div><div class="plan-label">días de<br>entreno</div></div>
+          </div>
+          <div class="box" style="margin-top:10px">
+            <div class="box-title">Cómo funcionan los planes</div>
+            <div class="box-item">Cada plan tiene los días de entreno creados pero sin ejercicios</div>
+            <div class="box-item">El usuario añade ejercicios, series, repeticiones y pesos</div>
+            <div class="box-item">Puede asignar el plan activo desde el calendario</div>
+          </div>
+
+          <div class="section-label" style="margin-top:20px">Lista de la compra — categorías vacías</div>
+          <div class="shop-grid">
+            <div class="shop-cat">
+              <div class="shop-cat-name">💪 Proteínas</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+            <div class="shop-cat">
+              <div class="shop-cat-name">🥛 Lácteos</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+            <div class="shop-cat">
+              <div class="shop-cat-name">🌾 Hidratos</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+            <div class="shop-cat">
+              <div class="shop-cat-name">🥦 Frutas y verduras</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+            <div class="shop-cat">
+              <div class="shop-cat-name">🛒 Despensa</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+            <div class="shop-cat">
+              <div class="shop-cat-name">🥑 Grasas</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+            <div class="shop-cat">
+              <div class="shop-cat-name">🧪 Suplementación</div>
+              <div class="shop-empty">sin productos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">07</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">El usuario rellena a su ritmo</div>
+          <div class="step-desc">Puede empezar por la sección que quiera. Los cambios se guardan automáticamente en Firestore con cada edición. No hay orden obligatorio.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num amber">08</div></div>
+        <div class="step-body">
+          <div class="step-title">Puede activar la IA en cualquier momento <span class="step-tag tag-ai">Gemini API</span></div>
+          <div class="step-desc">Si en algún momento quiere que la IA complete o regenere una sección (el menú, los entrenos o la lista de compra), puede hacerlo desde Perfil sin perder lo que ya tenía.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /ip-new -->
+
+  <!-- YA REGISTRADO -->
+  <div class="iniciopane" id="ip-existing">
+    <div class="section-label">5 pasos</div>
+    <div class="flow">
+      <div class="step">
+        <div class="step-left"><div class="num teal">01</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Página de bienvenida</div>
+          <div class="step-desc">Si el dispositivo ya tiene sesión activa, Firebase Auth la detecta automáticamente y salta directo al paso 3. Sin interacción del usuario.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">02</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Login <span class="step-tag tag-fb">Firebase Auth</span></div>
+          <div class="step-desc">Email + contraseña o proveedor social. Si la contraseña falla, opción de recuperación por email. Sesión persistente entre visitas.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">03</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Carga de datos</div>
+          <div class="step-desc">React lee <code>Firestore /users/{uid}</code>. Primero aplica caché local para carga instantánea, luego sincroniza con la nube. El indicador de sync muestra el estado en tiempo real.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">04</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Dashboard con sus datos</div>
+          <div class="step-desc">Ve su menú, entrenos y lista exactamente como los dejó. Los cambios se guardan automáticamente con debounce.</div>
+          <div class="box">
+            <div class="box-title">Acciones disponibles</div>
+            <div class="box-item">Editar comidas, macros o pesos de ejercicios</div>
+            <div class="box-item">Marcar días de entreno completados</div>
+            <div class="box-item">Perfil → cambiar objetivo → regenerar plan con IA</div>
+            <div class="box-item">Actualizar peso y medidas actuales</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num gray">05</div></div>
+        <div class="step-body">
+          <div class="step-title">Cerrar sesión</div>
+          <div class="step-desc">Firebase borra el token local. La siguiente visita empieza en el login. Los datos permanecen en Firestore intactos y sincronizados.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ip-existing -->
+
+  <!-- MODO PRUEBA -->
+  <div class="iniciopane" id="ip-guest">
+    <div class="section-label">4 pasos</div>
+    <div class="flow">
+      <div class="step">
+        <div class="step-left"><div class="num coral">01</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Pulsa «Probar sin cuenta» <span class="step-tag tag-fb">Firebase Auth</span></div>
+          <div class="step-desc">Firebase crea una sesión anónima con uid temporal. Sin email ni contraseña. Funciona igual que una cuenta real en términos técnicos.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num coral">02</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">App con datos de demostración</div>
+          <div class="step-desc">Se carga la plantilla <code>defaultUser.js</code> con un usuario ficticio y plan completo de ejemplo. El usuario puede explorar toda la interfaz sin restricciones.</div>
+          <div class="box">
+            <div class="box-title">Limitaciones visibles</div>
+            <div class="box-item">Banner discreto: «Modo prueba — datos no permanentes»</div>
+            <div class="box-item">Botón siempre visible: «Crear cuenta para guardar»</div>
+            <div class="box-item">No puede usar la generación con IA</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num coral">03</div><div class="vline"></div></div>
+        <div class="step-body">
+          <div class="step-title">Puede editar todo en modo prueba</div>
+          <div class="step-desc">Los cambios se guardan en Firestore bajo el uid anónimo y persisten mientras la sesión esté activa en ese dispositivo.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="num teal">04</div></div>
+        <div class="step-body">
+          <div class="step-title">Conversión a cuenta real (opcional)</div>
+          <div class="step-desc">Al registrarse, Firebase vincula el uid anónimo al nuevo email. Todos los datos que editó en modo demo se conservan automáticamente. Cero fricción.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ip-guest -->
+
+</div><!-- /p-inicio -->
+
+<!-- STACK -->
+<div class="pane" id="p-stack">
+  <div class="section-label">El stack no cambia — sí se amplía lo que cada capa hace</div>
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="stack-layer">Frontend</div>
+      <div class="stack-name">React + Vite</div>
+      <div class="stack-why">Rutas protegidas, estado global y componentes reutilizables. Gestiona tanto el flujo de IA como el manual desde el mismo árbol de componentes.</div>
+      <div class="stack-items">
+        <div class="stack-item">React Router — navegación</div>
+        <div class="stack-item">Context API — estado de auth</div>
+        <div class="stack-item">Tailwind CSS — estilos</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Autenticación</div>
+      <div class="stack-name">Firebase Auth</div>
+      <div class="stack-why">Login, registro, sesión persistente y modo anónimo. El onboarding guarda en el perfil si el usuario eligió modo IA o manual.</div>
+      <div class="stack-items">
+        <div class="stack-item">Email + contraseña</div>
+        <div class="stack-item">OAuth — Google / Apple</div>
+        <div class="stack-item">Sesiones anónimas</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Base de datos</div>
+      <div class="stack-name">Firestore</div>
+      <div class="stack-why">La estructura de datos es la misma para ambos modos. En modo manual las colecciones se crean vacías desde <code>defaultUser.js</code>. En modo IA las rellena Gemini. El perfil también almacena el estado del plan de pago para controlar el acceso a la IA.</div>
+      <div class="stack-items">
+        <div class="stack-item">/users/{uid}/profile</div>
+        <div class="stack-item">profile.fecha_ultima_gen</div>
+        <div class="stack-item">profile.plan_pro</div>
+        <div class="stack-item">profile.fecha_expiracion</div>
+        <div class="stack-item">/users/{uid}/nutrition</div>
+        <div class="stack-item">/users/{uid}/training</div>
+        <div class="stack-item">/users/{uid}/shopping</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Capa de plantillas <span style="color:var(--accent);font-size:.65rem;font-family:'JetBrains Mono',monospace;margin-left:4px">nuevo peso</span></div>
+      <div class="stack-name">defaultUser.js</div>
+      <div class="stack-why">Archivo JS que define la estructura vacía inicial. En modo manual es el punto de partida del usuario. En modo IA es el fallback mientras Gemini genera el plan. Sin él ambos modos fallarían al arrancar.</div>
+      <div class="stack-items">
+        <div class="stack-item">7 días × 4 comidas vacías</div>
+        <div class="stack-item">7 planes de entreno sin ejercicios</div>
+        <div class="stack-item">7 categorías de compra vacías</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Backend serverless</div>
+      <div class="stack-name">Cloud Functions</div>
+      <div class="stack-why">Se activa en modo IA, regeneraciones parciales y procesado de pagos. <code>generatePlan</code> comprueba siempre <code>fecha_ultima_generacion</code> y <code>plan_pro</code> antes de llamar a Gemini para garantizar que no se bypasea el límite desde el frontend. <strong>Requiere plan Blaze</strong> — el plan gratuito Spark no permite llamadas a APIs externas. Coste real: 0€ hasta 2M invocaciones/mes (con tu modelo de 1 gen/usuario/mes necesitas 2M usuarios activos para superarlo).</div>
+      <div class="stack-items">
+        <div class="stack-item">generatePlan — verifica límite + llama a Gemini</div>
+        <div class="stack-item">regenerateNutrition — solo menú</div>
+        <div class="stack-item">regenerateTraining — solo entrenos</div>
+        <div class="stack-item">regenerateShopping — solo compra</div>
+        <div class="stack-item">stripeWebhook — recibe eventos Stripe → actualiza Firebase</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Inteligencia artificial</div>
+      <div class="stack-name">Gemini Flash-Lite</div>
+      <div class="stack-why">El modelo más económico de Google — suficiente para generar planes de entrenamiento y menús. Gratis hasta ~45.000 usuarios con el modelo de 1 generación/mes. A partir de ahí cuesta fracciones de céntimo por llamada. La API key nunca sale del servidor (Cloud Functions la protege).</div>
+      <div class="stack-items">
+        <div class="stack-item">Prompt dinámico por perfil</div>
+        <div class="stack-item">Output JSON estructurado</div>
+        <div class="stack-item">1 gen/mes gratis · ilimitado en Pro</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Pagos</div>
+      <div class="stack-name">Stripe</div>
+      <div class="stack-why">Gestiona los dos modelos de cobro: pago único de 5€ para adelantar la generación del mes, y suscripción mensual de 9,99€ para el plan Pro con IA ilimitada. Comisión ~1,5% por transacción. Sin coste fijo mensual.</div>
+      <div class="stack-items">
+        <div class="stack-item">Pago único 5€ — adelantar mes</div>
+        <div class="stack-item">Suscripción 9,99€/mes — Pro</div>
+        <div class="stack-item">Webhooks → Firebase actualiza plan</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Hosting</div>
+      <div class="stack-name">Firebase Hosting</div>
+      <div class="stack-why">HTTPS automático, CDN global y deploy con un comando. Integrado con el resto del stack. Plan gratuito suficiente para uso personal.</div>
+      <div class="stack-items">
+        <div class="stack-item">HTTPS + CDN incluidos</div>
+        <div class="stack-item">Deploy: firebase deploy</div>
+        <div class="stack-item">Custom domain gratuito</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">App móvil</div>
+      <div class="stack-name">Capacitor</div>
+      <div class="stack-why">Envuelve la web en shell nativa para Android e iOS. Sin reescribir la lógica. Un build para web, otro para Play Store, otro para App Store.</div>
+      <div class="stack-items">
+        <div class="stack-item">@capacitor/android</div>
+        <div class="stack-item">@capacitor/ios</div>
+        <div class="stack-item">Push notifications nativas</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ESTRUCTURA -->
+<div class="pane" id="p-arch">
+  <div class="section-label">Árbol de archivos</div>
+
+  <div class="tree-wrap">
+
+    <!-- RAÍZ -->
+    <div class="tree-root">📁 roadto75/ <span class="arch-root-badge">raíz del proyecto</span></div>
+
+    <!-- src/ -->
+    <div class="tree-folder">
+      <div class="tree-folder-label">📁 src/ <span class="tree-folder-desc">todo el código del frontend vive aquí</span></div>
+
+      <!-- pages/ -->
+      <div class="tree-folder tree-nested">
+        <div class="tree-folder-label">📁 pages/ <span class="tree-folder-desc">una pantalla = un archivo; aquí viven las vistas principales</span></div>
+        <div class="tree-files">
+          <div class="tree-file">
+            <div class="tree-file-name">Landing.jsx</div>
+            <div class="tree-file-desc">Primera pantalla que ve cualquier visitante. Muestra el logo, el eslogan y tres botones: <em>Crear cuenta</em>, <em>Iniciar sesión</em> y <em>Probar sin cuenta</em>. También alberga el formulario de registro con email + contraseña.</div>
+          </div>
+          <div class="tree-file">
+            <div class="tree-file-name">Onboarding.jsx</div>
+            <div class="tree-file-desc">Formulario de bienvenida dividido en tres pasos: datos personales (nombre, edad, peso, altura), estilo de vida (días de entreno, equipamiento) y objetivo (volumen, definición, recomposición). Al final el usuario elige entre <em>generar plan con IA</em> o <em>rellenarlo manualmente</em>.</div>
+          </div>
+          <div class="tree-file">
+            <div class="tree-file-name">Dashboard.jsx</div>
+            <div class="tree-file-desc">Pantalla principal de la app tras autenticarse. Contiene las cinco secciones con navegación por pestañas: Nutrición, Entrenamiento, Lista de la compra, Suplementos y Perfil. Todos los datos se cargan desde Firestore y se guardan automáticamente con debounce.</div>
+          </div>
+          <div class="tree-file">
+            <div class="tree-file-name">Success.jsx</div>
+            <div class="tree-file-desc">Página a la que Stripe redirige tras un pago completado correctamente. Muestra confirmación visual, informa del plan activado (5€ o Pro) y enlaza de vuelta al Dashboard. Ruta pública — no requiere auth para que la redirección funcione siempre.</div>
+          </div>
+          <div class="tree-file">
+            <div class="tree-file-name">Cancel.jsx</div>
+            <div class="tree-file-desc">Página a la que Stripe redirige si el usuario cancela el proceso de pago. Informa que no se ha realizado ningún cargo y ofrece volver al Dashboard. Ruta pública — igual que Success.jsx.</div>
+          </div>
+          <div class="tree-file">
+            <div class="tree-file-name">Profile.jsx</div>
+            <div class="tree-file-desc">Pestaña de Perfil dentro del Dashboard. Muestra el nombre, objetivo, plan activo (Free / Pro), días restantes hasta la próxima generación gratuita y la fecha de expiración del Pro si aplica. Incluye botón para cambiar el objetivo que puede disparar el UpgradeModal si el usuario no puede regenerar aún.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- components/ -->
+      <div class="tree-folder tree-nested">
+        <div class="tree-folder-label">📁 components/ <span class="tree-folder-desc">piezas reutilizables organizadas por dominio</span></div>
+
+        <div class="tree-folder tree-nested">
+          <div class="tree-folder-label">📁 onboarding/</div>
+          <div class="tree-files">
+            <div class="tree-file"><div class="tree-file-name">StepPersonal.jsx</div><div class="tree-file-desc">Paso 1 del onboarding. Recoge nombre, edad, peso actual, altura y sexo biológico para calcular el TDEE y las necesidades calóricas del usuario.</div></div>
+            <div class="tree-file"><div class="tree-file-name">StepLifestyle.jsx</div><div class="tree-file-desc">Paso 2. Pregunta el nivel de actividad diaria, cuántos días a la semana puede entrenar y si dispone de gimnasio, material en casa o entrena sin equipamiento.</div></div>
+            <div class="tree-file"><div class="tree-file-name">StepGoal.jsx</div><div class="tree-file-desc">Paso 3. El usuario elige su objetivo (volumen, definición, recomposición o mantenimiento) e indica restricciones alimentarias. Esta información es el input principal para Gemini.</div></div>
+            <div class="tree-file"><div class="tree-file-name">StepMode.jsx</div><div class="tree-file-desc">Pantalla final del onboarding donde el usuario decide si quiere que la IA genere su plan completo o si prefiere rellenarlo él mismo desde cero.</div></div>
+          </div>
+        </div>
+
+        <div class="tree-folder tree-nested">
+          <div class="tree-folder-label">📁 nutrition/</div>
+          <div class="tree-files">
+            <div class="tree-file"><div class="tree-file-name">MealCard.jsx</div><div class="tree-file-desc">Tarjeta editable que representa una comida (desayuno, comida, merienda o cena). Muestra la lista de alimentos y permite añadir, editar y eliminar items. Guarda los cambios automáticamente.</div></div>
+            <div class="tree-file"><div class="tree-file-name">MacroSummary.jsx</div><div class="tree-file-desc">Resumen visual de macronutrientes del día: proteínas, hidratos y grasas en gramos y porcentaje. Compara el total real con el objetivo marcado en el perfil.</div></div>
+            <div class="tree-file"><div class="tree-file-name">DayColumn.jsx</div><div class="tree-file-desc">Columna vertical que agrupa las cuatro MealCards de un día concreto. Muestra el nombre del día y el total de calorías. Sirve de contenedor para la vista semanal.</div></div>
+          </div>
+        </div>
+
+        <div class="tree-folder tree-nested">
+          <div class="tree-folder-label">📁 training/</div>
+          <div class="tree-files">
+            <div class="tree-file"><div class="tree-file-name">CalendarLog.jsx</div><div class="tree-file-desc">Calendario semanal donde se marcan los días de entreno completados. Al pulsar un día se puede registrar el entreno realizado y ver el historial de la semana anterior.</div></div>
+            <div class="tree-file"><div class="tree-file-name">ExerciseRow.jsx</div><div class="tree-file-desc">Fila editable para un ejercicio dentro de un plan. Muestra el nombre, las series, las repeticiones y el peso utilizado. Permite editar cada campo en línea y registrar el progreso semana a semana.</div></div>
+            <div class="tree-file"><div class="tree-file-name">PlanSelector.jsx</div><div class="tree-file-desc">Selector desplegable para elegir qué plan de entreno está activo (del 1 al 7 días). Cambia la vista del calendario y los ejercicios mostrados según el plan seleccionado.</div></div>
+          </div>
+        </div>
+
+        <div class="tree-folder tree-nested">
+          <div class="tree-folder-label">📁 shopping/</div>
+          <div class="tree-files">
+            <div class="tree-file"><div class="tree-file-name">ShoppingItem.jsx</div><div class="tree-file-desc">Elemento individual de la lista de la compra con checkbox para marcarlo como comprado, nombre del producto y cantidad. Al marcarlo se tacha visualmente y se guarda el estado.</div></div>
+            <div class="tree-file"><div class="tree-file-name">CategoryCard.jsx</div><div class="tree-file-desc">Tarjeta que agrupa los productos de una misma categoría (proteínas, lácteos, hidratos, etc.). Muestra el número de items pendientes y permite añadir productos nuevos a esa categoría.</div></div>
+          </div>
+        </div>
+
+        <div class="tree-folder tree-nested">
+          <div class="tree-folder-label">📁 supplements/</div>
+          <div class="tree-files">
+            <div class="tree-file"><div class="tree-file-name">ShakeCounter.jsx</div><div class="tree-file-desc">Contador de batidos de proteína del día con botones para sumar y restar tomas. Muestra el total consumido frente al objetivo diario y guarda el estado en Firestore automáticamente.</div></div>
+            <div class="tree-file"><div class="tree-file-name">SupplementAlert.jsx</div><div class="tree-file-desc">Tarjeta de alerta que avisa cuando el usuario no ha alcanzado su dosis diaria de proteína o creatina. Calcula el déficit en tiempo real comparando lo registrado con el objetivo del perfil.</div></div>
+          </div>
+        </div>
+
+        <div class="tree-folder tree-nested">
+          <div class="tree-folder-label">📁 ui/</div>
+          <div class="tree-files">
+            <div class="tree-file"><div class="tree-file-name">Header.jsx</div><div class="tree-file-desc">Barra superior de la app con el logo de RoadTo75, el nombre del usuario autenticado y el botón de cerrar sesión. Siempre visible dentro del Dashboard.</div></div>
+            <div class="tree-file"><div class="tree-file-name">Tabs.jsx</div><div class="tree-file-desc">Componente de navegación por pestañas reutilizable. Recibe un array de secciones y gestiona cuál está activa. Lo usan el Dashboard y el Onboarding.</div></div>
+            <div class="tree-file"><div class="tree-file-name">Modal.jsx</div><div class="tree-file-desc">Ventana emergente genérica con overlay oscuro. Se usa para confirmar acciones destructivas (borrar un alimento, reiniciar el plan) o mostrar detalles adicionales sin cambiar de pantalla.</div></div>
+            <div class="tree-file"><div class="tree-file-name">SyncBadge.jsx</div><div class="tree-file-desc">Indicador de sincronización en tiempo real que muestra si los datos están guardados, pendientes de guardar o si hubo un error de conexión. Aparece en la esquina de cada sección editable.</div></div>
+            <div class="tree-file"><div class="tree-file-name">EmptyState.jsx</div><div class="tree-file-desc">Pantalla de estado vacío que se muestra cuando una sección no tiene datos todavía. Incluye un icono, un mensaje descriptivo y un botón de acción (añadir manualmente o generar con IA).</div></div>
+            <div class="tree-file"><div class="tree-file-name">UpgradeModal.jsx</div><div class="tree-file-desc">Modal que aparece cuando el usuario intenta generar un plan antes de que pasen 30 días. Muestra los dos planes de pago: pago único de 5€ para generar ahora (reinicia el mes) y plan Pro de 9,99€/mes para generaciones ilimitadas ese mes. Llama a <code>stripe.js</code> según la opción elegida. También muestra los días restantes hasta la próxima generación gratuita.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- services/ -->
+      <div class="tree-folder tree-nested">
+        <div class="tree-folder-label">📁 services/ <span class="tree-folder-desc">regla clave: toda lógica externa pasa por aquí — ningún componente llama a Firebase directamente</span></div>
+        <div class="tree-files">
+          <div class="tree-file"><div class="tree-file-name">firebase.js</div><div class="tree-file-desc">Inicializa la conexión con Firebase usando las variables de entorno del archivo <code>.env</code>. Exporta las instancias de <code>app</code>, <code>auth</code> y <code>db</code> que usan el resto de servicios. Si algún día se cambia de proveedor, solo hay que tocar este archivo.</div></div>
+          <div class="tree-file"><div class="tree-file-name">auth.js</div><div class="tree-file-desc">Agrupa todas las operaciones de autenticación: registro con email y contraseña, inicio de sesión, login con Google o Apple, creación de sesión anónima para el modo prueba y cierre de sesión. Ningún componente llama a Firebase Auth directamente.</div></div>
+          <div class="tree-file"><div class="tree-file-name">db.js</div><div class="tree-file-desc">Gestiona la lectura y escritura de datos en Firestore bajo la ruta <code>/users/{uid}/</code>. Implementa debounce de 800ms en las escrituras para evitar demasiadas llamadas a la base de datos mientras el usuario escribe.</div></div>
+          <div class="tree-file"><div class="tree-file-name">functions.js</div><div class="tree-file-desc">Llama a las Cloud Functions del backend (generatePlan, regenerateNutrition, etc.) adjuntando el token de autenticación del usuario. Gestiona los estados de carga y los errores para que los componentes no tengan que preocuparse de ello.</div></div>
+          <div class="tree-file"><div class="tree-file-name">stripe.js</div><div class="tree-file-desc">Llama a las Cloud Functions de pago desde el frontend. Expone dos funciones: <code>initSinglePayment()</code> para el pago único de 5€ (adelantar generación) y <code>initProSubscription()</code> para activar el plan Pro de 9,99€/mes. Redirige al usuario a Stripe Checkout y gestiona el retorno tras el pago.</div></div>
+        </div>
+      </div>
+
+      <!-- hooks/ -->
+      <div class="tree-folder tree-nested">
+        <div class="tree-folder-label">📁 hooks/ <span class="tree-folder-desc">lógica de estado compartida entre componentes</span></div>
+        <div class="tree-files">
+          <div class="tree-file"><div class="tree-file-name">useAuth.js</div><div class="tree-file-desc">Hook que expone el usuario actualmente autenticado y si hay una sesión activa. Se suscribe a los cambios de Firebase Auth para que todos los componentes que lo usen se actualicen automáticamente cuando el usuario inicia o cierra sesión.</div></div>
+          <div class="tree-file"><div class="tree-file-name">useProfile.js</div><div class="tree-file-desc">Hook que carga y expone el perfil del usuario: datos personales, objetivo nutricional y el modo elegido (IA o manual). Cualquier componente que necesite saber si el usuario ha completado el onboarding usa este hook.</div></div>
+          <div class="tree-file"><div class="tree-file-name">useUserData.js</div><div class="tree-file-desc">Hook principal de la app. Carga el menú semanal, los planes de entrenamiento y la lista de la compra desde Firestore y los expone junto con funciones para actualizarlos. Aplica caché local para que la app sea rápida aunque haya mala conexión.</div></div>
+        </div>
+      </div>
+
+      <!-- templates/ -->
+      <div class="tree-folder tree-nested">
+        <div class="tree-folder-label">📁 templates/ <span class="tree-folder-desc">define la estructura vacía con la que arranca cada usuario nuevo</span></div>
+        <div class="tree-files">
+          <div class="tree-file"><div class="tree-file-name">defaultUser.js</div><div class="tree-file-desc">Exporta el objeto base con el que se inicializa cualquier cuenta nueva: 7 días con 4 comidas vacías cada uno, 7 planes de entreno sin ejercicios y 7 categorías de compra vacías. En modo manual es el punto de partida; en modo IA es el fallback mientras Gemini genera el plan.</div></div>
+          <div class="tree-file"><div class="tree-file-name">demoUser.js</div><div class="tree-file-desc">Igual que defaultUser pero con datos de ejemplo ya rellenos (comidas, ejercicios, lista de la compra). Se usa en el modo prueba sin cuenta para que el visitante pueda explorar la app sin tener que introducir nada.</div></div>
+        </div>
+      </div>
+
+      <!-- App.jsx -->
+      <div class="tree-files" style="margin-left:20px;margin-top:4px">
+        <div class="tree-file">
+          <div class="tree-file-name">App.jsx</div>
+          <div class="tree-file-desc">Define el sistema de rutas de toda la aplicación. Rutas públicas: <code>/</code> (Landing), <code>/success</code> y <code>/cancel</code> (retorno de Stripe). Rutas de onboarding: usuario autenticado sin perfil. Rutas protegidas: <code>/app</code> (Dashboard, requiere auth + perfil completo). Sin esta lógica un usuario podría llegar al Dashboard sin datos o Stripe no podría redirigir correctamente.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- functions/ -->
+    <div class="tree-folder">
+      <div class="tree-folder-label">📁 functions/ <span class="tree-folder-desc">backend serverless — solo se activa en modo IA o al regenerar una sección</span></div>
+      <div class="tree-files">
+        <div class="tree-file"><div class="tree-file-name">generatePlan.js</div><div class="tree-file-desc">Función principal. Antes de llamar a la IA comprueba en Firestore si el usuario tiene <code>plan_pro</code> activo o si han pasado 30 días desde <code>fecha_ultima_generacion</code>. Si no cumple ninguna condición devuelve error 403. Si sí puede generar, lee el perfil, construye un prompt personalizado y llama a <strong>Gemini Flash-Lite</strong>. Devuelve el plan completo en JSON, lo guarda en Firestore y actualiza <code>fecha_ultima_generacion</code>.</div></div>
+        <div class="tree-file"><div class="tree-file-name">regenerateNutrition.js</div><div class="tree-file-desc">Regenera únicamente el menú semanal sin tocar el plan de entreno ni la lista de la compra. Útil cuando el usuario quiere variar la alimentación manteniendo el resto del plan intacto.</div></div>
+        <div class="tree-file"><div class="tree-file-name">regenerateTraining.js</div><div class="tree-file-desc">Regenera únicamente los planes de entrenamiento. Tiene en cuenta el equipamiento disponible y los días de entreno del perfil actual del usuario para ajustar los ejercicios y la progresión.</div></div>
+        <div class="tree-file"><div class="tree-file-name">regenerateShopping.js</div><div class="tree-file-desc">Regenera la lista de la compra en base al menú semanal actual. Agrupa los ingredientes por categorías (proteínas, lácteos, hidratos, etc.) y elimina duplicados antes de guardarla.</div></div>
+        <div class="tree-file"><div class="tree-file-name">createCheckoutSession.js</div><div class="tree-file-desc">Cloud Function que recibe el tipo de pago del frontend (pago único 5€ o suscripción Pro 9,99€), crea la sesión de Stripe Checkout con el Price ID correspondiente y devuelve la URL. Define las URLs de retorno <code>success_url</code> y <code>cancel_url</code>. Sin esta función el botón de pago no puede abrir Stripe.</div></div>
+        <div class="tree-file"><div class="tree-file-name">stripeWebhook.js</div><div class="tree-file-desc">Recibe los eventos de Stripe (pago único completado o suscripción Pro activada/cancelada) y actualiza Firestore en consecuencia. Para el pago de 5€ resetea <code>fecha_ultima_generacion</code>. Para el Pro activa <code>plan_pro: true</code> y guarda <code>fecha_expiracion</code>. Para cancelaciones o expiración pone <code>plan_pro: false</code>. Verifica la firma del webhook para evitar llamadas falsas.</div></div>
+        <div class="tree-file"><div class="tree-file-name">index.js</div><div class="tree-file-desc">Punto de entrada del backend. Importa y exporta todas las funciones anteriores para que Firebase las reconozca y las despliegue. Cualquier función nueva debe añadirse aquí para que sea accesible desde el frontend.</div></div>
+      </div>
+    </div>
+
+    <!-- public/ -->
+    <div class="tree-folder">
+      <div class="tree-folder-label">📁 public/ <span class="tree-folder-desc">assets estáticos servidos directamente sin pasar por Vite</span></div>
+      <div class="tree-files">
+        <div class="tree-file"><div class="tree-file-name">manifest.json</div><div class="tree-file-desc">Archivo de configuración de la Progressive Web App. Define el nombre de la app, los iconos en distintos tamaños, el color de la barra de estado y el modo de visualización (pantalla completa). Sin él no aparece el banner de instalación en Android ni iOS.</div></div>
+        <div class="tree-file"><div class="tree-file-name">favicon.svg</div><div class="tree-file-desc">Icono vectorial de RoadTo75 que aparece en la pestaña del navegador, en el escritorio del móvil al instalar la PWA y en la pantalla de carga de la app nativa.</div></div>
+      </div>
+    </div>
+
+    <!-- config raíz -->
+    <div class="tree-folder">
+      <div class="tree-folder-label">📄 Configuración <span class="tree-folder-desc">archivos en la raíz del proyecto</span></div>
+      <div class="tree-files">
+        <div class="tree-file"><div class="tree-file-name">vite.config.js</div><div class="tree-file-desc">Configura el bundler Vite: alias de rutas para que <code>@/components/...</code> funcione sin rutas relativas largas, el plugin de React para JSX y el plugin de PWA para generar el Service Worker automáticamente en el build de producción.</div></div>
+        <div class="tree-file"><div class="tree-file-name">firebase.json</div><div class="tree-file-desc">Indica a Firebase cómo desplegar el proyecto: qué carpeta subir al Hosting (la carpeta <code>dist/</code> generada por Vite), dónde están las Cloud Functions y qué rewrites aplicar para que el enrutamiento de React funcione en producción.</div></div>
+        <div class="tree-file"><div class="tree-file-name">firestore.rules</div><div class="tree-file-desc">Reglas de seguridad de la base de datos. Garantizan que cada usuario solo puede leer y escribir en su propio documento <code>/users/{uid}/</code>. Sin estas reglas cualquier usuario autenticado podría acceder a los datos de otro.</div></div>
+        <div class="tree-file"><div class="tree-file-name">.env</div><div class="tree-file-desc">Variables de entorno con las claves de Firebase (API key, project ID, etc.) y la URL de las Cloud Functions. Este archivo nunca se sube a Git. Cada desarrollador tiene el suyo propio y en producción se configura en el panel de Firebase.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HOJA DE RUTA -->
+<div class="pane" id="p-roadmap">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+    <div class="section-label" style="margin:0;flex:1">Del index.html al producto final</div>
+    <button class="roadmap-reset" onclick="resetAll()">↺ Reiniciar</button>
+  </div>
+
+  <div class="total-prog">
+    <div class="total-prog-label">Progreso total</div>
+    <div class="total-prog-bar"><div class="total-prog-fill" id="total-fill" style="width:0%"></div></div>
+    <div class="total-prog-text" id="total-text">0 / 0</div>
+  </div>
+
+  <div class="roadmap" id="roadmap-container">
+
+    <!-- FASE 0 -->
+    <div class="phase" data-phase="0">
+      <div class="phase-header">
+        <div class="phase-num">0</div>
+        <div class="phase-info">
+          <div class="phase-title">Preparación del entorno</div>
+          <div class="phase-sub">Antes de tocar una sola línea de código</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="0-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Node.js (v18 o superior)</div><div class="ck-note">Descarga desde nodejs.org — elige la versión LTS</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="0-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Git si no lo tienes</div><div class="ck-note">Descarga desde git-scm.com</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="0-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear repositorio en GitHub</div><div class="ck-note">Nombre sugerido: roadto75 — inicialízalo vacío (sin README)</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="0-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar VS Code (recomendado) con extensión ESLint</div><div class="ck-note">Opcionales útiles: Prettier, Tailwind CSS IntelliSense, Firebase Explorer</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="phase" data-phase="1">
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info">
+          <div class="phase-title">Montar el proyecto React + Vite</div>
+          <div class="phase-sub">Crear la base sobre la que se construye todo</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="1-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear el proyecto con Vite <span class="ck-tag cmd">npm create vite@latest roadto75 --template react</span></div><div class="ck-note">Selecciona React → JavaScript cuando te pregunte</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="1-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar dependencias base <span class="ck-tag cmd">npm install</span></div><div class="ck-note">Instala también: react-router-dom, tailwindcss, firebase</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="1-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Configurar Tailwind CSS</div><div class="ck-note">Sigue la guía oficial: tailwindcss.com/docs/guides/vite</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="1-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear la estructura de carpetas</div><div class="ck-note">src/pages · src/components · src/services · src/hooks · src/templates</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="1-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Conectar el repo a GitHub <span class="ck-tag cmd">git init && git remote add origin ...</span></div><div class="ck-note">Hacer el primer commit y push</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="phase" data-phase="2">
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info">
+          <div class="phase-title">Configurar Firebase</div>
+          <div class="phase-sub">Auth + Firestore + Hosting en la consola</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="2-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear proyecto en Firebase Console</div><div class="ck-note">console.firebase.google.com → Añadir proyecto → Nombre: roadto75</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Activar Firestore Database</div><div class="ck-note">En la consola: Build → Firestore → Crear base de datos → Modo producción</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Activar Firebase Authentication — Email y Anónimo</div><div class="ck-note">Build → Authentication → Habilitar: Email/contraseña y Anónimo</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-2b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Configurar Google OAuth (si se usa login con Google)</div><div class="ck-note">Firebase Console → Authentication → Sign-in method → Google → Activar. Luego ir a console.cloud.google.com → APIs → Credentials → OAuth 2.0 Client ID → añadir el dominio de la app en "Authorized redirect URIs". Sin este paso el botón "Continuar con Google" falla con error de redirect</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Copiar las credenciales al proyecto <span class="ck-tag warn">nunca a git</span></div><div class="ck-note">Crear archivo .env con VITE_FIREBASE_API_KEY, VITE_FIREBASE_PROJECT_ID, etc.</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/services/firebase.js</div><div class="ck-note">Inicializar Firebase app, exportar db (Firestore) y auth</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Configurar Firestore Security Rules</div><div class="ck-note">Solo cada usuario puede leer y escribir sus propios datos: allow read, write: if request.auth.uid == userId</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Obtener la API key de Gemini <span class="ck-tag new">gratis</span></div><div class="ck-note">Ir a aistudio.google.com → Get API key → Copiar la clave. Se usará en la Fase 6 como secreto de Firebase</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="2-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Actualizar Firebase al plan Blaze (pay-as-you-go) <span class="ck-tag warn">obligatorio antes de la Fase 6</span></div><div class="ck-note">El plan gratuito Spark no permite que las Cloud Functions hagan llamadas a APIs externas (Gemini, Stripe). Sin Blaze las funciones fallan en cuanto intentan conectar con internet. Coste: 0€ hasta superar los límites gratuitos (2M invocaciones/mes). Solo pagas si los superas — y con tu modelo de 1 gen/mes eso requiere más de 2 millones de usuarios activos al mes. Consola Firebase → Configuración → Uso y facturación → Cambiar plan → Blaze.</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="phase" data-phase="3">
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info">
+          <div class="phase-title">Autenticación y rutas</div>
+          <div class="phase-sub">Login, registro y protección de rutas</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="3-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/services/auth.js</div><div class="ck-note">Funciones: signIn, signUp, signInAnonymously, signOut</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="3-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear hook useAuth.js</div><div class="ck-note">Escucha onAuthStateChanged de Firebase y expone el usuario actual</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="3-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear App.jsx con React Router y ProtectedRoute</div><div class="ck-note">Rutas: / (Landing) · /onboarding · /app (Dashboard). ProtectedRoute redirige según el estado de auth</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="3-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir la página Landing.jsx</div><div class="ck-note">Formularios de login y registro + botón Probar sin cuenta</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="3-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Verificar que login, registro y modo anónimo funcionan</div><div class="ck-note">Ver los usuarios creados en Firebase Console → Authentication</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 4 -->
+    <div class="phase" data-phase="4">
+      <div class="phase-header">
+        <div class="phase-num">4</div>
+        <div class="phase-info">
+          <div class="phase-title">Onboarding y plantillas</div>
+          <div class="phase-sub">Formulario de perfil y estructura inicial de datos</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="4-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/templates/defaultUser.js</div><div class="ck-note">7 días × 4 comidas vacías · 7 planes de entreno sin ejercicios · 7 categorías de compra sin productos</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="4-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/templates/demoUser.js</div><div class="ck-note">Copia de defaultUser.js pero con datos de ejemplo para el modo prueba</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="4-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir Onboarding.jsx con 3 pasos</div><div class="ck-note">StepPersonal · StepLifestyle · StepGoal. Barra de progreso entre pasos</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="4-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir StepMode — elección IA vs manual <span class="ck-tag new">nuevo</span></div><div class="ck-note">Guardar la elección en /users/{uid}/profile.mode = 'ai' | 'manual'</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="4-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Al finalizar onboarding, guardar perfil y copiar defaultUser.js a Firestore</div><div class="ck-note">setDoc(doc(db, 'users', uid), { profile: {...}, ...defaultUser })</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="4-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Inicializar campos de monetización en el perfil <span class="ck-tag warn">obligatorio</span></div><div class="ck-note">Añadir al guardar el perfil: plan_pro: false · fecha_expiracion: null · fecha_ultima_generacion: null. Sin estos campos generatePlan.js fallará al intentar leerlos</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 5 -->
+    <div class="phase" data-phase="5">
+      <div class="phase-header">
+        <div class="phase-num">5</div>
+        <div class="phase-info">
+          <div class="phase-title">Migrar el dashboard desde el index.html</div>
+          <div class="phase-sub">Convertir el HTML/JS actual en componentes React</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="5-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear Dashboard.jsx con navegación por secciones</div><div class="ck-note">Tabs: Nutrición · Entrenos · Compra · Suplementos · Perfil</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="5-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Migrar sección de Nutrición</div><div class="ck-note">MealCard con desayuno, comida, merienda y cena · edición de alimentos y macros · totales por día</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="5-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Migrar sección de Entrenamiento</div><div class="ck-note">CalendarLog · PlanSelector (1–7 días) · ExerciseRow con pesos y series</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="5-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Migrar sección de Lista de la compra</div><div class="ck-note">7 categorías (proteínas, lácteos, hidratos, frutas/verduras, despensa, grasas, suplementación)</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="5-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Migrar sección de Suplementos</div><div class="ck-note">Contador de batidos · alertas de proteína y creatina</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="5-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir sección de Perfil <span class="ck-tag new">nuevo</span></div><div class="ck-note">Muestra: nombre, objetivo actual, plan activo (Free/Pro), fecha de próxima generación gratuita y días restantes. Botón para cambiar objetivo que abre un modal y puede disparar regeneración con IA</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="5-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Conectar toda la escritura y lectura con Firestore vía db.js</div><div class="ck-note">Debounce de 800ms en los saves · indicador de sync · caché local como fallback</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 6 -->
+    <div class="phase" data-phase="6">
+      <div class="phase-header">
+        <div class="phase-num">6</div>
+        <div class="phase-info">
+          <div class="phase-title">Cloud Functions + IA</div>
+          <div class="phase-sub">Generación de planes con Gemini Flash-Lite en el backend</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="6-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Firebase CLI <span class="ck-tag cmd">npm install -g firebase-tools</span></div><div class="ck-note">Después: firebase login y firebase init functions</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="6-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Verificar que tienes la API key de Gemini del paso 2-6</div><div class="ck-note">Si no la tienes: aistudio.google.com → Get API key. Es gratuita, no requiere tarjeta</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="6-1b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar la API key de Gemini como secreto de Firebase <span class="ck-tag warn">nunca en el código</span></div><div class="ck-note">firebase functions:secrets:set GEMINI_API_KEY</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="6-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/generatePlan.js <span class="ck-tag ai">Gemini API</span></div><div class="ck-note">Lee el perfil del uid autenticado · verifica plan_pro y fecha_ultima_generacion · construye el prompt · llama a <strong>Gemini Flash-Lite</strong> · guarda el JSON en Firestore</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="6-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear las funciones de regeneración parcial</div><div class="ck-note">regenerateNutrition · regenerateTraining · regenerateShopping</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="6-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/services/functions.js en el frontend</div><div class="ck-note">Llama a las Cloud Functions con el token del usuario · maneja estados de carga y error</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="6-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir el botón «Generar mi plan» en el Dashboard</div><div class="ck-note">Solo visible si profile.mode === 'ai' · muestra spinner mientras Gemini genera</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 7 -->
+    <div class="phase" data-phase="7">
+      <div class="phase-header">
+        <div class="phase-num">7</div>
+        <div class="phase-info">
+          <div class="phase-title">Monetización con Stripe</div>
+          <div class="phase-sub">Pago único 5€ · Plan Pro 9,99€/mes</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="7-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear cuenta en Stripe y obtener las claves</div><div class="ck-note">dashboard.stripe.com → Developers → API keys. La clave pública (pk_live_...) va al .env del frontend como VITE_STRIPE_PUBLIC_KEY. La clave secreta (sk_live_...) se guarda como secreto de Firebase: <code>firebase functions:secrets:set STRIPE_SECRET_KEY</code> — nunca en el código ni en .env</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-0b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar el Webhook Secret como secreto de Firebase <span class="ck-tag warn">nunca en el código</span></div><div class="ck-note">Stripe → Developers → Webhooks → copiar el Signing Secret → <code>firebase functions:secrets:set STRIPE_WEBHOOK_SECRET</code>. Sin esto stripeWebhook.js no puede verificar que los eventos son legítimos y cualquiera podría falsificar un pago</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear productos en Stripe Dashboard <span class="ck-tag new">2 productos</span></div><div class="ck-note">Producto 1: "Generar ahora" — pago único 5€. Producto 2: "Plan Pro" — suscripción mensual 9,99€. Copiar los Price ID de cada uno</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-1b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar los Price ID como secretos de Firebase <span class="ck-tag warn">nunca hardcodeados</span></div><div class="ck-note"><code>firebase functions:secrets:set STRIPE_PRICE_SINGLE</code> → pegar el Price ID del pago único 5€. <code>firebase functions:secrets:set STRIPE_PRICE_PRO</code> → pegar el Price ID de la suscripción 9,99€. createCheckoutSession.js los leerá desde process.env en tiempo de ejecución</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Stripe SDK en Functions <span class="ck-tag cmd">npm install stripe</span></div><div class="ck-note">Dentro de la carpeta functions/ — no en el frontend</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/stripeWebhook.js</div><div class="ck-note">Escucha checkout.session.completed y customer.subscription.deleted. Verifica la firma del webhook con STRIPE_WEBHOOK_SECRET. Actualiza plan_pro, fecha_expiracion y fecha_ultima_generacion en Firestore</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Registrar el webhook en Stripe Dashboard</div><div class="ck-note">Stripe → Developers → Webhooks → Añadir endpoint con la URL de la Cloud Function stripeWebhook. El Signing Secret ya fue guardado como secreto de Firebase en el paso 7-0b</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir lógica de control en generatePlan.js</div><div class="ck-note">Leer plan_pro y fecha_ultima_generacion del perfil. Si plan_pro=false Y fecha_ultima_generacion < 30 días → devolver error 403 "limit_reached". Si puede generar → llamar a Gemini y actualizar fecha_ultima_generacion</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/createCheckoutSession.js <span class="ck-tag warn">paso crítico</span></div><div class="ck-note">Cloud Function que recibe el tipo de pago (5€ único o Pro 9,99€), crea la sesión de Stripe Checkout con los Price ID correspondientes y devuelve la URL al frontend. Sin esta función el botón de pago no puede abrir Stripe</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/services/stripe.js en el frontend</div><div class="ck-note">initSinglePayment() e initProSubscription() — llaman a createCheckoutSession y redirigen al usuario a la URL de Stripe</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir UpgradeModal.jsx</div><div class="ck-note">Aparece cuando generatePlan devuelve 403. Muestra días restantes hasta próxima generación gratuita, el botón de 5€ y el botón Pro 9,99€/mes</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/pages/Success.jsx y src/pages/Cancel.jsx</div><div class="ck-note">Stripe redirige a estas páginas tras el pago. Success muestra confirmación y enlaza al Dashboard. Cancel informa que el pago fue cancelado y vuelve al Dashboard sin cambios</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-10" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir las rutas /success y /cancel en App.jsx</div><div class="ck-note">Rutas públicas (no requieren auth) para que Stripe pueda redirigir sin problemas. Añadir también las URLs de retorno en createCheckoutSession: success_url y cancel_url</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="7-11" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Probar el flujo completo en modo test de Stripe</div><div class="ck-note">Usar tarjeta de prueba 4242 4242 4242 4242. Verificar que el webhook llega, Firestore se actualiza y el usuario puede generar inmediatamente</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 8 -->
+    <div class="phase" data-phase="8">
+      <div class="phase-header">
+        <div class="phase-num">8</div>
+        <div class="phase-info">
+          <div class="phase-title">PWA + Deploy</div>
+          <div class="phase-sub">App instalable y publicada en la web</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="8-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear public/manifest.json</div><div class="ck-note">name, short_name, icons, theme_color, background_color, display: standalone</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="8-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir Service Worker con vite-plugin-pwa</div><div class="ck-note">Caché offline de assets · la app funciona sin conexión con los datos del caché</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="8-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Verificar que la app es instalable en Android (Chrome)</div><div class="ck-note">DevTools → Application → Manifest — sin errores. Aparece el banner de instalación</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="8-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Hacer build de producción <span class="ck-tag cmd">npm run build</span></div><div class="ck-note">Genera la carpeta dist/ con la app optimizada</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="8-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Deploy en Firebase Hosting <span class="ck-tag cmd">firebase deploy</span></div><div class="ck-note">La app queda en tu-proyecto.web.app con HTTPS automático</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 9 -->
+    <div class="phase" data-phase="9">
+      <div class="phase-header">
+        <div class="phase-num">9</div>
+        <div class="phase-info">
+          <div class="phase-title">App nativa en las tiendas (futuro)</div>
+          <div class="phase-sub">Play Store y App Store con Capacitor</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="9-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Capacitor <span class="ck-tag cmd">npm install @capacitor/core @capacitor/cli</span></div><div class="ck-note">Inicializar: npx cap init roadto75 com.roadto75.app</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="9-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir plataforma Android <span class="ck-tag cmd">npx cap add android</span></div><div class="ck-note">Requiere Android Studio instalado</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="9-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir plataforma iOS <span class="ck-tag cmd">npx cap add ios</span></div><div class="ck-note">Requiere Mac con Xcode instalado</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="9-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Generar APK de Android y probar en dispositivo real</div><div class="ck-note">Android Studio → Build → Generate Signed APK</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="9-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Publicar en Google Play Store</div><div class="ck-note">Necesitas cuenta de desarrollador (25$ único) · subir el AAB firmado</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="9-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Publicar en Apple App Store</div><div class="ck-note">Necesitas Apple Developer Program (99€/año) · build desde Xcode · subir con Transporter</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODELO IA -->
+<div class="pane" id="p-negocio">
+
+  <div class="section-label">Planes de acceso a la IA</div>
+
+  <div class="plan-cards">
+    <div class="plan-card-wrap plan-free">
+      <div class="stack-layer">Plan</div>
+      <div class="stack-name" style="color:var(--text2)">Gratis</div>
+      <div class="stack-why">1 generación de IA al mes. Al registrarse está disponible inmediatamente. Si quiere regenerar antes de que pasen 30 días, debe esperar o pagar.</div>
+      <div class="stack-items">
+        <div class="stack-item item-free">1 generación/mes</div>
+        <div class="stack-item item-free">Plan entrenamiento + menú</div>
+        <div class="stack-item item-free">Contador visible hasta próxima gen</div>
+      </div>
+    </div>
+    <div class="plan-card-wrap plan-single">
+      <div class="stack-layer">Pago único</div>
+      <div class="stack-name" style="color:var(--accent3)">5 € ahora</div>
+      <div class="stack-why">Genera inmediatamente sin esperar al mes. Una vez pagado y generado, el contador de 30 días vuelve a empezar desde ese momento. No es una suscripción.</div>
+      <div class="stack-items">
+        <div class="stack-item item-single">Genera ahora + reinicia el mes</div>
+        <div class="stack-item item-single">Pago puntual, sin suscripción</div>
+        <div class="stack-item item-single">Vuelve a Free tras el ciclo</div>
+      </div>
+    </div>
+    <div class="plan-card-wrap plan-pro">
+      <div class="stack-layer">Suscripción mensual</div>
+      <div class="stack-name" style="color:var(--accent)">Pro — 9,99 €/mes</div>
+      <div class="stack-why">Consultas a la IA ilimitadas durante ese mes. Útil si el usuario cambia su objetivo, peso o alimentos con frecuencia. Al cancelar o expirar vuelve automáticamente al plan Free.</div>
+      <div class="stack-items">
+        <div class="stack-item item-pro">IA ilimitada ese mes</div>
+        <div class="stack-item item-pro">Cancela cuando quieras</div>
+        <div class="stack-item item-pro">Al expirar → vuelve a Free</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Flujo de decisión del usuario</div>
+
+  <div class="arch-card" style="margin-bottom:32px">
+    <div class="arch-card-header"><div class="arch-card-title">Lógica de generación</div></div>
+    <div style="padding:20px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);line-height:2">
+      <span style="color:var(--accent2)">REGISTRO</span> → Generación gratuita disponible inmediatamente<br>
+      <span style="color:var(--muted)">↓</span><br>
+      <span style="color:var(--accent2)">USUARIO FREE</span><br>
+      <span style="color:var(--muted)">├──</span> Genera → espera 30 días → genera gratis otra vez<br>
+      <span style="color:var(--muted)">└──</span> Quiere antes → <span style="color:var(--accent3)">paga 5€</span> → genera + reinicia contador 30 días<br>
+      <span style="color:var(--muted)">↓</span><br>
+      <span style="color:var(--accent)">USUARIO PRO</span> (9,99€/mes)<br>
+      <span style="color:var(--muted)">├──</span> Genera cuando quiera, sin límite ese mes<br>
+      <span style="color:var(--muted)">└──</span> Al cancelar → vuelve a Free con 1 generación/mes
+    </div>
+  </div>
+
+  <div class="section-label">Costes de infraestructura por tramo de usuarios</div>
+
+  <div style="overflow-x:auto;margin-bottom:32px">
+    <table style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:10px 12px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Servicio</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">100</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">1.000</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">10.000</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">100.000</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">1.000.000</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Firebase Storage</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~20€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~245€</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Firebase Descarga</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~90€</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Firebase Functions</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Firebase Auth</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Gemini Flash-Lite</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~26€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~370€</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Stripe (~1,5%)</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~0€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~2€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~17€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~170€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~2.250€</td>
+        </tr>
+        <tr style="background:rgba(181,240,55,.04)">
+          <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">TOTAL INFRAESTRUCTURA</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~0€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~2€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~17€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~216€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~2.955€</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Estimación: 50KB almacenamiento/usuario · 100KB descarga/mes · 1 llamada IA/mes · 1.300 tokens/generación</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Firebase Functions: 2M invocaciones/mes gratis — con 1M usuarios generando 1x/mes solo se usan 1M invocaciones. Nunca se paga.</div>
+  </div>
+
+  <div class="section-label">Ingresos vs costes — 1% Pro + 1% pago único 5€</div>
+
+  <div style="overflow-x:auto;margin-bottom:32px">
+    <table style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:10px 12px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px"></th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">100</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">1.000</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">10.000</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">100.000</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.7rem">1.000.000</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Ingresos Pro 9,99€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~10€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~100€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~1.000€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~10.000€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~100.000€</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Pagos únicos 5€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~5€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~50€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~500€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~5.000€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~50.000€</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Total ingresos</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~15€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~150€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~1.500€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~15.000€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~150.000€</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Total costes</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~0€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~2€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~17€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~216€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~2.955€</td>
+        </tr>
+        <tr style="background:rgba(181,240,55,.04)">
+          <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">BENEFICIO NETO</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~15€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~148€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~1.483€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~14.784€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~147.045€</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;color:var(--text2)">Margen</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~100%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~99%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~99%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~99%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~98%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Hoja de ruta de monetización</div>
+
+  <div class="flow">
+    <div class="step">
+      <div class="step-left"><div class="num teal">F1</div><div class="vline"></div></div>
+      <div class="step-body">
+        <div class="step-title">Fase 1 — MVP <span class="step-tag tag-ai">Ahora</span></div>
+        <div class="step-desc">La IA funciona en la app, sin pagos todavía. Solo validar que genera buenos planes.</div>
+        <div class="box">
+          <div class="box-title">Qué se implementa</div>
+          <div class="box-item">Firebase Function recibe perfil del usuario y llama a Gemini Flash-Lite</div>
+          <div class="box-item">Gemini devuelve plan de entrenamiento + menú semanal en JSON</div>
+          <div class="box-item">Se guarda en Firebase: plan generado + <code>fecha_ultima_generacion</code></div>
+          <div class="box-item">Si intenta regenerar antes de 30 días → mensaje "disponible el DD/MM"</div>
+          <div class="box-item">Sin Stripe aún — todo el mundo en Free</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="num purple">F2</div><div class="vline"></div></div>
+      <div class="step-body">
+        <div class="step-title">Fase 2 — Monetización <span class="step-tag tag-new">Con usuarios</span></div>
+        <div class="step-desc">Activar los dos modelos de pago con Stripe.</div>
+        <div class="box">
+          <div class="box-title">Pago único 5€</div>
+          <div class="box-item">Aparece botón "Generar ahora por 5€" cuando el usuario no puede regenerar aún</div>
+          <div class="box-item">Stripe procesa el pago → webhook → Firebase resetea <code>fecha_ultima_generacion</code></div>
+          <div class="box-item">Genera inmediatamente y reinicia el ciclo de 30 días</div>
+        </div>
+        <div class="box" style="margin-top:8px">
+          <div class="box-title">Plan Pro 9,99€/mes</div>
+          <div class="box-item">Stripe gestiona la suscripción mensual</div>
+          <div class="box-item">Firebase guarda: <code>plan_pro: true</code> + <code>fecha_expiracion</code></div>
+          <div class="box-item">Mientras activo → IA ilimitada ese mes</div>
+          <div class="box-item">Al cancelar o expirar → vuelve a Free automáticamente</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="num amber">F3</div></div>
+      <div class="step-body">
+        <div class="step-title">Fase 3 — Crecimiento <span class="step-tag tag-new">Con ingresos</span></div>
+        <div class="step-desc">Mejorar la app para retener usuarios y atraer nuevos. Sin prisa, guiado por feedback real.</div>
+        <div class="box">
+          <div class="box-title">Personalización avanzada</div>
+          <div class="box-item">Alergias e intolerancias alimentarias</div>
+          <div class="box-item">Equipamiento disponible (gym, casa, sin material)</div>
+          <div class="box-item">Preferencias de cocina (rápido, batch cooking...)</div>
+        </div>
+        <div class="box" style="margin-top:8px">
+          <div class="box-title">Historial y app nativa</div>
+          <div class="box-item">Ver y recuperar planes anteriores generados</div>
+          <div class="box-item">Publicar en App Store y Google Play con Capacitor</div>
+          <div class="box-item">Notificaciones: recordatorio de entreno y renovación del plan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+// TAB NAVIGATION
+function show(id){
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.classList.toggle('active', t.getAttribute('onclick').includes("'"+id+"'"));
+  });
+  document.querySelectorAll('.pane').forEach(function(p){
+    p.classList.toggle('active', p.id === 'p-'+id);
+  });
+}
+function showInicio(id){
+  var container = document.getElementById('p-inicio');
+  container.querySelectorAll('.subtab').forEach(function(t){
+    t.classList.toggle('active', t.getAttribute('onclick').includes("'"+id+"'"));
+  });
+  container.querySelectorAll('.iniciopane').forEach(function(p){
+    p.classList.toggle('active', p.id === 'ip-'+id);
+  });
+}
+function showSub(id){
+  var container = document.getElementById('ip-new');
+  container.querySelectorAll('.subtab').forEach(function(t){
+    t.classList.toggle('active', t.getAttribute('onclick').includes("'"+id+"'"));
+  });
+  container.querySelectorAll('.subpane').forEach(function(p){
+    p.classList.toggle('active', p.id === 'sp-'+id);
+  });
+}
+
+// ROADMAP CHECKS
+var STORAGE_KEY = 'roadto75_checks';
+
+function loadChecks(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }
+  catch(e){ return {}; }
+}
+function saveChecks(data){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function toggle(row){
+  var id = row.getAttribute('data-id');
+  var checks = loadChecks();
+  checks[id] = !checks[id];
+  saveChecks(checks);
+  applyState(row, checks[id]);
+  updateProgress();
+}
+
+function applyState(row, done){
+  row.classList.toggle('done', !!done);
+}
+
+function updateProgress(){
+  var checks = loadChecks();
+  var phases = document.querySelectorAll('.phase');
+  var totalDone = 0, totalAll = 0;
+
+  phases.forEach(function(phase){
+    var rows = phase.querySelectorAll('.ck-row');
+    var phaseDone = 0;
+    rows.forEach(function(r){
+      var id = r.getAttribute('data-id');
+      if(checks[id]){ phaseDone++; }
+    });
+    var pct = rows.length ? Math.round(phaseDone/rows.length*100) : 0;
+    var fill = phase.querySelector('.prog-fill');
+    var label = phase.querySelector('.prog-label');
+    if(fill) fill.style.width = pct+'%';
+    if(label) label.textContent = pct+'%';
+    totalDone += phaseDone;
+    totalAll += rows.length;
+  });
+
+  var totalPct = totalAll ? Math.round(totalDone/totalAll*100) : 0;
+  var tf = document.getElementById('total-fill');
+  var tt = document.getElementById('total-text');
+  if(tf) tf.style.width = totalPct+'%';
+  if(tt) tt.textContent = totalDone+' / '+totalAll;
+}
+
+function resetAll(){
+  if(!confirm('¿Reiniciar todos los checks?')) return;
+  saveChecks({});
+  document.querySelectorAll('.ck-row').forEach(function(r){ r.classList.remove('done'); });
+  updateProgress();
+}
+
+function initRoadmap(){
+  var checks = loadChecks();
+  document.querySelectorAll('.ck-row').forEach(function(r){
+    var id = r.getAttribute('data-id');
+    if(checks[id]) r.classList.add('done');
+  });
+  updateProgress();
+}
+
+initRoadmap();
+</script>
+</body>
+</html>
