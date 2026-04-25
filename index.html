@@ -608,6 +608,8 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="stack-item">profile.fecha_ultima_gen</div>
         <div class="stack-item">profile.plan_pro</div>
         <div class="stack-item">profile.fecha_expiracion</div>
+        <div class="stack-item">profile.createdAt</div>
+        <div class="stack-item">profile.lastActive</div>
         <div class="stack-item">/users/{uid}/nutrition</div>
         <div class="stack-item">/users/{uid}/training</div>
         <div class="stack-item">/users/{uid}/shopping</div>
@@ -653,6 +655,17 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="stack-item">Pago único 5€ — adelantar mes</div>
         <div class="stack-item">Suscripción 9,99€/mes — Pro</div>
         <div class="stack-item">Webhooks → Firebase actualiza plan</div>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-layer">Métricas</div>
+      <div class="stack-name">Admin Panel + Stripe Dashboard</div>
+      <div class="stack-why">Las métricas vienen de dos fuentes que ya tienes: Firestore para datos de usuarios (registros, planes activos, generaciones) y Stripe Dashboard para todo lo relacionado con pagos. El panel de admin es una ruta privada <code>/admin</code> en la propia app, protegida por tu UID — nadie más puede acceder. Sin coste adicional.</div>
+      <div class="stack-items">
+        <div class="stack-item">Firestore → métricas de usuarios</div>
+        <div class="stack-item">Stripe Dashboard → métricas de pagos</div>
+        <div class="stack-item">/admin protegida por UID del dueño</div>
+        <div class="stack-item">0€ de coste adicional</div>
       </div>
     </div>
     <div class="stack-card">
@@ -718,6 +731,10 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
           <div class="tree-file">
             <div class="tree-file-name">Profile.jsx</div>
             <div class="tree-file-desc">Pestaña de Perfil dentro del Dashboard. Muestra el nombre, objetivo, plan activo (Free / Pro), días restantes hasta la próxima generación gratuita y la fecha de expiración del Pro si aplica. Incluye botón para cambiar el objetivo que puede disparar el UpgradeModal si el usuario no puede regenerar aún.</div>
+          </div>
+          <div class="tree-file">
+            <div class="tree-file-name">Admin.jsx</div>
+            <div class="tree-file-desc">Panel de métricas privado solo accesible para el dueño de la app. Protegido por UID — si el UID del usuario autenticado no coincide con el del admin, redirige al Dashboard. Lee datos de Firestore en tiempo real y muestra: total de usuarios registrados, nuevos usuarios esta semana y este mes, usuarios con plan Pro activo, total de pagos únicos de 5€ realizados, generaciones de IA completadas, usuarios activos en los últimos 30 días y ratio de conversión Free → Pro. Incluye enlace directo al Stripe Dashboard para métricas de pagos detalladas.</div>
           </div>
         </div>
       </div>
@@ -994,7 +1011,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="4-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Al finalizar onboarding, guardar perfil y copiar defaultUser.js a Firestore</div><div class="ck-note">setDoc(doc(db, 'users', uid), { profile: {...}, ...defaultUser })</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="4-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Inicializar campos de monetización en el perfil <span class="ck-tag warn">obligatorio</span></div><div class="ck-note">Añadir al guardar el perfil: plan_pro: false · fecha_expiracion: null · fecha_ultima_generacion: null. Sin estos campos generatePlan.js fallará al intentar leerlos</div></div></div>
+        <div class="ck-row" data-id="4-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Inicializar campos de monetización y métricas en el perfil <span class="ck-tag warn">obligatorio</span></div><div class="ck-note">Añadir al guardar el perfil: plan_pro: false · fecha_expiracion: null · fecha_ultima_generacion: null · createdAt: new Date() · lastActive: new Date(). Sin estos campos generatePlan.js fallará y el panel de admin no podrá calcular métricas por periodo</div></div></div>
       </div>
     </div>
 
@@ -1138,6 +1155,35 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-row" data-id="9-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Publicar en Google Play Store</div><div class="ck-note">Necesitas cuenta de desarrollador (25$ único) · subir el AAB firmado</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="9-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Publicar en Apple App Store</div><div class="ck-note">Necesitas Apple Developer Program (99€/año) · build desde Xcode · subir con Transporter</div></div></div>
+      </div>
+    </div>
+
+    <!-- FASE 10 -->
+    <div class="phase" data-phase="10">
+      <div class="phase-header">
+        <div class="phase-num">10</div>
+        <div class="phase-info">
+          <div class="phase-title">Panel de métricas privado</div>
+          <div class="phase-sub">Admin.jsx + Firestore · solo visible para ti · 0€ adicional</div>
+        </div>
+        <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
+      </div>
+      <div class="phase-steps">
+        <div class="ck-row" data-id="10-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar tu UID de admin como constante</div><div class="ck-note">Firebase Console → Authentication → copia tu UID personal. Guárdalo como ADMIN_UID en el frontend. El panel solo se muestra si auth.currentUser.uid === ADMIN_UID</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir ruta /admin protegida en App.jsx</div><div class="ck-note">Comprueba si el UID del usuario es el de admin. Si no lo es redirige a /app. Si lo es renderiza Admin.jsx</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Registrar campo createdAt al crear cada usuario <span class="ck-tag warn">añadir en Fase 4</span></div><div class="ck-note">En el onboarding al guardar el perfil añadir createdAt: new Date(). Sin este campo no se pueden calcular métricas de nuevos registros por periodo</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Registrar campo lastActive al entrar al Dashboard <span class="ck-tag warn">añadir en Fase 5</span></div><div class="ck-note">Actualizar lastActive: new Date() cada vez que el usuario abre el Dashboard. Permite calcular usuarios activos en los últimos 7 y 30 días</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear queries de Firestore para las métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana/mes (filtrar por createdAt) · Usuarios Pro activos (plan_pro=true) · Generaciones realizadas (fecha_ultima_generacion != null) · Usuarios activos 30 días (lastActive)</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir Admin.jsx con tarjetas de métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana · Nuevos este mes · Usuarios Pro activos · Pagos únicos 5€ · Generaciones realizadas · Usuarios activos 30 días · Ratio conversión Free→Pro. Todo en tiempo real desde Firestore</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir enlace directo al Stripe Dashboard</div><div class="ck-note">Stripe ya muestra ingresos, pagos por día, suscripciones activas y cancelaciones con gráficas. No hay que replicarlo — solo enlazarlo desde Admin.jsx</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="10-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Actualizar Firestore Security Rules para lectura admin</div><div class="ck-note">Permitir leer todos los documentos de /users solo al UID de admin. Sin esto cualquier usuario autenticado podría consultar datos de otros</div></div></div>
       </div>
     </div>
 
