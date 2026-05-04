@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>RoadTo75 — Arquitectura</title>
+<title>BTal — Arquitectura</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -214,9 +214,9 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 <body>
 
 <div class="hero">
-  <div class="badge">RoadTo75 — Arquitectura & Flujos</div>
+  <div class="badge">BTal — Arquitectura & Flujos</div>
   <h1>De <em>index.html</em><br>a app real</h1>
-  <p class="hero-sub">Stack definitivo, flujos de usuario y estructura de proyecto para convertir RoadTo75 en una aplicación multi-usuario con IA integrada.</p>
+  <p class="hero-sub">Stack definitivo, flujos de usuario y estructura de proyecto para convertir BTal en una aplicación multi-usuario con IA integrada.</p>
 </div>
 
 <div class="tabs-wrap">
@@ -651,9 +651,9 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
     <div class="stack-card">
       <div class="stack-layer">Pagos</div>
       <div class="stack-name">Stripe</div>
-      <div class="stack-why">Gestiona los dos modelos de cobro: pago único de 5€ para adelantar la generación del mes, y suscripción mensual de 9,99€ para el plan Pro con IA ilimitada. <strong>Comisión real EU/EEA: 1,5% + 0,25€ por transacción</strong> (fuera de EEA: 2,5% + 0,25€). Para un pago de 5€ la comisión efectiva es ~6,5% (~0,33€) y para 9,99€ ~4% (~0,40€). Sin coste fijo mensual. Webhook con verificación de firma e idempotencia (event.id como clave) para evitar procesar dos veces.</div>
+      <div class="stack-why">Gestiona los dos modelos de cobro: pago único de 4,99€ para adelantar la generación del mes, y suscripción mensual de 9,99€ para el plan Pro con IA ilimitada. <strong>Comisión real EU/EEA: 1,5% + 0,25€ por transacción</strong> (fuera de EEA: 2,5% + 0,25€). Para un pago de 4,99€ la comisión efectiva es ~6,5% (~0,33€) y para 9,99€ ~4% (~0,40€). Sin coste fijo mensual. Webhook con verificación de firma e idempotencia (event.id como clave) para evitar procesar dos veces.</div>
       <div class="stack-items">
-        <div class="stack-item">Pago único 5€ — adelantar mes</div>
+        <div class="stack-item">Pago único 4,99€ — adelantar mes</div>
         <div class="stack-item">Suscripción 9,99€/mes — Pro</div>
         <div class="stack-item">Webhooks → Firebase actualiza plan</div>
       </div>
@@ -701,7 +701,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
   <div class="tree-wrap">
 
     <!-- RAÍZ -->
-    <div class="tree-root">📁 roadto75/ <span class="arch-root-badge">raíz del proyecto</span></div>
+    <div class="tree-root">📁 btal/ <span class="arch-root-badge">raíz del proyecto</span></div>
 
     <!-- src/ -->
     <div class="tree-folder">
@@ -725,7 +725,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
           </div>
           <div class="tree-file">
             <div class="tree-file-name">Success.jsx</div>
-            <div class="tree-file-desc">Página a la que Stripe redirige tras un pago completado correctamente. Muestra confirmación visual, informa del plan activado (5€ o Pro) y enlaza de vuelta al Dashboard. Ruta pública — no requiere auth para que la redirección funcione siempre.</div>
+            <div class="tree-file-desc">Página a la que Stripe redirige tras un pago completado correctamente. Muestra confirmación visual, informa del plan activado (4,99€ o Pro) y enlaza de vuelta al Dashboard. Ruta pública — no requiere auth para que la redirección funcione siempre.</div>
           </div>
           <div class="tree-file">
             <div class="tree-file-name">Cancel.jsx</div>
@@ -737,7 +737,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
           </div>
           <div class="tree-file">
             <div class="tree-file-name">Admin.jsx</div>
-            <div class="tree-file-desc">Panel de métricas privado solo accesible para el dueño de la app. Protegido por UID — si el UID del usuario autenticado no coincide con el del admin, redirige al Dashboard. Lee datos de Firestore en tiempo real y muestra: total de usuarios registrados, nuevos usuarios esta semana y este mes, usuarios con plan Pro activo, total de pagos únicos de 5€ realizados, generaciones de IA completadas, usuarios activos en los últimos 30 días y ratio de conversión Free → Pro. Incluye enlace directo al Stripe Dashboard para métricas de pagos detalladas.</div>
+            <div class="tree-file-desc">Panel de métricas privado solo accesible para el dueño de la app. Protegido por UID — si el UID del usuario autenticado no coincide con el del admin, redirige al Dashboard. Lee datos de Firestore en tiempo real y muestra: total de usuarios registrados, nuevos usuarios esta semana y este mes, usuarios con plan Pro activo, total de pagos únicos de 4,99€ realizados, generaciones de IA completadas, usuarios activos en los últimos 30 días y ratio de conversión Free → Pro. Incluye enlace directo al Stripe Dashboard para métricas de pagos detalladas.</div>
           </div>
         </div>
       </div>
@@ -797,12 +797,12 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="tree-folder tree-nested">
           <div class="tree-folder-label">📁 ui/</div>
           <div class="tree-files">
-            <div class="tree-file"><div class="tree-file-name">Header.jsx</div><div class="tree-file-desc">Barra superior de la app con el logo de RoadTo75, el nombre del usuario autenticado y el botón de cerrar sesión. Siempre visible dentro del Dashboard.</div></div>
+            <div class="tree-file"><div class="tree-file-name">Header.jsx</div><div class="tree-file-desc">Barra superior de la app con el logo de BTal, el nombre del usuario autenticado y el botón de cerrar sesión. Siempre visible dentro del Dashboard.</div></div>
             <div class="tree-file"><div class="tree-file-name">Tabs.jsx</div><div class="tree-file-desc">Componente de navegación por pestañas reutilizable. Recibe un array de secciones y gestiona cuál está activa. Lo usan el Dashboard y el Onboarding.</div></div>
             <div class="tree-file"><div class="tree-file-name">Modal.jsx</div><div class="tree-file-desc">Ventana emergente genérica con overlay oscuro. Se usa para confirmar acciones destructivas (borrar un alimento, reiniciar el plan) o mostrar detalles adicionales sin cambiar de pantalla.</div></div>
             <div class="tree-file"><div class="tree-file-name">SyncBadge.jsx</div><div class="tree-file-desc">Indicador de sincronización en tiempo real que muestra si los datos están guardados, pendientes de guardar o si hubo un error de conexión. Aparece en la esquina de cada sección editable.</div></div>
             <div class="tree-file"><div class="tree-file-name">EmptyState.jsx</div><div class="tree-file-desc">Pantalla de estado vacío que se muestra cuando una sección no tiene datos todavía. Incluye un icono, un mensaje descriptivo y un botón de acción (añadir manualmente o generar con IA).</div></div>
-            <div class="tree-file"><div class="tree-file-name">UpgradeModal.jsx</div><div class="tree-file-desc">Modal que aparece cuando el usuario intenta generar un plan antes de que pasen 30 días. Muestra los dos planes de pago: pago único de 5€ para generar ahora (reinicia el mes) y plan Pro de 9,99€/mes para generaciones ilimitadas ese mes. Llama a <code>stripe.js</code> según la opción elegida. También muestra los días restantes hasta la próxima generación gratuita.</div></div>
+            <div class="tree-file"><div class="tree-file-name">UpgradeModal.jsx</div><div class="tree-file-desc">Modal que aparece cuando el usuario intenta generar un plan antes de que pasen 30 días. Muestra los dos planes de pago: pago único de 4,99€ para generar ahora (reinicia el mes) y plan Pro de 9,99€/mes para generaciones ilimitadas ese mes. Llama a <code>stripe.js</code> según la opción elegida. También muestra los días restantes hasta la próxima generación gratuita.</div></div>
             <div class="tree-file"><div class="tree-file-name">ConfirmModal.jsx</div><div class="tree-file-desc">Modal de confirmación reutilizable que reemplaza al <code>mobileConfirm()</code> del index.html actual. Recibe título, cuerpo (con HTML enriquecido) y devuelve una promesa que resuelve <code>true</code>/<code>false</code>. Lo usan todas las acciones destructivas: eliminar comida, eliminar plan, resetear día, eliminar cuenta. Diseño bottom-sheet en móvil (más cómodo) y centrado en desktop.</div></div>
             <div class="tree-file"><div class="tree-file-name">EmojiPicker.jsx</div><div class="tree-file-desc">Selector de emoji con buscador en español. Carga el catálogo desde la API pública <code>emoji.json</code> (con caché en memoria) y agrupa por categorías (caras, animales, comida, objetos, símbolos, banderas). Lo usan <code>MealEditor.jsx</code> y cualquier sitio donde haya que elegir un icono. Incluye traducción ES → EN para que el usuario pueda buscar "manzana" y encuentre 🍎.</div></div>
             <div class="tree-file"><div class="tree-file-name">Lightbox.jsx</div><div class="tree-file-desc">Visor de imágenes en pantalla completa con galería. Cuando el usuario pulsa la foto de un producto en la lista de la compra, se abre el lightbox con esa foto + todas las del atributo <code>data-gallery</code>. Soporta navegación con flechas, dots de paginación, gestos táctiles (swipe) y cierre con Escape o clic en el fondo. Importante para que la lista de la compra muestre referencias visuales claras de cada producto.</div></div>
@@ -818,7 +818,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
           <div class="tree-file"><div class="tree-file-name">auth.js</div><div class="tree-file-desc">Agrupa todas las operaciones de autenticación: registro con email y contraseña, inicio de sesión, login con Google o Apple, creación de sesión anónima para el modo prueba y cierre de sesión. Ningún componente llama a Firebase Auth directamente.</div></div>
           <div class="tree-file"><div class="tree-file-name">db.js</div><div class="tree-file-desc">Gestiona la lectura y escritura de datos en Firestore bajo la ruta <code>/users/{uid}/</code>. Implementa debounce de 800ms en las escrituras para evitar demasiadas llamadas a la base de datos mientras el usuario escribe.</div></div>
           <div class="tree-file"><div class="tree-file-name">functions.js</div><div class="tree-file-desc">Llama a las Cloud Functions del backend (generatePlan, regenerateNutrition, etc.) adjuntando el token de autenticación del usuario. Gestiona los estados de carga y los errores para que los componentes no tengan que preocuparse de ello.</div></div>
-          <div class="tree-file"><div class="tree-file-name">stripe.js</div><div class="tree-file-desc">Llama a las Cloud Functions de pago desde el frontend. Expone dos funciones: <code>initSinglePayment()</code> para el pago único de 5€ (adelantar generación) y <code>initProSubscription()</code> para activar el plan Pro de 9,99€/mes. Redirige al usuario a Stripe Checkout y gestiona el retorno tras el pago.</div></div>
+          <div class="tree-file"><div class="tree-file-name">stripe.js</div><div class="tree-file-desc">Llama a las Cloud Functions de pago desde el frontend. Expone dos funciones: <code>initSinglePayment()</code> para el pago único de 4,99€ (adelantar generación) y <code>initProSubscription()</code> para activar el plan Pro de 9,99€/mes. Redirige al usuario a Stripe Checkout y gestiona el retorno tras el pago.</div></div>
         </div>
       </div>
 
@@ -860,8 +860,8 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="tree-file"><div class="tree-file-name">regenerateNutrition.js</div><div class="tree-file-desc">Regenera únicamente el menú semanal sin tocar el plan de entreno ni la lista de la compra. Útil cuando el usuario quiere variar la alimentación manteniendo el resto del plan intacto.</div></div>
         <div class="tree-file"><div class="tree-file-name">regenerateTraining.js</div><div class="tree-file-desc">Regenera únicamente los planes de entrenamiento. Tiene en cuenta el equipamiento disponible y los días de entreno del perfil actual del usuario para ajustar los ejercicios y la progresión.</div></div>
         <div class="tree-file"><div class="tree-file-name">regenerateShopping.js</div><div class="tree-file-desc">Regenera la lista de la compra en base al menú semanal actual. Agrupa los ingredientes por categorías (proteínas, lácteos, hidratos, etc.) y elimina duplicados antes de guardarla.</div></div>
-        <div class="tree-file"><div class="tree-file-name">createCheckoutSession.js</div><div class="tree-file-desc">Cloud Function que recibe el tipo de pago del frontend (pago único 5€ o suscripción Pro 9,99€), crea la sesión de Stripe Checkout con el Price ID correspondiente y devuelve la URL. Define las URLs de retorno <code>success_url</code> y <code>cancel_url</code>. Sin esta función el botón de pago no puede abrir Stripe.</div></div>
-        <div class="tree-file"><div class="tree-file-name">stripeWebhook.js</div><div class="tree-file-desc">Recibe los eventos de Stripe (pago único completado o suscripción Pro activada/cancelada) y actualiza Firestore en consecuencia. Para el pago de 5€ resetea <code>fecha_ultima_generacion</code>. Para el Pro activa <code>plan_pro: true</code> y guarda <code>fecha_expiracion</code>. Para cancelaciones o expiración pone <code>plan_pro: false</code>. Verifica la firma del webhook para evitar llamadas falsas.</div></div>
+        <div class="tree-file"><div class="tree-file-name">createCheckoutSession.js</div><div class="tree-file-desc">Cloud Function que recibe el tipo de pago del frontend (pago único 4,99€ o suscripción Pro 9,99€), crea la sesión de Stripe Checkout con el Price ID correspondiente y devuelve la URL. Define las URLs de retorno <code>success_url</code> y <code>cancel_url</code>. Sin esta función el botón de pago no puede abrir Stripe.</div></div>
+        <div class="tree-file"><div class="tree-file-name">stripeWebhook.js</div><div class="tree-file-desc">Recibe los eventos de Stripe (pago único completado o suscripción Pro activada/cancelada) y actualiza Firestore en consecuencia. Para el pago de 4,99€ resetea <code>fecha_ultima_generacion</code>. Para el Pro activa <code>plan_pro: true</code> y guarda <code>fecha_expiracion</code>. Para cancelaciones o expiración pone <code>plan_pro: false</code>. Verifica la firma del webhook para evitar llamadas falsas.</div></div>
         <div class="tree-file"><div class="tree-file-name">deleteAccount.js</div><div class="tree-file-desc">Cloud Function para borrar la cuenta de un usuario por completo (obligatorio GDPR + App Store). Pasos: (1) cancela cualquier suscripción Stripe activa, (2) borra el documento <code>/users/{uid}</code> y todas sus subcolecciones, (3) llama a <code>admin.auth().deleteUser(uid)</code> para eliminar la cuenta de Firebase Auth. Pide confirmación adicional con texto-trampa en el frontend (escribir "ELIMINAR") antes de invocarla.</div></div>
         <div class="tree-file"><div class="tree-file-name">exportUserData.js</div><div class="tree-file-desc">Cloud Function para exportar todos los datos del usuario en JSON (obligatorio GDPR — derecho de portabilidad, art. 20). Lee el documento entero <code>/users/{uid}</code>, lo serializa y devuelve una URL temporal de descarga. Útil también para que el usuario tenga un backup propio. Limitar a 1 export al día por UID para evitar abuso.</div></div>
         <div class="tree-file"><div class="tree-file-name">index.js</div><div class="tree-file-desc">Punto de entrada del backend. Importa y exporta todas las funciones anteriores para que Firebase las reconozca y las despliegue. Cualquier función nueva debe añadirse aquí para que sea accesible desde el frontend.</div></div>
@@ -873,7 +873,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
       <div class="tree-folder-label">📁 public/ <span class="tree-folder-desc">assets estáticos servidos directamente sin pasar por Vite</span></div>
       <div class="tree-files">
         <div class="tree-file"><div class="tree-file-name">manifest.json</div><div class="tree-file-desc">Archivo de configuración de la Progressive Web App. Define el nombre de la app, los iconos en distintos tamaños, el color de la barra de estado y el modo de visualización (pantalla completa). Sin él no aparece el banner de instalación en Android ni iOS.</div></div>
-        <div class="tree-file"><div class="tree-file-name">favicon.svg</div><div class="tree-file-desc">Icono vectorial de RoadTo75 que aparece en la pestaña del navegador, en el escritorio del móvil al instalar la PWA y en la pantalla de carga de la app nativa.</div></div>
+        <div class="tree-file"><div class="tree-file-name">favicon.svg</div><div class="tree-file-desc">Icono vectorial de BTal que aparece en la pestaña del navegador, en el escritorio del móvil al instalar la PWA y en la pantalla de carga de la app nativa.</div></div>
       </div>
     </div>
 
@@ -917,7 +917,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="-1-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Decidir nombre/marca de la app</div><div class="ck-note">¿RoadTo75 sigue siendo el nombre? Comprobar disponibilidad en App Store, Play Store y como dominio antes de fijarlo</div></div></div>
+        <div class="ck-row" data-id="-1-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Decidir nombre/marca de la app</div><div class="ck-note">¿BTal sigue siendo el nombre? Comprobar disponibilidad en App Store, Play Store y como dominio antes de fijarlo</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="-1-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Registrar dominio principal</div><div class="ck-note">Cloudflare Registrar o Namecheap (~10€/año .com). Activar 2FA en la cuenta del registrador</div></div></div>
         <div class="ck-sep"></div>
@@ -950,7 +950,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="0-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Git si no lo tienes</div><div class="ck-note">Descarga desde git-scm.com</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="0-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear repositorio en GitHub</div><div class="ck-note">Nombre sugerido: roadto75 — inicialízalo vacío (sin README)</div></div></div>
+        <div class="ck-row" data-id="0-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear repositorio en GitHub</div><div class="ck-note">Nombre sugerido: btal — inicialízalo vacío (sin README)</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="0-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar VS Code (recomendado) con extensión ESLint</div><div class="ck-note">Opcionales útiles: Prettier, Tailwind CSS IntelliSense, Firebase Explorer</div></div></div>
       </div>
@@ -967,7 +967,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="1-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear el proyecto con Vite <span class="ck-tag cmd">npm create vite@latest roadto75 --template react</span></div><div class="ck-note">Selecciona React → JavaScript cuando te pregunte</div></div></div>
+        <div class="ck-row" data-id="1-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear el proyecto con Vite <span class="ck-tag cmd">npm create vite@latest btal --template react</span></div><div class="ck-note">Selecciona React → JavaScript cuando te pregunte</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="1-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar dependencias base <span class="ck-tag cmd">npm install</span></div><div class="ck-note">Instala también: react-router-dom, tailwindcss, firebase</div></div></div>
         <div class="ck-sep"></div>
@@ -990,7 +990,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="2-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear proyecto en Firebase Console</div><div class="ck-note">console.firebase.google.com → Añadir proyecto → Nombre: roadto75</div></div></div>
+        <div class="ck-row" data-id="2-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear proyecto en Firebase Console</div><div class="ck-note">console.firebase.google.com → Añadir proyecto → Nombre: btal</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="2-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Activar Firestore Database</div><div class="ck-note">En la consola: Build → Firestore → Crear base de datos → Modo producción</div></div></div>
         <div class="ck-sep"></div>
@@ -1138,7 +1138,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="phase-num">7</div>
         <div class="phase-info">
           <div class="phase-title">Monetización con Stripe</div>
-          <div class="phase-sub">Pago único 5€ · Plan Pro 9,99€/mes</div>
+          <div class="phase-sub">Pago único 4,99€ · Plan Pro 9,99€/mes</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1147,9 +1147,9 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-0b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar el Webhook Secret como secreto de Firebase <span class="ck-tag warn">nunca en el código</span></div><div class="ck-note">Stripe → Developers → Webhooks → copiar el Signing Secret → <code>firebase functions:secrets:set STRIPE_WEBHOOK_SECRET</code>. Sin esto stripeWebhook.js no puede verificar que los eventos son legítimos y cualquiera podría falsificar un pago</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear productos en Stripe Dashboard <span class="ck-tag new">2 productos</span></div><div class="ck-note">Producto 1: "Generar ahora" — pago único 5€. Producto 2: "Plan Pro" — suscripción mensual 9,99€. Copiar los Price ID de cada uno</div></div></div>
+        <div class="ck-row" data-id="7-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear productos en Stripe Dashboard <span class="ck-tag new">2 productos</span></div><div class="ck-note">Producto 1: "Generar ahora" — pago único 4,99€. Producto 2: "Plan Pro" — suscripción mensual 9,99€. Copiar los Price ID de cada uno</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-1b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar los Price ID como secretos de Firebase <span class="ck-tag warn">nunca hardcodeados</span></div><div class="ck-note"><code>firebase functions:secrets:set STRIPE_PRICE_SINGLE</code> → pegar el Price ID del pago único 5€. <code>firebase functions:secrets:set STRIPE_PRICE_PRO</code> → pegar el Price ID de la suscripción 9,99€. createCheckoutSession.js los leerá desde process.env en tiempo de ejecución</div></div></div>
+        <div class="ck-row" data-id="7-1b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar los Price ID como secretos de Firebase <span class="ck-tag warn">nunca hardcodeados</span></div><div class="ck-note"><code>firebase functions:secrets:set STRIPE_PRICE_SINGLE</code> → pegar el Price ID del pago único 4,99€. <code>firebase functions:secrets:set STRIPE_PRICE_PRO</code> → pegar el Price ID de la suscripción 9,99€. createCheckoutSession.js los leerá desde process.env en tiempo de ejecución</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Stripe SDK en Functions <span class="ck-tag cmd">npm install stripe</span></div><div class="ck-note">Dentro de la carpeta functions/ — no en el frontend</div></div></div>
         <div class="ck-sep"></div>
@@ -1159,11 +1159,11 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir lógica de control en generatePlan.js</div><div class="ck-note">Leer plan_pro y fecha_ultima_generacion del perfil. Si plan_pro=false Y fecha_ultima_generacion < 30 días → devolver error 403 "limit_reached". Si puede generar → llamar a Gemini y actualizar fecha_ultima_generacion</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/createCheckoutSession.js <span class="ck-tag warn">paso crítico</span></div><div class="ck-note">Cloud Function que recibe el tipo de pago (5€ único o Pro 9,99€), crea la sesión de Stripe Checkout con los Price ID correspondientes y devuelve la URL al frontend. Sin esta función el botón de pago no puede abrir Stripe</div></div></div>
+        <div class="ck-row" data-id="7-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/createCheckoutSession.js <span class="ck-tag warn">paso crítico</span></div><div class="ck-note">Cloud Function que recibe el tipo de pago (4,99€ único o Pro 9,99€), crea la sesión de Stripe Checkout con los Price ID correspondientes y devuelve la URL al frontend. Sin esta función el botón de pago no puede abrir Stripe</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/services/stripe.js en el frontend</div><div class="ck-note">initSinglePayment() e initProSubscription() — llaman a createCheckoutSession y redirigen al usuario a la URL de Stripe</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir UpgradeModal.jsx</div><div class="ck-note">Aparece cuando generatePlan devuelve 403. Muestra días restantes hasta próxima generación gratuita, el botón de 5€ y el botón Pro 9,99€/mes</div></div></div>
+        <div class="ck-row" data-id="7-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir UpgradeModal.jsx</div><div class="ck-note">Aparece cuando generatePlan devuelve 403. Muestra días restantes hasta próxima generación gratuita, el botón de 4,99€ y el botón Pro 9,99€/mes</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear src/pages/Success.jsx y src/pages/Cancel.jsx</div><div class="ck-note">Stripe redirige a estas páginas tras el pago. Success muestra confirmación y enlaza al Dashboard. Cancel informa que el pago fue cancelado y vuelve al Dashboard sin cambios</div></div></div>
         <div class="ck-sep"></div>
@@ -1175,7 +1175,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-13" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">No fiarse del success_url para confirmar pago</div><div class="ck-note">El usuario puede llamar manualmente a <code>/success</code> sin haber pagado nada. La verdad SIEMPRE viene del webhook. Success.jsx debe leer Firestore para verificar el estado real, no asumir que el pago se hizo solo por estar en esa URL</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-14" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Configurar comisiones reales en el cálculo</div><div class="ck-note">Stripe en EU: 1,5% + 0,25€/transacción. Para pago de 5€ son ~0,33€ (6,5% efectivo). Para 9,99€ son ~0,40€ (4%). Tenerlo en cuenta en proyecciones de ingresos. Stripe Tax (gestiona IVA) cuesta 0,5% adicional — opcional pero recomendado si vendes a EU</div></div></div>
+        <div class="ck-row" data-id="7-14" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Configurar comisiones reales en el cálculo</div><div class="ck-note">Stripe en EU: 1,5% + 0,25€/transacción. Para pago de 4,99€ son ~0,33€ (6,5% efectivo). Para 9,99€ son ~0,40€ (4%). Tenerlo en cuenta en proyecciones de ingresos. Stripe Tax (gestiona IVA) cuesta 0,5% adicional — opcional pero recomendado si vendes a EU</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-15" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Customer Portal de Stripe para gestionar suscripción</div><div class="ck-note">Stripe ofrece un portal alojado donde el usuario puede cancelar, cambiar tarjeta o descargar facturas. Cloud Function <code>createPortalSession</code> que devuelve la URL. Sin esto tienes que construir tú la UI de cancelación y se complica</div></div></div>
       </div>
@@ -1215,7 +1215,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="9-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Capacitor <span class="ck-tag cmd">npm install @capacitor/core @capacitor/cli</span></div><div class="ck-note">Inicializar: npx cap init roadto75 com.roadto75.app</div></div></div>
+        <div class="ck-row" data-id="9-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar Capacitor <span class="ck-tag cmd">npm install @capacitor/core @capacitor/cli</span></div><div class="ck-note">Inicializar: npx cap init btal com.btal.app</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="9-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir plataforma Android <span class="ck-tag cmd">npx cap add android</span></div><div class="ck-note">Requiere Android Studio instalado</div></div></div>
         <div class="ck-sep"></div>
@@ -1258,7 +1258,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear queries de Firestore para las métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana/mes (filtrar por createdAt) · Usuarios Pro activos (plan_pro=true) · Generaciones realizadas (fecha_ultima_generacion != null) · Usuarios activos 30 días (lastActive)</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="10-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir Admin.jsx con tarjetas de métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana · Nuevos este mes · Usuarios Pro activos · Pagos únicos 5€ · Generaciones realizadas · Usuarios activos 30 días · Ratio conversión Free→Pro. Todo en tiempo real desde Firestore</div></div></div>
+        <div class="ck-row" data-id="10-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir Admin.jsx con tarjetas de métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana · Nuevos este mes · Usuarios Pro activos · Pagos únicos 4,99€ · Generaciones realizadas · Usuarios activos 30 días · Ratio conversión Free→Pro. Todo en tiempo real desde Firestore</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir enlace directo al Stripe Dashboard</div><div class="ck-note">Stripe ya muestra ingresos, pagos por día, suscripciones activas y cancelaciones con gráficas. No hay que replicarlo — solo enlazarlo desde Admin.jsx</div></div></div>
         <div class="ck-sep"></div>
@@ -1609,7 +1609,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
     </div>
     <div class="plan-card-wrap plan-single">
       <div class="stack-layer">Pago único</div>
-      <div class="stack-name" style="color:var(--accent3)">5 € ahora</div>
+      <div class="stack-name" style="color:var(--accent3)">4,99 € ahora</div>
       <div class="stack-why">Genera inmediatamente sin esperar al mes. Una vez pagado y generado, el contador de 30 días vuelve a empezar desde ese momento. No es una suscripción.</div>
       <div class="stack-items">
         <div class="stack-item item-single">Genera ahora + reinicia el mes</div>
@@ -1638,7 +1638,7 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
       <span style="color:var(--muted)">↓</span><br>
       <span style="color:var(--accent2)">USUARIO FREE</span><br>
       <span style="color:var(--muted)">├──</span> Genera → espera 30 días → genera gratis otra vez<br>
-      <span style="color:var(--muted)">└──</span> Quiere antes → <span style="color:var(--accent3)">paga 5€</span> → genera + reinicia contador 30 días<br>
+      <span style="color:var(--muted)">└──</span> Quiere antes → <span style="color:var(--accent3)">paga 4,99€</span> → genera + reinicia contador 30 días<br>
       <span style="color:var(--muted)">↓</span><br>
       <span style="color:var(--accent)">USUARIO PRO</span> (9,99€/mes)<br>
       <span style="color:var(--muted)">├──</span> Genera cuando quiera, sin límite ese mes<br>
@@ -1720,11 +1720,11 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
       </tbody>
     </table>
     <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Estimación: 50KB almacenamiento/usuario · 100KB descarga/mes · 1 llamada IA/mes · ~3.800 tokens/generación (800 input + 3000 output)</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Stripe EU/EEA: 1,5% + 0,25€ por transacción. Para pago de 5€ son ~0,33€ (6,5% efectivo) y para 9,99€ son ~0,40€ (4%). Asume 1% de usuarios paga 5€ y 1% suscribe Pro 9,99€</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Stripe EU/EEA: 1,5% + 0,25€ por transacción. Para pago de 4,99€ son ~0,33€ (6,5% efectivo) y para 9,99€ son ~0,40€ (4%). Asume 1% de usuarios paga 4,99€ y 1% suscribe Pro 9,99€</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Firebase Functions: hasta 100k usuarios prácticamente gratis. A 1M usuarios ~50€/mes por GB-segundos de cómputo y egress (no solo invocaciones)</div>
   </div>
 
-  <div class="section-label">Ingresos vs costes — 1% Pro + 1% pago único 5€</div>
+  <div class="section-label">Ingresos vs costes — 1% Pro + 1% pago único 4,99€</div>
 
   <div style="overflow-x:auto;margin-bottom:32px">
     <table style="width:100%;border-collapse:collapse;font-size:.8rem">
@@ -1748,8 +1748,8 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~100.000€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:10px 12px;color:var(--text);font-weight:600">Pagos únicos 5€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~5€</td>
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Pagos únicos 4,99€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~4,99€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~50€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~500€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~5.000€</td>
@@ -1815,8 +1815,8 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
         <div class="step-title">Fase 2 — Monetización <span class="step-tag tag-new">Con usuarios</span></div>
         <div class="step-desc">Activar los dos modelos de pago con Stripe.</div>
         <div class="box">
-          <div class="box-title">Pago único 5€</div>
-          <div class="box-item">Aparece botón "Generar ahora por 5€" cuando el usuario no puede regenerar aún</div>
+          <div class="box-title">Pago único 4,99€</div>
+          <div class="box-item">Aparece botón "Generar ahora por 4,99€" cuando el usuario no puede regenerar aún</div>
           <div class="box-item">Stripe procesa el pago → webhook → Firebase resetea <code>fecha_ultima_generacion</code></div>
           <div class="box-item">Genera inmediatamente y reinicia el ciclo de 30 días</div>
         </div>
@@ -1884,7 +1884,7 @@ function showSub(id){
 }
 
 // ROADMAP CHECKS
-var STORAGE_KEY = 'roadto75_checks';
+var STORAGE_KEY = 'btal_checks';
 
 function loadChecks(){
   try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }
