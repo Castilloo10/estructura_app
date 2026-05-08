@@ -182,6 +182,24 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 .total-prog-text{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text);flex-shrink:0}
 .total-prog-label{font-size:.8rem;color:var(--text2);flex-shrink:0}
 
+/* STATUS BANNER · estado actual del proyecto BTal */
+.status-banner{background:linear-gradient(135deg,rgba(55,240,168,.06),rgba(181,240,55,.06));border:1px solid rgba(55,240,168,.25);border-radius:12px;padding:18px 20px;margin-bottom:18px}
+.status-banner-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.status-banner-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.4px;color:var(--text);display:flex;align-items:center;gap:8px}
+.status-banner-title::before{content:'●';color:var(--accent2);font-size:.9rem}
+.status-banner-date{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);padding:3px 9px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--border)}
+.status-banner-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.status-banner-cols{grid-template-columns:1fr}}
+.status-banner-col h4{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.status-banner-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.status-banner-list li{font-size:.78rem;line-height:1.45;color:var(--text2);padding-left:18px;position:relative}
+.status-banner-list li::before{position:absolute;left:0;top:0;font-family:'JetBrains Mono',monospace;font-size:.7rem}
+.status-banner-list li.done{color:var(--text2)}
+.status-banner-list li.done::before{content:'✓';color:var(--accent2)}
+.status-banner-list li.pend{color:var(--text2)}
+.status-banner-list li.pend::before{content:'○';color:var(--accent3)}
+.status-banner-list li code{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);background:rgba(181,240,55,.08);padding:1px 5px;border-radius:4px}
+
 /* PLAN CARDS (Modelo IA) */
 .plan-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:32px}
 .plan-card-wrap{background:var(--surface);border-radius:12px;padding:20px;transition:border-color .2s;border:1px solid var(--border)}
@@ -896,6 +914,76 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
     <div class="section-label" style="margin:0;flex:1">Del index.html al producto final</div>
     <button class="roadmap-reset" onclick="resetAll()">↺ Reiniciar</button>
+  </div>
+
+  <!-- ESTADO ACTUAL DEL PROYECTO · sincronizado con lo que hay desplegado -->
+  <div class="status-banner">
+    <div class="status-banner-head">
+      <div class="status-banner-title">Estado actual del proyecto</div>
+      <div class="status-banner-date">6 mayo 2026 · btal-app.web.app</div>
+    </div>
+    <div class="status-banner-cols">
+      <div class="status-banner-col">
+        <h4>Extras hechos fuera del roadmap original</h4>
+        <ul class="status-banner-list">
+          <li class="done"><strong>Decisión:</strong> NO usamos Tailwind. Ionic ya trae utility classes y web components nativos — añadir Tailwind sería redundante.</li>
+          <li class="done">PWA splash iOS — 40 imágenes <code>apple-splash-*</code> con logo pequeño tipo Instagram/X + script <code>scripts/generate-splash.ps1</code></li>
+          <li class="done">MFA TOTP — código completo (<code>EnableTotpModal</code>, <code>TotpSignInModal</code>, <code>ReauthModal</code>, helpers en <code>auth.ts</code>) · activación en consola pendiente</li>
+          <li class="done">Página <code>/auth/action</code> con los 6 modos de Firebase (resetPassword, verifyEmail, recoverEmail, verifyAndChangeEmail, revertSecondFactorAddition, signIn)</li>
+          <li class="done"><strong>Settings completos</strong>: Avatar editable + Administrar cuenta (info, verificar, cambiar email, vincular Google, cambiar contraseña 2-pasos Instagram-style, restablecer, eliminar cuenta) + Preferencias + Soporte (mailto pre-rellenados) + Acerca</li>
+          <li class="done">Cambio de email del usuario con <code>verifyBeforeUpdateEmail</code> + <code>ReauthModal</code> reusable cuando la sesión es vieja</li>
+          <li class="done"><strong>Identity Platform</strong> habilitado (Spark, 3.000 DAU gratis) + Firestore Database activo + reglas básicas desplegadas</li>
+          <li class="done"><strong>Onboarding</strong> de 3 pasos con barra de progreso, validación, prefill de displayName desde Auth, salida con "Cerrar sesión"</li>
+          <li class="done"><strong>ProfileProvider</strong> con sync a Firestore + state-from-prop síncrono al cambiar de usuario (arregla bug cross-device del onboarding) + <code>refreshUser()</code> en AuthContext para propagar reloads</li>
+          <li class="done"><strong>PreferencesProvider</strong>: sistema de unidades (kg/lb, cm/in) e inicio de semana (lunes/domingo). Local para invitados, Firestore para reales con migración invitado→real automática</li>
+          <li class="done">Util <code>units.ts</code> con conversiones <code>formatWeight</code>, <code>formatHeight</code>, <code>weekDays</code> centralizados — listos para reutilizar en dashboard real</li>
+          <li class="done"><strong>Editar datos del perfil de fitness</strong> — modal <code>EditFitnessProfileModal</code> accesible desde Settings → Administrar cuenta → "Editar datos del perfil". Inputs adaptados a kg/cm o lb/ft+in según preferencia. Helper <code>updateUserProfileFields</code> en <code>db.ts</code> + <code>updateProfile()</code> en ProfileProvider con optimistic update.</li>
+          <li class="done"><strong>Tarjeta de perfil real en Dashboard</strong> — peso, altura, IMC con categoría OMS (lima/cyan/oro/coral), objetivo destacado, equipamiento, nivel de actividad, días de entreno y pills de restricciones. Lee del <code>profile</code> de Firestore con la unidad de la preferencia activa.</li>
+          <li class="done"><strong>Aviso médico/legal</strong> (14-2) — checkbox obligatorio en paso 1 del onboarding. Bloquea avance si no se acepta. Timestamp de aceptación se persiste en <code>UserDocument.medicalDisclaimerAcceptedAt</code> para evidencia legal.</li>
+          <li class="done"><strong>Esqueleto v2 — Fase 1</strong>: <code>AppShell</code> con <code>IonTabs</code> + bottom bar nativo + 5 sub-rutas (<code>/app/hoy</code>, <code>/app/menu</code>, <code>/app/compra</code>, <code>/app/entreno</code>, <code>/app/registro</code>). Componente <code>TabHeader</code> reusable con saludo, fecha y slots de acciones. Tab <strong>Hoy</strong> con header real (saludo + fecha + avatar gradient lima→cyan) + hero card vacía + 3 empty cards (entreno, comidas, suplementos). Las 4 tabs restantes con placeholder "soon". Sin datos hardcodeados de usuario — cero números falsos. <strong>Avatar de perfil presente en las 5 tabs</strong> a través del componente <code>AppAvatarButton</code> (encapsula botón circular con foto/inicial + estado + montaje lazy del <code>ProfileSheet</code>).</li>
+          <li class="done"><strong>ProfileSheet</strong> bottom sheet (<code>IonModal</code> con <code>breakpoints={[0, 0.85, 1]}</code>) accesible desde el avatar de cualquier tab. Sustituye a la tarjeta de perfil que vivía en el Dashboard antiguo. Reusa los datos del <code>ProfileProvider</code>: peso, altura, IMC con categoría OMS, objetivo, equipamiento, actividad, días, restricciones. Botones a "Editar datos del perfil" y a "Ajustes".</li>
+          <li class="done"><strong>v2 design notes</strong> guardadas en <code>web plan muscular HTML/v2_design_notes.md</code> — paleta, componentes por tab, mapping de datos a Firestore, archivos React donde vive todo. Referencia para las Fases 2-5.</li>
+          <li class="done"><strong>Fase 2A completa — Interruptor IA/Manual + plantillas</strong>: <code>defaultUser.ts</code> ampliado con tipos <code>Menu</code> (7 días × 4 comidas), <code>Entrenos</code> (planes 1-7 días con ejercicios), <code>Compra</code> (7 categorías), <code>Suplementos</code> (contadores de dosis). Factories <code>defaultMenu/Entrenos/Compra/Suplementos()</code>. Nuevo <code>demoUser.ts</code> con plan completo de ejemplo basado en el v2 mockup (menú semanal realista, plan 4 días Push/Pull/Legs+Brazos, lista de la compra con 12 productos, contadores de batidos/creatina). Nuevo componente <code>StepMode</code> reusable (cards IA/Manual con copy y meta-info). Onboarding ahora son <strong>4 pasos</strong> con barra de progreso actualizada — el 4º fuerza la elección. <code>saveOnboardingProfile</code> escribe doc completo (profile + menu + entrenos + compra + suplementos). Migración automática <code>ensureUserDocumentSchema</code> añade campos faltantes a docs viejos al cargarlos en ProfileProvider, sin romper nada. <code>seedGuestDocument</code> crea el doc del invitado con <code>demoUser</code> (idempotente). <code>ChangeModeModal</code> en Settings → Administrar cuenta → "Modo de generación" para cambiar IA↔Manual sin perder datos.</li>
+          <li class="done"><strong>Schema granular IA + reglas de plan</strong>: <code>UserDocument</code> ampliado con <code>plan: {tipo, vence_en, one_off_consumido}</code> y <code>generaciones: {menu_at, entrenos_at, consumidas_ciclo, ciclo_inicio}</code>. Tipos <code>PlanTipo</code> ('free' | 'one_off' | 'pro') y <code>ScopeIA</code> ('all' | 'menu' | 'entrenos'). Helper <code>canGenerateAi(userDoc, isAnonymous, scope)</code> en <code>utils/ia.ts</code> que devuelve <code>{allowed, reason, unlocksAt, hint}</code> — la UI lo usa para enseñar/ocultar/desactivar el botón "Generar con IA" en cada tab. Decisión de producto: <strong>opción 1 estricta</strong> (1 gen total al mes en Free, sea total o parcial); <strong>la compra deriva del menú, no se regenera con IA aparte</strong>; productos extra ad-hoc añadibles manualmente. Campos <code>plan_pro/fecha_expiracion/fecha_ultima_generacion</code> deprecados pero retrocompatibles para no romper docs existentes hasta Fase 6.</li>
+          <li class="done"><strong>Conversión invitado → cuenta real</strong>: helpers <code>linkAnonymousAccount(email, password)</code> y <code>linkAnonymousGoogle()</code> en <code>auth.ts</code> que usan <code>linkWithCredential</code> / <code>linkWithPopup</code> de Firebase para preservar el uid → todos los cambios del demo (menú editado, entrenos personalizados, lista de la compra) se transfieren a la cuenta real automáticamente. Nuevo <code>LinkGuestAccountModal</code> con form email+password + botón Google. Banner CTA permanente con gradient violeta en HoyPage solo visible si <code>user.isAnonymous</code> (cumple "Crear cuenta para guardar" del flujo de modo prueba del roadmap).</li>
+          <li class="done"><strong>Fix accesibilidad aria-hidden</strong>: helper <code>blurAndRun()</code> en <code>utils/focus.ts</code> aplicado en todos los botones que abren modales (Settings, AccountManageModal, ProfileSheet, HoyPage avatar, banner invitado). Elimina el warning "Blocked aria-hidden on an element because its descendant retained focus" de Ionic React + IonRouterOutlet anidado.</li>
+          <li class="done"><strong>Scope de IA en onboarding y modal de cambio</strong>: nuevo tipo <code>AiScopeChoice</code> ('all' | 'menu_compra' | 'menu_only' | 'entrenos_only') guardado en <code>profile.aiScope</code>. <code>StepMode</code> rediseñado: cuando el user elige IA aparece un sub-bloque con 4 cards (✨ Todo · 🍽️ Menú+Compra · 📋 Solo menú · 🏋️ Solo entrenos). El paso 4 del onboarding valida que se haya elegido scope si modo='ai' antes de Finalizar. <code>ChangeModeModal</code> muestra <strong>IonAlert de confirmación</strong> cuando el cambio es manual→ia avisando de que aparecerán los botones "Generar con IA" en cada tab.</li>
+          <li class="done"><strong>Botones "Generar con IA" condicionales por modo + scope por contexto</strong>: nuevo <code>AiGenerateModal</code> reusable que pregunta scope (si hay >1) + comprueba límite con <code>canGenerateAi</code> + dispara generación (Fase 6 muestra toast "Disponible cuando activemos Gemini"). Botones puestos en: <strong>HoyPage</strong> (CTA lima sólido en hero card · 4 opciones), <strong>MenuPage</strong> (botón en header · 2 opciones: menú+compra o solo menú), <strong>EntrenoPage</strong> (botón en header · scope único entrenos_only sin grid). Si <code>profile.modo === 'manual'</code> los botones desaparecen automáticamente. Para invitados nunca aparecen (regla del roadmap).</li>
+          <li class="done"><strong>Auditoría 2026-05-07 — bugs corregidos + endurecimiento</strong>: <code>firestore.rules</code> bloquea modificación cliente de campos de monetización (<code>plan</code>, <code>generaciones</code>, <code>plan_pro</code>, <code>fecha_expiracion</code>, <code>fecha_ultima_generacion</code>) — solo Cloud Functions con Admin SDK los toca. <code>PreferencesProvider</code> con <code>userTouchedRef</code> + <code>prefsRef</code> elimina race en sync inicial (si user toca prefs durante carga, gana su elección). <code>ProfileProvider.updateProfile</code> con optimistic update + revert al snapshot pre-cambio si Firestore falla. <code>AiGenerateModal</code> valida <code>defaultScope</code> contra <code>availableScopes</code>. <code>canGenerateAi</code> usa <code>setDate(+30)</code> DST-safe. Bundle <code>index.js</code> reducido de 1.5 MB a 143 KB (gz 34 KB) con <code>vite.config.ts → manualChunks</code> separando firebase-auth/firestore/core, ionic, react-vendor. <code>StepModeValue</code> centralizado en <code>templates/defaultUser.ts</code>. Helper <code>blurAndRun</code> aplicado en todos los botones que abren modales (incluyendo <code>handleLinkGoogle</code>).</li>
+          <li class="done"><strong>Botón "Atrás" en formulario inicial</strong>: ya existía y funcionaba correctamente en pasos 1, 2 y 3 del onboarding. Reforzado con <code>aria-label</code> descriptivo. State de cada paso (datos personales, estilo de vida, objetivo, modo IA/aiScope) preservado al volver atrás — el user puede corregir lo que rellenó mal sin perder lo demás.</li>
+          <li class="done"><strong>Animaciones globales BTal — refactor 2026-05-08</strong>: nuevo <code>src/styles/animations.css</code> central con keyframes reutilizables (<code>btal-pop-in</code>, <code>btal-bump</code>, <code>btal-spin-once</code>, <code>btal-pulse-ok</code>/<code>gold</code>/<code>danger</code>, <code>btal-fade-up</code>, <code>btal-wiggle</code>, <code>btal-pulse-soft</code>) + helpers <code>.btal-anim-*</code> y <code>.btal-stagger-1..8</code>. <strong>Press-in v1-style</strong> en TODOS los botones nativos / <code>IonButton</code> / <code>&lt;a&gt;</code> con <code>:active { transform: translateY(1px) scale(.97) !important; filter: brightness(.92) }</code> · feedback uniforme aunque cada botón tenga su propio <code>:active</code>. <strong>Cards entran con stagger</strong>: <code>.menu-meal</code>, <code>.hoy-sup-card</code>, <code>.compra-sup-card</code>, <code>.sup-stat</code>, <code>.hoy-hero</code>. <strong>SupCountersInline</strong>: 5 stats con bump al cambiar valor (<code>key={value}</code> + <code>btal-anim-bump</code>), ⟳ icono spin 360° al click, ⓘ wiggle al hover, divider <code>scaleX</code>. <strong>HoyPage mark/cancel</strong>: badge "✓ Tomado hoy" pop-in + glow lima/violeta, ✓ rebote, cancel-btn fade-up retrasado, mark-btn halo dorado/violeta al pulsar. <strong>Tab transitions</strong> 140 ms snappy. Todo respeta <code>prefers-reduced-motion: reduce</code>.</li>
+          <li class="done"><strong>Animaciones de modal nativas Ionic</strong>: <code>setupIonicReact()</code> sin opciones — Ionic detecta runtime y aplica modo iOS (slide-up 400 ms) o md (scale+fade 200 ms). Quitadas las animaciones <code>settings-modal-entrance</code> de las cards interiores (<code>.settings-modal-card</code>, <code>.account-manage-card</code>, <code>.edit-fp-card</code>, <code>.forgot-card</code>) que se solapaban con la nativa y hacían la entrada doble + cierre brusco. Ahora apertura/cierre coherentes en web, PWA y Capacitor sin código custom.</li>
+          <li class="done"><strong>AppAvatarButton</strong> (<code>components/AppAvatarButton.tsx</code>): botón circular con foto/inicial + estado <code>profileOpen</code> + montaje lazy del <code>ProfileSheet</code> encapsulado en un solo componente. Reemplaza la lógica duplicada inline que vivía en HoyPage. Montado ahora en las 5 tabs (Hoy, Menú, Compra, Entreno, Registro) vía slot <code>right</code> del <code>TabHeader</code>. Iniciales con misma regla que HoyPage (Auth displayName/email primero, fallback al <code>profile.nombre</code> de Firestore para invitados anónimos).</li>
+          <li class="done"><strong>MealSheet macros bento centrados</strong>: <code>.meal-sheet-bento-cell</code> ahora <code>flex-direction: column; align-items: center</code>. Estructura JSX con <code>.meal-sheet-bento-top</code> (icono + número en línea horizontal) + label debajo. Grid 3 columnas (<code>1fr auto 1fr</code>) en el top para que el NÚMERO quede centrado horizontalmente, alineado verticalmente con el label, y el icono "cuelga" a su izquierda sin descentrar.</li>
+          <li class="done"><strong>Auto-blur global en overlays</strong>: listener único en <code>main.tsx</code> que escucha <code>ion{Modal,Alert,Popover,ActionSheet,Picker}WillPresent</code> y hace <code>blur()</code> del <code>document.activeElement</code> antes de que Ionic aplique <code>aria-hidden</code> al router-outlet de fondo. Resuelve definitivamente el warning "Blocked aria-hidden because its descendant retained focus" para <code>IonButton</code> (cuyo foco vive en <code>&lt;a.button-native&gt;</code> del shadow DOM y <code>host.blur()</code> no alcanza).</li>
+          <li class="done">ErrorBoundary global con fallback "Recargar" + "Ir al inicio" para no quedarse atrapado</li>
+          <li class="done">Validación de <code>.env</code> en dev: avisa por consola si falta alguna <code>VITE_FIREBASE_*</code></li>
+          <li class="done">Firestore lazy-loaded vía <code>import('firebase/firestore')</code> en <code>db.ts</code> — chunk no entra al bundle inicial</li>
+        </ul>
+      </div>
+      <div class="status-banner-col">
+        <h4>Pendientes detectados durante la implementación</h4>
+        <ul class="status-banner-list">
+          <li class="pend"><strong>Migrar contenido del monolítico v1</strong> (9335 líneas, 219 funciones JS) a las tabs del v2 — el esqueleto ya está. Quedan: Menú (Fase 2B), Compra (Fase 3), Entreno (Fase 4), Registro (Fase 5). Cada tab debe portar la información de su sección equivalente del <code>index.html</code> v1.</li>
+          <li class="pend"><strong>App Check</strong> (11-0) — bloqueante <strong>antes de Fase 6</strong>. Sin App Check cualquiera puede llamar a <code>generatePlan</code> desde Postman y vaciar la cuota gratuita de Gemini en una tarde. reCAPTCHA v3 en web + DeviceCheck/Play Integrity en nativo.</li>
+          <li class="pend"><strong>Validación de rangos en firestore.rules</strong> (11-1) — peso 30-300, edad 14-90, altura 120-230, días entreno 0-7, objetivo en lista cerrada, tamaño doc &lt; 100KB. Las reglas actuales solo bloquean campos de monetización (post auditoría 2026-05-07) — falta validar el contenido del <code>profile</code>.</li>
+          <li class="pend"><strong>CSP headers en firebase.json</strong> (11-4) — Content Security Policy que limite scripts/styles/connect-src a Stripe + Firebase + Gemini. Mitiga XSS si alguna dependencia se compromete.</li>
+          <li class="pend"><strong>Detector de adblocker bloqueando Firestore</strong> (post auditoría) — en PWA web, uBlock/AdGuard pueden bloquear <code>firestore.googleapis.com</code> con <code>ERR_BLOCKED_BY_CLIENT</code> y los writes fallan silenciosamente. Banner persistente que avise. En nativo no aplica.</li>
+          <li class="pend"><strong>ErrorContext + UI feedback</strong> de errores Firestore (post auditoría) — el catch de los hooks (<code>setUserPreferences</code>, <code>touchLastActive</code>) silencia errores con <code>console.warn</code>. Toast persistente cuando un write falla. Necesario en Fase 2B con CRUD inline.</li>
+          <li class="pend"><strong>README.md</strong> del proyecto — falta. Setup, estructura, cómo desplegar, cómo añadir un componente.</li>
+          <li class="pend"><strong>Exportar mis datos</strong> (5-8) — Cloud Function GDPR-compliant. Diferido a Fase 6.</li>
+          <li class="pend"><strong>Activar TOTP</strong> en Google Cloud Console → Identity Platform (requiere meter método de pago aunque esté en free tier — pospuesto)</li>
+          <li class="pend"><strong>Custom SMTP</strong> para que los emails de Firebase no caigan en spam (SendGrid/Mailgun) — fase 14 o cuando haya usuarios reales</li>
+          <li class="pend"><strong>Google Sign-In en PWA standalone iOS</strong> — limitación conocida; se resuelve con dominio custom o build nativo de Capacitor (Fase 9)</li>
+          <li class="pend"><strong>Plan Blaze</strong> requerido antes de Fase 6 (Cloud Functions con APIs externas — Gemini, Stripe)</li>
+          <li class="pend"><strong>API key Gemini</strong> (2-6) — gratis en aistudio.google.com, se necesita para Fase 6.</li>
+        </ul>
+        <p style="font-size:.7rem;color:var(--muted);margin-top:10px;line-height:1.5">
+          Lista detallada con prioridades, contexto y soluciones sugeridas:
+          <code>web plan muscular HTML/auditoria_2026-05-07_pendientes.md</code>
+        </p>
+      </div>
+    </div>
   </div>
 
   <div class="total-prog">
@@ -1886,9 +1974,71 @@ function showSub(id){
 // ROADMAP CHECKS
 var STORAGE_KEY = 'btal_checks';
 
+// Pre-marcado de lo ya completado en el proyecto BTal (mayo 2026).
+// Esto se usa como base; lo que el usuario marque/desmarque a mano
+// se guarda en localStorage y prevalece sobre estos defaults.
+var INITIAL_CHECKS = {
+  // FASE -1 · Pre-trabajo (parcial)
+  '-1-0': true, // Decidir marca → BTal
+  '-1-5': true, // Logo y paleta (BT lima sobre negro)
+
+  // FASE 0 · Entorno (100%)
+  '0-0': true, '0-1': true, '0-2': true, '0-3': true,
+
+  // FASE 1 · React + Vite
+  // Decisión consciente: NO usamos Tailwind (1-2). Ionic ya trae utility
+  // classes y web components nativos; Tailwind sería redundante. Marco
+  // como "hecho" porque la decisión está tomada y no debe bloquear el plan.
+  '1-0': true, '1-1': true, '1-2': true, '1-3': true, '1-4': true,
+
+  // FASE 2 · Firebase (auth + Firestore con reglas. Falta Blaze + Gemini)
+  '2-0': true, '2-1': true, '2-2': true, '2-2b': true, '2-3': true,
+  '2-4': true, '2-5': true,
+  // 2-6 (API key Gemini) y 2-7 (plan Blaze) pendientes para Fase 6
+
+  // FASE 3 · Auth (100% — incluye MFA TOTP completo en código, reset/verify
+  // con action handler custom, vincular Google, cambiar contraseña, MFA en
+  // sign-in, AuthContext con refreshUser para propagación cross-device)
+  '3-0': true, '3-1': true, '3-2': true, '3-3': true,
+  '3-4': true, '3-5': true, '3-6': true, '3-7': true,
+
+  // FASE 4 · Onboarding y plantillas (completa tras Fase 2A)
+  '4-0': true, // defaultUser.ts ampliado con menu/entrenos/compra/suplementos
+  '4-1': true, // demoUser.ts con plan completo de ejemplo (Fase 2A)
+  '4-2': true, // Onboarding 4 pasos con barra de progreso y validación
+  '4-3': true, // StepMode IA vs manual añadido como paso 4 (Fase 2A)
+  '4-4': true, // Guardar perfil + completed:true al finalizar
+  '4-5': true, // plan_pro / fechas / createdAt / lastActive en defaults
+
+  // FASE 5 · Dashboard / Perfil
+  // 5-0 hecho: AppShell con IonTabs + 5 sub-rutas (Hoy/Menú/Compra/Entreno/Registro)
+  // y bottom bar nativo Ionic. Header reusable + ProfileSheet desde avatar.
+  '5-0': true,
+  '5-7': true, // Eliminar cuenta con texto-trampa + reauth + Cloud Function TODO
+  // 5-1..5-6, 5-8, 5-9 pendientes — migración del index.html monolítico
+  // a las tabs (Menú=5-1, Entreno=5-2, Compra=5-3, Registro/Suplementos=5-4)
+
+  // FASE 8 · PWA + Deploy (manifest, instalable, deploy; sin Service Worker)
+  '8-0': true, '8-2': true, '8-3': true, '8-4': true,
+
+  // FASE 9 · Capacitor (solo init, sin plataformas todavía)
+  '9-0': true,
+
+  // FASE 14 · Legal — checkbox de aviso médico ya cableado en onboarding
+  // paso 1 (bloquea avance), persiste timestamp en
+  // UserDocument.medicalDisclaimerAcceptedAt al completar.
+  '14-2': true,
+};
+
 function loadChecks(){
-  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }
-  catch(e){ return {}; }
+  var stored = {};
+  try{ stored = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }
+  catch(e){ stored = {}; }
+  // Merge: defaults primero, localStorage encima (gana lo que marca el user).
+  var merged = {};
+  for(var k in INITIAL_CHECKS){ merged[k] = INITIAL_CHECKS[k]; }
+  for(var k2 in stored){ merged[k2] = stored[k2]; }
+  return merged;
 }
 function saveChecks(data){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1936,10 +2086,9 @@ function updateProgress(){
 }
 
 function resetAll(){
-  if(!confirm('¿Reiniciar todos los checks?')) return;
+  if(!confirm('¿Reiniciar todos los checks? Se vuelve al estado actual del proyecto BTal (lo ya hecho queda marcado).')) return;
   saveChecks({});
-  document.querySelectorAll('.ck-row').forEach(function(r){ r.classList.remove('done'); });
-  updateProgress();
+  initRoadmap();
 }
 
 function initRoadmap(){
@@ -1947,6 +2096,7 @@ function initRoadmap(){
   document.querySelectorAll('.ck-row').forEach(function(r){
     var id = r.getAttribute('data-id');
     if(checks[id]) r.classList.add('done');
+    else r.classList.remove('done');
   });
   updateProgress();
 }
