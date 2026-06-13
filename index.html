@@ -49,6 +49,14 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 .step-body{padding-bottom:22px;flex:1}
 .step-title{font-size:.9rem;font-weight:700;color:var(--text);line-height:32px}
 .step-desc{font-size:.82rem;color:var(--text2);line-height:1.7;margin-top:1px}
+/* INICIO · en pantallas anchas los pasos van a 2 columnas para LLENAR el ancho
+   (antes una sola columna estrecha dejaba la pestaña "comprimida" con mucho hueco
+   a derecha) · en móvil vuelve a 1 columna. */
+@media(min-width:780px){
+  #p-inicio .flow{display:grid;grid-template-columns:1fr 1fr;column-gap:34px;align-items:start}
+  #p-inicio .flow .vline{display:none}
+  #p-inicio .step-body{padding-bottom:20px}
+}
 .step-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px;vertical-align:middle}
 .tag-fb{background:rgba(251,188,4,.12);color:#fbbf24;border:1px solid rgba(251,188,4,.25)}
 .tag-ai{background:rgba(240,168,55,.12);color:var(--accent3);border:1px solid rgba(240,168,55,.25)}
@@ -1543,7 +1551,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
   </div>
 
-  <div class="section-label">Costes de infraestructura por tramo de usuarios REGISTRADOS (cuentas totales · no DAU/MAU)</div>
+  <div class="section-label">Costes de infraestructura por tramo de usuarios REGISTRADOS (cuentas totales · no DAU/MAU) · cifras MENSUALES (€/mes)</div>
 
   <div style="overflow-x:auto;margin-bottom:32px">
     <table style="width:100%;border-collapse:collapse;font-size:.8rem">
@@ -1663,7 +1671,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~13.755€</td>
         </tr>
         <tr style="background:rgba(181,240,55,.04)">
-          <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">TOTAL COSTES (infra + IAP)</td>
+          <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">TOTAL COSTES /mes (infra + IAP)</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~2€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~19€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~182€</td>
@@ -1683,7 +1691,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* reCAPTCHA Enterprise (migrado desde v3 Classic el 28-may-2026): <strong style="color:var(--accent2)">1.000.000 assessments/mes gratis</strong> (vs 10K de Classic), luego ~$1/1K. Solo aplicaría a la web (~1% del tráfico · app nativa) · native usa Play Integrity (Android) / DeviceCheck (iOS) hardware-attested gratis ilimitado. Integrado vía App Check (key 6LdTQwEt...)</div>
   </div>
 
-  <div class="section-label">Comparativa modelo IA · Gemini antes vs ahora (jun-2026)</div>
+  <div class="section-label">Comparativa modelo IA · Gemini antes vs ahora (jun-2026) · coste POR GENERACIÓN (no mensual)</div>
 
   <div style="overflow-x:auto;margin-bottom:32px">
     <table style="width:100%;border-collapse:collapse;font-size:.8rem">
@@ -1719,7 +1727,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Precios oficiales paid tier (ai.google.dev/gemini-api/docs/pricing, jun-2026). Output ×6,25, input ×3 → ~6× coste/gen, pero sigue marginal (un Pro de 9,99€ ≈ 400 generaciones). Se descartó <strong>gemini-3.5-flash</strong> ($1,50/$9,00, ×22 vs lite) por precio desproporcionado para JSON estructurado. <strong style="color:var(--accent)">El modelo NO es el cuello: el aporte real lo garantiza el ajuste de gramos con macros de OpenFoodFacts (Fase 6B)</strong>, así que se puede bajar a un modelo más barato si conviene. Opción Pro premium: GPT-mini / Claude Haiku solo para usuarios de pago.</div>
   </div>
 
-  <div class="section-label">Ingresos vs costes — 3% MAU Pro 9,99€ + 5% MAU regeneración 4,99€ (supuesto unificado 13-jun)</div>
+  <div class="section-label">Ingresos vs costes — 3% MAU Pro 9,99€ + 5% MAU regeneración 4,99€ (supuesto unificado 13-jun) · cifras MENSUALES (€/mes)</div>
 
   <div style="overflow-x:auto;margin-bottom:32px">
     <table style="width:100%;border-collapse:collapse;font-size:.8rem">
@@ -1751,7 +1759,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~41.700€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:10px 12px;color:var(--text);font-weight:600">Total ingresos (bruto)</td>
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Total ingresos /mes (bruto)</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~9€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~92€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~920€</td>
@@ -1759,7 +1767,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~91.700€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:10px 12px;color:var(--text);font-weight:600">Total costes (infra + IAP 15%)</td>
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Total costes /mes (infra + IAP 15%)</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~2€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~19€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~182€</td>
@@ -1767,7 +1775,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~18.363€</td>
         </tr>
         <tr style="background:rgba(181,240,55,.04)">
-          <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">BENEFICIO NETO</td>
+          <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">BENEFICIO NETO /mes</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~7€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~73€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~738€</td>
@@ -1845,7 +1853,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <!-- ── PROYECCIÓN FINANCIERA · mobile-first · revisión 13-jun 2026 (precios reales) ───── -->
-  <div class="section-label">Proyección financiera por escala · mobile-first (rev. 13-jun 2026 · precios reales implementados: Pro 9,99 · one-off 4,99)</div>
+  <div class="section-label">Proyección financiera por escala · mobile-first (rev. 13-jun 2026 · precios reales implementados: Pro 9,99 · one-off 4,99) · cifras MENSUALES (€/mes salvo donde se indique el periodo)</div>
 
   <div class="arch-card" style="margin-bottom:16px;border-left:3px solid var(--accent)">
     <div class="arch-card-header"><div class="arch-card-title">Assumptions del modelo · canal primario nativo</div></div>
@@ -1956,7 +1964,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">35.404 €</td>
         </tr>
         <tr style="border-bottom:1px solid var(--border);background:rgba(55,240,168,.04)">
-          <td style="padding:10px 8px;color:var(--accent2);font-weight:700">🟢 Ingresos netos</td>
+          <td style="padding:10px 8px;color:var(--accent2);font-weight:700">🟢 Ingresos netos /mes</td>
           <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">0 €</td>
           <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">78 €</td>
           <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">785 €</td>
@@ -2100,7 +2108,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:8px 6px;color:var(--accent2);font-weight:600">0 €</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:8px;color:var(--muted);font-size:.72rem">Apple Dev 99 €/año + Play Console 25 € one-off + dominio</td>
+          <td style="padding:8px;color:var(--muted);font-size:.72rem">Fijos (amortizados /mes): Apple Dev <b>99 €/año</b> + Play Console <b>25 € pago único</b> + dominio <b>~10 €/año</b></td>
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">9 €</td>
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">9 €</td>
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">9 €</td>
@@ -2112,7 +2120,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">19 €</td>
         </tr>
         <tr style="border-bottom:1px solid var(--border);background:rgba(240,55,55,.04)">
-          <td style="padding:10px 8px;color:#f87171;font-weight:700">🔴 Costes totales</td>
+          <td style="padding:10px 8px;color:#f87171;font-weight:700">🔴 Costes totales /mes</td>
           <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">9 €</td>
           <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">13 €</td>
           <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">54 €</td>
@@ -2124,7 +2132,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">4.642 €</td>
         </tr>
         <tr style="background:rgba(181,240,55,.06)">
-          <td style="padding:12px 8px;color:var(--accent);font-weight:700">💰 Beneficio neto</td>
+          <td style="padding:12px 8px;color:var(--accent);font-weight:700">💰 Beneficio neto /mes</td>
           <td style="text-align:center;padding:12px 6px;color:var(--accent3);font-weight:700">−9 €</td>
           <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+65 €</td>
           <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+731 €</td>
@@ -2155,7 +2163,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <!-- ── GRÁFICO 1 · Ingresos vs Costes vs Beneficio por escala (9 tiers) -->
-  <div class="section-label">Gráfico · ingresos, costes y beneficio por escala (9 tiers · pre-launch → 50K DAU)</div>
+  <div class="section-label">Gráfico · ingresos, costes y beneficio por escala (9 tiers · pre-launch → 50K DAU) · €/mes</div>
 
   <div class="arch-card" style="margin-bottom:24px">
     <div style="padding:20px">
