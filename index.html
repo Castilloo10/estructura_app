@@ -888,10 +888,13 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done">Functions desplegadas: <code>generatePlan</code> (scopes + Zod + reserva atómica) · <code>searchFood</code> · <code>deleteAccount</code> · <code>revokeOtherSessions</code> + scheduled <code>cleanupExpiredGuests</code> / <code>syncOffDeltas</code></li>
             <li class="done">IA Gemini (gemini-2.5-flash) + <strong>macros reales OpenFoodFacts</strong> + buscador + barcode</li>
             <li class="done">Seguridad: <strong>App Check ENFORCE</strong> · rules monetización seed-only + tope avatar · MFA TOTP</li>
-            <li class="done">77 tests de la app + 36 de functions (Vitest)</li>
+            <li class="done">93 tests de la app + 99 de functions (Vitest)</li>
             <li class="done">Auditoría completa 12-jun (~70 fixes aplicados) · React Compiler activo</li>
             <li class="done">Preferencia «Animaciones reducidas» por dispositivo</li>
             <li class="done">Legal in-app: privacidad + términos + cookies</li>
+            <li class="done"><strong>Tema claro/oscuro completo</strong> (reactivo · default claro · incl. splash/login/onboarding) + feature <strong>peso corporal</strong> (registro + gráfica + objetivo) + temporizador de descanso</li>
+            <li class="done"><strong>Pasada de accesibilidad</strong> (lector de pantalla, contraste WCAG en claro, escalado de fuente) + pulido UX 26-28 jun</li>
+            <li class="done"><strong>Repo en GitHub</strong> (privado): <code>BTal-App/btal-v2</code> · main al día (antes era local-only)</li>
           </ul>
         </div>
         <div class="status-banner-col">
@@ -901,7 +904,6 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="pend"><strong>Fase 4.5 — EAS dev build</strong>: Google sign-in nativo · App Check Play Integrity sin token debug · IAP RevenueCat · Liquid Glass iOS 26</li>
             <li class="pend"><strong>Fase 5</strong>: EAS Build / EAS Update + canal web (React Native Web)</li>
             <li class="pend">Publicación en stores: Play Console (25$) + Apple Developer (99€/año) + assets store</li>
-            <li class="pend"><code>git init</code> del repo <code>btal-v2</code></li>
             <li class="pend"><strong>Admin Dashboard</strong> (diseño · Fase 10 · post-monetización)</li>
           </ul>
           <p style="font-size:.66rem;color:var(--muted);margin-top:8px;font-style:italic">Stack elegido: crash/analytics = Firebase Crashlytics + Analytics (nativo, Fase 4.5+) · macros = OpenFoodFacts · pagos = IAP (RevenueCat).</p>
