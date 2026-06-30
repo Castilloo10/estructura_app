@@ -126,6 +126,23 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 .section-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:32px 0 16px;display:flex;align-items:center;gap:10px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
+/* GROUP HEADER · cabecera grande para agrupar secciones dentro de un panel (rediseño jun-2026) */
+.group-header{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,3.5vw,2rem);letter-spacing:.5px;color:var(--text);margin:52px 0 20px;padding-bottom:12px;border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.group-header:first-of-type{margin-top:8px}
+.group-header .gh-num{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;color:var(--accent);background:rgba(181,240,55,.12);border:1px solid rgba(181,240,55,.3);border-radius:8px;padding:5px 11px;letter-spacing:0;flex-shrink:0}
+.group-header .gh-sub{font-family:'DM Sans',sans-serif;font-size:.76rem;font-weight:400;color:var(--text2);letter-spacing:0;margin-left:auto;text-align:right;line-height:1.5;max-width:55%}
+@media(max-width:600px){.group-header .gh-sub{margin-left:0;text-align:left;max-width:100%;width:100%}}
+
+/* PANE INTRO · tarjeta resumen al inicio de un panel, con KPIs */
+.pane-intro{background:linear-gradient(135deg,rgba(181,240,55,.07),rgba(55,240,168,.04));border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:8px}
+.pane-intro h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,4vw,2.2rem);color:var(--accent);margin-bottom:8px;letter-spacing:.5px}
+.pane-intro p{font-size:.86rem;color:var(--text2);line-height:1.7;max-width:760px}
+.pi-stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+.pi-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 15px;min-width:120px;flex:1}
+.pi-stat .v{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--text);line-height:1}
+.pi-stat .v.accent{color:var(--accent)}
+.pi-stat .l{font-size:.66rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:4px;line-height:1.4}
+
 /* INFO GRID */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
 @media(max-width:600px){.info-grid{grid-template-columns:1fr}}
@@ -1501,6 +1518,19 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 <!-- MODELO IA -->
 <div class="pane" id="p-negocio">
 
+  <div class="pane-intro">
+    <h2>Modelo de negocio</h2>
+    <p>App nativa <strong style="color:var(--text)">mobile-first</strong> (99% móvil / 1% web) monetizada por <strong style="color:var(--text)">IAP de Apple/Google</strong>: plan <strong style="color:var(--text)">Pro 9,99 €/mes</strong> (≈3% del MAU) + <strong style="color:var(--text)">regeneración puntual 4,99 €</strong> (≈5% del MAU). El único coste que escala con el uso es la IA (Gemini): pesa ~87% del gasto a escala pero solo ~5% de los ingresos → <strong style="color:var(--accent)">margen ~94% estable a cualquier escala</strong>.</p>
+    <div class="pi-stats">
+      <div class="pi-stat"><div class="v accent">~94%</div><div class="l">Margen neto · toda escala</div></div>
+      <div class="pi-stat"><div class="v">~10 DAU</div><div class="l">Break-even</div></div>
+      <div class="pi-stat"><div class="v">€0,023</div><div class="l">Coste IA/generación · medido</div></div>
+      <div class="pi-stat"><div class="v accent">+14.617 €</div><div class="l">Beneficio/mes a 10K DAU</div></div>
+    </div>
+  </div>
+
+  <div class="group-header"><span class="gh-num">1</span> Acceso y planes <span class="gh-sub">Cómo accede el usuario a la IA y qué paga</span></div>
+
   <div class="section-label">Planes de acceso a la IA</div>
 
   <div class="plan-cards">
@@ -1552,6 +1582,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <span style="color:var(--muted)">└──</span> Al cancelar → vuelve a Free con 1 generación/mes
     </div>
   </div>
+
+  <div class="group-header"><span class="gh-num">2</span> Costes: infraestructura y modelo IA <span class="gh-sub">Lo que cuesta servir la app · la IA (Gemini) es el único coste que escala con el uso</span></div>
 
   <div class="section-label">Costes de infraestructura por tramo de usuarios REGISTRADOS (cuentas totales · no DAU/MAU) · cifras MENSUALES (€/mes)</div>
 
@@ -1815,6 +1847,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste/gen ≈ €0,023</strong> con gemini-3.1-flash-lite ($0,25 in / $1,50 out por 1M tokens, oficial jun-2026 · medido con tokens reales). La columna "vs 2.5-flash" (€0,052/gen · más verboso, 21K salida) muestra lo que costaría con el modelo anterior → <strong style="color:var(--accent)">se ahorra ~2,21×</strong> a cualquier escala desde el cambio del 30-jun. El buscador de alimentos NO cuenta (usa la BD local de OpenFoodFacts, 0 peticiones a Gemini).</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">Sin free tier:</strong> Gemini cobra desde la 1ª petición, pero el coste se mantiene <strong>marginal frente a los ingresos</strong> (~5% a 10K DAU) porque escala lineal con el uso y los ingresos crecen más rápido (Pro + one-off). Palancas de optimización: <strong>prompt de menú más corto</strong> (hoy son 9.431 tokens de entrada), <strong>batch API (−50%)</strong>, cache de generaciones similares, o reservar un modelo más capaz solo a Pro.</div>
   </div>
+
+  <div class="group-header"><span class="gh-num">3</span> Ingresos y proyección <span class="gh-sub">De dónde sale el dinero, hoja de ruta de monetización y proyección por escala</span></div>
 
   <div class="section-label">Ingresos vs costes — 3% MAU Pro 9,99€ + 5% MAU regeneración 4,99€ (supuesto unificado 13-jun) · cifras MENSUALES (€/mes)</div>
 
@@ -2252,6 +2286,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <!-- ── GRÁFICO 1 · Ingresos vs Costes vs Beneficio por escala (9 tiers) -->
+  <div class="group-header"><span class="gh-num">4</span> Gráficos <span class="gh-sub">Ingresos vs costes vs beneficio, breakdown de costes y curva de margen</span></div>
+
   <div class="section-label">Gráfico · ingresos, costes y beneficio por escala (9 tiers · pre-launch → 50K DAU) · €/mes</div>
 
   <div class="arch-card" style="margin-bottom:24px">
@@ -2599,6 +2635,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       </div>
     </div>
   </div>
+
+  <div class="group-header"><span class="gh-num">5</span> Optimizaciones y palancas <span class="gh-sub">Cómo minimizar el coste a escala (la IA es la palanca nº1)</span></div>
 
   <div class="section-label">Optimizaciones mobile-first para minimizar costes (revisión 14-may PM)</div>
 
