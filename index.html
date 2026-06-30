@@ -366,7 +366,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="step-left"><div class="num amber">07</div><div class="vline"></div></div>
         <div class="step-body">
           <div class="step-title">Generación del plan <span class="step-tag tag-ai">Gemini API</span></div>
-          <div class="step-desc">El usuario pulsa «Generar mi programa». La Cloud Function lee el perfil, construye el prompt y llama a <strong>Gemini 2.5 Flash</strong>. Devuelve JSON estructurado que se guarda en Firestore. La llamada solo ocurre una vez por generación, no en cada visita.</div>
+          <div class="step-desc">El usuario pulsa «Generar mi programa». La Cloud Function lee el perfil, construye el prompt y llama a <strong>Gemini 3.1 Flash-Lite</strong>. Devuelve JSON estructurado que se guarda en Firestore. La llamada solo ocurre una vez por generación, no en cada visita.</div>
           <div class="cols">
             <div class="box">
               <div class="box-title">Qué genera Gemini</div>
@@ -659,8 +659,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
     <div class="stack-card">
       <div class="stack-layer">Inteligencia artificial</div>
-      <div class="stack-name">Gemini 2.5 Flash</div>
-      <div class="stack-why">Modelo en producción: <strong>gemini-2.5-flash</strong> (se descartó flash-lite porque infra-dimensionaba las raciones, ~73% del objetivo kcal). La API es <strong>de pago, sin free tier</strong>: una generación completa (menú + entreno + compra) ronda <strong>~15K tokens</strong> (≈3K de entrada + ~12K de salida) ≈ <strong>€0,025 por generación</strong> — un Pro de 9,99€ cubre ≈400 generaciones. <code>maxOutputTokens</code> a 65536 para que el scope «Todo» no se trunque. La API key nunca sale del servidor (secreto en Cloud Functions). Sanitizar siempre los datos del perfil antes de meterlos en el prompt para evitar <strong>prompt injection</strong>.</div>
+      <div class="stack-name">Gemini 3.1 Flash-Lite</div>
+      <div class="stack-why">Modelo en producción: <strong>gemini-3.1-flash-lite</strong> (30-jun-2026 · 2.4× más rápido + 2.8× más barato que 2.5-flash, validado vs 16 modelos modernos · el viejo 2.5-flash-LITE se había descartado por infra-dimensionar las raciones, pero eso lo arregla el ajuste server-side de gramos, no el modelo). La API es <strong>de pago, sin free tier</strong>: una generación completa (menú + entreno + compra) ronda <strong>~12K tokens</strong> (≈6K de entrada + ~6K de salida, en 2 peticiones paralelas) ≈ <strong>€0,0085-0,01 por generación</strong> — un Pro de 9,99€ cubre ≈1.000+ generaciones. <code>maxOutputTokens</code> a 65536 para que el scope «Todo» no se trunque. La API key nunca sale del servidor (secreto en Cloud Functions). Sanitizar siempre los datos del perfil antes de meterlos en el prompt para evitar <strong>prompt injection</strong>.</div>
       <div class="stack-items">
         <div class="stack-item">Prompt dinámico por perfil</div>
         <div class="stack-item">Output JSON estructurado (validado con Zod)</div>
@@ -824,7 +824,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="tree-folder-label">📁 functions/src/ <span class="tree-folder-desc">backend serverless · Cloud Functions Gen 2 · europe-west1</span></div>
       <div class="tree-files">
         <div class="tree-file"><div class="tree-file-name">generatePlan.ts</div><div class="tree-file-desc">Callable principal de IA con scopes (all / menu_compra / menu_only / entrenos_only). <strong>Validación Zod</strong> del perfil de entrada y de la respuesta de Gemini, <strong>App Check enforce</strong>, <strong>rate limit por uid</strong>, <strong>cap global diario</strong> y <strong>reserva atómica</strong> de la generación con REFUND si algo falla después de reservarla.</div></div>
-        <div class="tree-file"><div class="tree-file-name">prompt.ts · gemini.ts · schemas.ts</div><div class="tree-file-desc">Construcción del prompt por perfil · cliente Gemini (gemini-2.5-flash, maxOutputTokens 65536) · schemas Zod de validación.</div></div>
+        <div class="tree-file"><div class="tree-file-name">prompt.ts · gemini.ts · schemas.ts</div><div class="tree-file-desc">Construcción del prompt por perfil · cliente Gemini (gemini-3.1-flash-lite, maxOutputTokens 65536) · schemas Zod de validación.</div></div>
         <div class="tree-file"><div class="tree-file-name">persist.ts · eligibility.ts · rateLimit.ts · globalQuota.ts · shoppingList.ts</div><div class="tree-file-desc">Contratos de merge del resultado en el documento del usuario · elegibilidad Free/Pro · rate limit por uid · cap global diario · derivación de la lista de la compra.</div></div>
         <div class="tree-file"><div class="tree-file-name">deleteAccount.ts</div><div class="tree-file-desc">Borrado RGPD en cascada: <code>recursiveDelete</code> de <code>/users/{uid}</code> + subcolecciones (<code>/registros</code>, <code>/_meta</code>) + usuario de Firebase Auth. Requiere login reciente. La suscripción Pro se cancela desde los Ajustes del sistema (la gestiona la store).</div></div>
         <div class="tree-file"><div class="tree-file-name">revokeOtherSessions.ts</div><div class="tree-file-desc">Revoca los refresh tokens del usuario para cerrar el resto de sesiones abiertas.</div></div>
@@ -886,7 +886,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done">App RN + Expo completa: 5 tabs · onboarding · ajustes · editores · flujo IA con wizard</li>
             <li class="done"><strong>Backend real cableado</strong>: auth email + 2FA TOTP + invitado (TTL 3 días) · Firestore con write-through · avatar data-URI · export RGPD · vincular invitado → cuenta</li>
             <li class="done">Functions desplegadas: <code>generatePlan</code> (scopes + Zod + reserva atómica) · <code>searchFood</code> · <code>deleteAccount</code> · <code>revokeOtherSessions</code> + scheduled <code>cleanupExpiredGuests</code> / <code>syncOffDeltas</code></li>
-            <li class="done">IA Gemini (gemini-2.5-flash) + <strong>macros reales OpenFoodFacts</strong> + buscador + barcode</li>
+            <li class="done">IA Gemini (gemini-3.1-flash-lite) + <strong>macros reales OpenFoodFacts</strong> + buscador + barcode</li>
             <li class="done">Seguridad: <strong>App Check ENFORCE</strong> · rules monetización seed-only + tope avatar · MFA TOTP</li>
             <li class="done">93 tests de la app + 99 de functions (Vitest)</li>
             <li class="done">Auditoría completa 12-jun (~70 fixes aplicados) · React Compiler activo</li>
@@ -1026,7 +1026,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">6</div>
         <div class="phase-info">
           <div class="phase-title">Cloud Functions + IA <span class="phase-etapa phase-etapa--done">✓ Hecho · 6A + 6B (macros reales OFF)</span></div>
-          <div class="phase-sub">NÚCLEO 6A cerrado 29-may: generatePlan (Gemini 2.5 Flash) genera menú objetivo-driven + rellena los 7 planes builtin · App Check enforce + rate limit + cap global + validación Zod + borrado RGPD. <strong>Refinado 30-may:</strong> suplementos coherentes (la IA decide el check «creatina en batido» · creatina diaria sin doble dosis), récords del usuario (top 8 PRs) inyectados en el prompt de entreno para progresiones realistas, <code>maxOutputTokens</code> 16384→65536 (arregla JSON truncado en scope «Todo» con los 7 planes), y fix de cliente nativo (timeout callable 120s + refresh del doc siempre tras generar). 6B (macros reales) cerrado 31-may con OpenFoodFacts: dump de ~25K alimentos ES en Firestore + buscador + barcode + ajuste de gramos al objetivo (6-10..6-22)</div>
+          <div class="phase-sub">NÚCLEO 6A cerrado 29-may: generatePlan (Gemini 3.1 Flash-Lite) genera menú objetivo-driven + rellena los 7 planes builtin · App Check enforce + rate limit + cap global + validación Zod + borrado RGPD. <strong>Refinado 30-may:</strong> suplementos coherentes (la IA decide el check «creatina en batido» · creatina diaria sin doble dosis), récords del usuario (top 8 PRs) inyectados en el prompt de entreno para progresiones realistas, <code>maxOutputTokens</code> 16384→65536 (arregla JSON truncado en scope «Todo» con los 7 planes), y fix de cliente nativo (timeout callable 120s + refresh del doc siempre tras generar). 6B (macros reales) cerrado 31-may con OpenFoodFacts: dump de ~25K alimentos ES en Firestore + buscador + barcode + ajuste de gramos al objetivo (6-10..6-22)</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1037,7 +1037,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="6-1b" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Guardar la API key de Gemini como secreto de Firebase <span class="ck-tag warn">nunca en el código</span></div><div class="ck-note">firebase functions:secrets:set GEMINI_API_KEY</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="6-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/generatePlan.js <span class="ck-tag ai">Gemini API</span></div><div class="ck-note">Lee el perfil del uid autenticado · verifica plan_pro y fecha_ultima_generacion · construye el prompt · llama a <strong>Gemini 2.5 Flash</strong> · guarda el JSON en Firestore</div></div></div>
+        <div class="ck-row" data-id="6-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear functions/generatePlan.js <span class="ck-tag ai">Gemini API</span></div><div class="ck-note">Lee el perfil del uid autenticado · verifica plan_pro y fecha_ultima_generacion · construye el prompt · llama a <strong>Gemini 3.1 Flash-Lite</strong> · guarda el JSON en Firestore</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="6-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear las funciones de regeneración parcial</div><div class="ck-note">regenerateNutrition · regenerateTraining · regenerateShopping</div></div></div>
         <div class="ck-sep"></div>
@@ -1641,7 +1641,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~135€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(240,168,56,.04)">
-          <td style="padding:10px 12px;color:var(--text);font-weight:600">Gemini 2.5 Flash (IA) <span style="color:var(--accent3);font-weight:400;font-size:.7rem">⚠ SIN free tier · paga desde la 1ª generación</span></td>
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Gemini 3.1 Flash-Lite (IA) <span style="color:var(--accent3);font-weight:400;font-size:.7rem">⚠ SIN free tier · paga desde la 1ª generación</span></td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent3)">&lt;1€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~4€</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~42€</td>
@@ -1685,7 +1685,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </table>
     <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--text)">Glosario:</strong> <strong>Registrados</strong> = cuentas creadas en total (las columnas de esta tabla). <strong>MAU</strong> (Monthly Active Users) = usuarios que abren la app al menos 1 vez al mes ≈ <strong>16,7% de los registrados</strong> (el resto son cuentas dormidas). <strong>DAU</strong> (Daily Active Users) = usuarios que abren la app un día cualquiera ≈ 30% del MAU. Ejemplo: 10.000 registrados → ~1.670 MAU → ~500 DAU. <strong style="color:var(--text)">Alcance:</strong> esta tabla no incluye backups (pospuestos a lanzamiento) ni los fijos Apple Dev/Play/dominio (~19€/mes) — la proyección por DAU de abajo sí los cuenta.</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">Avatar (12-jun):</strong> la foto de perfil viaja como <strong>data-URI JPEG dentro del doc Firestore</strong> (compresión adaptativa hasta 1024px · tope 200K chars blindado en rules) → <strong>0€ de Firebase Storage para siempre</strong>; el único coste es egress marginal (~2-4€/mes a 10K DAU, ya en "Firebase Descarga"). Escape hatch post-launch si creciera: mover a Storage + URL.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Estimación: 50KB almacenamiento/usuario · 100KB descarga/mes · 1 generación IA/mes (Free). <strong style="color:var(--accent)">Actualizado 1-jun-2026:</strong> la generación "all" produce el menú semanal (7 días × 4 comidas) + RELLENA los 7 planes builtin de entreno → ~15K tokens/gen (≈3K input + ~12K output) → <strong style="color:var(--accent)">~€0,025/generación</strong> con <strong style="color:var(--accent)">Gemini 2.5 Flash</strong> ($0,30/$2,50 por 1M in/out, vigente jun-2026). Se subió desde Flash-Lite ($0,10/$0,40, ~€0,004/gen) porque el lite infra-dimensionaba las raciones. Aun ×6, sigue siendo marginal frente a Pro 9,99€ (un Pro paga ~400 generaciones).</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Estimación: 50KB almacenamiento/usuario · 100KB descarga/mes · 1 generación IA/mes (Free). <strong style="color:var(--accent)">Actualizado 1-jun-2026:</strong> la generación "all" produce el menú semanal (7 días × 4 comidas) + RELLENA los 7 planes builtin de entreno → ~12K tokens/gen (≈6K input + ~6K output, en 2 peticiones paralelas) → <strong style="color:var(--accent)">~€0,0085-0,01/generación</strong> con <strong style="color:var(--accent)">Gemini 3.1 Flash-Lite</strong> ($0,25/$1,50 por 1M in/out, vigente jun-2026). Sustituyó a 2.5-flash ($0,30/$2,50, ~€0,025/gen) el 30-jun: 2.4× más rápido + 2.8× más barato, con kcal final idéntica (la garantiza el ajuste de gramos con OpenFoodFacts, no el modelo). Marginal frente a Pro 9,99€ (un Pro paga ~1.000 generaciones).</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">OpenFoodFacts macros reales (Fase 6B, 31-may):</strong> dump pre-cargado en Firestore <code>foods/</code> (~25K alimentos ES, ~4 MB) · la generación y el buscador LEEN de la BD propia (cache-first) y solo consultan la API en vivo en cache-miss (límite 10/min de OFF nunca se toca a escala). Sync semanal vía Cloud Scheduler. Licencia ODbL · <strong style="color:var(--accent2)">0 € a cualquier escala</strong> · cobertura fuerte de marcas blancas españolas.</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">Pago = IAP (In-App Purchase).</strong> Apple/Google obligan a usar IAP para bienes digitales en apps nativas (las pasarelas externas = rechazo en review). Comisión IAP <strong>15%</strong> (Small Business Program &lt;1M$/año · 30% por encima) vía <strong>RevenueCat</strong> (cross-platform · free &lt;$2,5k/mes). Ese 15% se descuenta de los ingresos (tabla de ingresos), no es coste de infra. Supuesto unificado 13-jun: <strong>3% del MAU</strong> suscribe Pro 9,99€ + <strong>5% del MAU</strong> compra la regeneración 4,99€ (el mismo de la proyección por DAU de abajo)</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Firebase Functions: ~20€/mes a 100K · ~185€/mes a 1M (GB-segundos de generatePlan/searchFood + egress, no solo invocaciones)</div>
@@ -1709,24 +1709,111 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       </thead>
       <tbody>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:10px 12px;color:var(--muted);font-weight:600">gemini-2.5-flash-lite <span style="font-weight:400;font-size:.7rem">(ANTES)</span></td>
+          <td style="padding:10px 12px;color:var(--muted);font-weight:600">gemini-2.5-flash-lite <span style="font-weight:400;font-size:.7rem">(1º · may)</span></td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">$0,10</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">$0,40</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~€0,004</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~€4</td>
-          <td style="padding:10px 12px;color:var(--accent3)">❌ infra-dimensionaba (~73% del objetivo kcal de forma consistente)</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~€0,004</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~€4</td>
+          <td style="padding:10px 12px;color:var(--accent3)">❌ infra-dimensionaba (~73% kcal · era ANTES de enrichMenu)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+          <td style="padding:10px 12px;color:var(--text2);font-weight:600">gemini-2.5-flash <span style="font-weight:400;font-size:.7rem">(2º · jun)</span></td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">$0,30</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">$2,50</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~€0,025</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~€25</td>
+          <td style="padding:10px 12px;color:var(--text2)">✅ buena calidad pero LENTO (~50s menú+entreno) y caro</td>
         </tr>
         <tr style="background:rgba(181,240,55,.04)">
-          <td style="padding:10px 12px;color:var(--accent);font-weight:700">gemini-2.5-flash <span style="font-weight:400;font-size:.7rem">(AHORA)</span></td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text)">$0,30</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text)">$2,50</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent)">~€0,025</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent)">~€25</td>
-          <td style="padding:10px 12px;color:var(--accent2)">✅ dimensiona bien las raciones + cuadra el objetivo</td>
+          <td style="padding:10px 12px;color:var(--accent);font-weight:700">gemini-3.1-flash-lite <span style="font-weight:400;font-size:.7rem">(AHORA · 30-jun)</span></td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text)">$0,25</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text)">$1,50</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent)">~€0,0085</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent)">~€8,5</td>
+          <td style="padding:10px 12px;color:var(--accent2)">✅ 2.4× más RÁPIDO (~21s) · kcal final 100% (enrichMenu) · 2.8× más barato</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Precios oficiales paid tier (ai.google.dev/gemini-api/docs/pricing, jun-2026). Output ×6,25, input ×3 → ~6× coste/gen, pero sigue marginal (un Pro de 9,99€ ≈ 400 generaciones). Se descartó <strong>gemini-3.5-flash</strong> ($1,50/$9,00, ×22 vs lite) por precio desproporcionado para JSON estructurado. <strong style="color:var(--accent)">El modelo NO es el cuello: el aporte real lo garantiza el ajuste de gramos con macros de OpenFoodFacts (Fase 6B)</strong>, así que se puede bajar a un modelo más barato si conviene. Opción Pro premium: GPT-mini / Claude Haiku solo para usuarios de pago.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Precios oficiales paid tier (ai.google.dev/gemini-api/docs/pricing, jun-2026). <strong style="color:var(--accent)">3.1-flash-lite vs 2.5-flash: −17% input, −40% output Y ~40% menos tokens → ~2.8× más barato/gen y ~2.4× más rápido</strong> (~21s vs ~50s en menú+entreno). <strong style="color:var(--accent)">enrichMenu (Fase 6B) clava las kcal con cualquier modelo</strong>, así que la decisión final fue velocidad + precio. Se probaron <strong>16 modelos modernos</strong> (OpenAI GPT-5-mini/4o-mini, Anthropic Claude-3-Haiku, xAI Grok-4.3, Mistral, Qwen3-235B, DeepSeek-V3.2, Llama 3.3/4, GLM, Kimi vía OpenRouter): NINGUNO igualó a Gemini en velocidad (el más rápido, Llama 4, 1.3× más lento; el resto 3-7×). Trade-off de 3.1-fl: variedad de platos algo menor (~0,85 vs ~0,97), reforzada con guardas deterministas. Un Pro de 9,99€ ≈ 1.000+ generaciones.</div>
+  </div>
+
+  <div class="section-label">Coste de la IA por volumen de peticiones · rango amplio (10 DAU → 1M DAU) · gemini-3.1-flash-lite a €0,0085/gen</div>
+
+  <div style="overflow-x:auto;margin-bottom:8px">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:9px 10px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px">DAU</th>
+          <th style="text-align:center;padding:9px 8px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.68rem">MAU ~(×3,3)</th>
+          <th style="text-align:center;padding:9px 8px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.68rem">Generaciones IA/mes</th>
+          <th style="text-align:center;padding:9px 8px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.68rem">Peticiones a Gemini/mes <span style="font-size:.58rem">(×2 · menú+entreno)</span></th>
+          <th style="text-align:center;padding:9px 8px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.68rem">Coste IA/mes <span style="font-size:.58rem">(3.1-flash-lite)</span></th>
+          <th style="text-align:center;padding:9px 8px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.68rem">vs 2.5-flash <span style="font-size:.58rem">(€0,025)</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">10</td><td style="text-align:center;padding:7px;color:var(--text2)">~33</td><td style="text-align:center;padding:7px;color:var(--text2)">~33</td><td style="text-align:center;padding:7px;color:var(--text2)">~66</td><td style="text-align:center;padding:7px;color:var(--accent)">&lt;1 €</td><td style="text-align:center;padding:7px;color:var(--muted)">&lt;1 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">50</td><td style="text-align:center;padding:7px;color:var(--text2)">~170</td><td style="text-align:center;padding:7px;color:var(--text2)">~170</td><td style="text-align:center;padding:7px;color:var(--text2)">~340</td><td style="text-align:center;padding:7px;color:var(--accent)">~1 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~4 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">100</td><td style="text-align:center;padding:7px;color:var(--text2)">~330</td><td style="text-align:center;padding:7px;color:var(--text2)">~330</td><td style="text-align:center;padding:7px;color:var(--text2)">~660</td><td style="text-align:center;padding:7px;color:var(--accent)">~3 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~8 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">500 <span style="color:var(--accent3);font-size:.62rem">★ break-even</span></td><td style="text-align:center;padding:7px;color:var(--text2)">~1.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~1.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.400</td><td style="text-align:center;padding:7px;color:var(--accent)">~14 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~43 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">1.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.300</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.300</td><td style="text-align:center;padding:7px;color:var(--text2)">~6.600</td><td style="text-align:center;padding:7px;color:var(--accent)">~28 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~83 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">2.000 <span style="color:var(--accent3);font-size:.62rem">★ sweet spot</span></td><td style="text-align:center;padding:7px;color:var(--text2)">~6.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~6.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~13.400</td><td style="text-align:center;padding:7px;color:var(--accent)">~57 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~168 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">5.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~17.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~17.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~34.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~145 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~425 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(181,240,55,.06)"><td style="padding:7px 10px;color:var(--accent);font-weight:700">10.000 <span style="font-size:.62rem">(Scale)</span></td><td style="text-align:center;padding:7px;color:var(--text)">~33.000</td><td style="text-align:center;padding:7px;color:var(--text)">~33.000</td><td style="text-align:center;padding:7px;color:var(--text)">~66.000</td><td style="text-align:center;padding:7px;color:var(--accent);font-weight:700">~280 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~825 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">25.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~83.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~83.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~166.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~705 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~2.075 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">50.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~167.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~167.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~334.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~1.420 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~4.175 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">100.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~333.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~333.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~666.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~2.830 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~8.325 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">250.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~833.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~833.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~1,67 M</td><td style="text-align:center;padding:7px;color:var(--accent)">~7.080 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~20.825 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">500.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~1,67 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~1,67 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~3,34 M</td><td style="text-align:center;padding:7px;color:var(--accent)">~14.200 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~41.750 €</td></tr>
+        <tr><td style="padding:7px 10px;color:var(--text2);font-weight:600">1.000.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~3,33 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~3,33 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~6,66 M</td><td style="text-align:center;padding:7px;color:var(--accent)">~28.300 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~83.250 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="arch-card" style="margin-bottom:16px">
+    <div style="padding:14px 18px">
+      <div style="font-size:.74rem;color:var(--text);font-weight:700;margin-bottom:4px">Tokens por petición · una generación «Todo» = 2 llamadas a Gemini EN PARALELO</div>
+      <div style="font-size:.66rem;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace">El menú+suplementos y el entreno se piden en 2 prompts focalizados a la vez (split que bajó −43% la latencia). Las macros las clava luego el servidor (OpenFoodFacts), no el modelo.</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:.74rem">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:7px 8px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.4px">Petición</th>
+              <th style="text-align:center;padding:7px 8px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.66rem">Tokens ENTRADA (prompt)</th>
+              <th style="text-align:center;padding:7px 8px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.66rem">Tokens SALIDA (JSON)</th>
+              <th style="text-align:left;padding:7px 8px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:.66rem">Qué contiene</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+              <td style="padding:7px 8px;color:var(--text);font-weight:600">1 · Menú + suplementos</td>
+              <td style="text-align:center;padding:7px 8px;color:var(--text2)">~3.500</td>
+              <td style="text-align:center;padding:7px 8px;color:var(--accent)">~3.500-4.000</td>
+              <td style="padding:7px 8px;color:var(--text2);font-size:.7rem">perfil + reglas de menú + esqueleto JSON · 7 días × comidas (alimentos con macros/100g) + suplementos</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
+              <td style="padding:7px 8px;color:var(--text);font-weight:600">2 · Entreno</td>
+              <td style="text-align:center;padding:7px 8px;color:var(--text2)">~2.500</td>
+              <td style="text-align:center;padding:7px 8px;color:var(--accent)">~2.000-2.500</td>
+              <td style="padding:7px 8px;color:var(--text2);font-size:.7rem">perfil + reglas de entreno + esqueleto · 7 planes (1+2+…+7 = 28 días) con ejercicios, series y RIR</td>
+            </tr>
+            <tr style="background:rgba(181,240,55,.05);font-weight:700">
+              <td style="padding:8px;color:var(--accent)">Total / generación «Todo»</td>
+              <td style="text-align:center;padding:8px;color:var(--text)">~6.000</td>
+              <td style="text-align:center;padding:8px;color:var(--accent)">~6.000</td>
+              <td style="padding:8px;color:var(--text2);font-size:.7rem">~12-13K tokens en 2 llamadas paralelas → ~€0,0085 salida + ~€0,0015 entrada ≈ €0,01/gen</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:.66rem;color:var(--muted);margin-top:10px;font-family:'JetBrains Mono',monospace">La <strong style="color:var(--accent)">SALIDA domina el coste</strong> (en 3.1-flash-lite el output cuesta ×6 la entrada: $1,50 vs $0,25 /1M). <strong>Scopes PARCIALES = 1 sola petición:</strong> «solo menú», «solo entreno» o «menú + compra» → ~la mitad de tokens y de coste. <strong>Regenerar una comida o un día sueltos</strong> = petición pequeña (~1-2K tokens). El buscador de alimentos y el escáner de barras <strong>NO llaman a Gemini</strong> (leen la BD local de OpenFoodFacts).</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:32px">
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Supuestos:</strong> DAU/MAU = 30% (MAU ≈ DAU × 3,3) · <strong>1 generación IA / MAU / mes</strong> (estimación CONSERVADORA: Free = 1 gen/30 días, pero Pro 3% del MAU es ILIMITADO y tira del promedio hacia arriba). Cada generación "Todo" = <strong>2 peticiones a Gemini</strong> (menú+suplementos y entreno van en 2 llamadas focalizadas en paralelo · split que bajó −43% la latencia) y ronda ~12K tokens (≈6K entrada + ~6K salida).</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste/gen ≈ €0,0085</strong> con gemini-3.1-flash-lite ($0,25 in / $1,50 out por 1M tokens, oficial jun-2026). La columna "vs 2.5-flash" (€0,025/gen) muestra lo que costaría con el modelo anterior → <strong style="color:var(--accent)">se ahorra ~2,8×</strong> a cualquier escala desde el cambio del 30-jun. El buscador de alimentos NO cuenta (usa la BD local de OpenFoodFacts, 0 peticiones a Gemini).</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">Sin free tier:</strong> Gemini cobra desde la 1ª petición, pero el coste se mantiene <strong>marginal frente a los ingresos</strong> (~1,8% a 10K DAU) porque escala lineal con el uso y los ingresos crecen más rápido (Pro + one-off). Palanca de optimización si hiciera falta a gran escala: <strong>batch API (−50%)</strong>, cache de generaciones similares, o reservar un modelo más capaz solo a Pro.</div>
   </div>
 
   <div class="section-label">Ingresos vs costes — 3% MAU Pro 9,99€ + 5% MAU regeneración 4,99€ (supuesto unificado 13-jun) · cifras MENSUALES (€/mes)</div>
@@ -1807,7 +1894,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="step-desc">La IA funciona en la app, sin pagos todavía. Solo validar que genera buenos planes.</div>
         <div class="box">
           <div class="box-title">Qué se implementa</div>
-          <div class="box-item">Firebase Function recibe perfil del usuario y llama a Gemini 2.5 Flash</div>
+          <div class="box-item">Firebase Function recibe perfil del usuario y llama a Gemini 3.1 Flash-Lite</div>
           <div class="box-item">Gemini devuelve plan de entrenamiento + menú semanal en JSON</div>
           <div class="box-item">Se guarda en Firebase: plan generado + <code>fecha_ultima_generacion</code></div>
           <div class="box-item">Si intenta regenerar antes de 30 días → mensaje "disponible el DD/MM"</div>
@@ -2026,16 +2113,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">~167.000</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(240,168,56,.05)">
-          <td style="padding:8px;color:var(--text);font-size:.72rem;font-weight:600">Gemini 2.5 Flash (IA · €0,025/gen · sin free tier)</td>
+          <td style="padding:8px;color:var(--text);font-size:.72rem;font-weight:600">Gemini 3.1 Flash-Lite (IA · €0,0085/gen · sin free tier)</td>
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">&lt;1 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--text2)">4 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--text2)">43 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--text2)">83 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">168 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">425 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">825 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">1.675 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">4.175 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--text2)">1 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--text2)">14 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--text2)">28 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">57 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">145 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">280 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">570 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">1.420 €</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
           <td style="padding:8px;color:var(--muted);font-size:.72rem">Cloud Functions (cómputo · generatePlan + searchFood)</td>
@@ -2124,44 +2211,44 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <tr style="border-bottom:1px solid var(--border);background:rgba(240,55,55,.04)">
           <td style="padding:10px 8px;color:#f87171;font-weight:700">🔴 Costes totales /mes</td>
           <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">9 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">13 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">54 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">97 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">200 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">489 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">935 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">1.879 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">4.642 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">10 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">25 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">42 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">89 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">209 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">390 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">774 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">1.887 €</td>
         </tr>
         <tr style="background:rgba(181,240,55,.06)">
           <td style="padding:12px 8px;color:var(--accent);font-weight:700">💰 Beneficio neto /mes</td>
           <td style="text-align:center;padding:12px 6px;color:var(--accent3);font-weight:700">−9 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+65 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+731 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+1.452 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+2.918 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+7.360 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+14.551 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+29.305 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+73.212 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+68 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+760 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+1.507 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+3.029 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+7.640 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+15.096 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+30.410 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+75.967 €</td>
         </tr>
         <tr>
           <td style="padding:6px 8px;color:var(--muted);font-size:.66rem">Margen</td>
           <td style="text-align:center;padding:6px;color:var(--muted);font-size:.66rem">–</td>
-          <td style="text-align:center;padding:6px;color:var(--muted);font-size:.66rem">83%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">93%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
+          <td style="text-align:center;padding:6px;color:var(--muted);font-size:.66rem">87%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">97%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">97%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">97%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">97%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">97%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">97%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">98%</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste IA (Gemini 2.5 Flash · €0,025/generación, jun-2026):</strong> generaciones/mes ≈ <strong>1 × MAU</strong> (estimación CONSERVADORA, algo por encima para ir sobre seguro). Modelo: Free = 1 gen/30 días + onboarding + <strong>Pro (3% MAU) = ILIMITADO</strong> (tira del promedio hacia arriba, los 3 botones "Generar con IA" se pueden usar muchas veces) + one-off (5% MAU). El buscador de alimentos NO usa Gemini (usa la BD de OpenFoodFacts). A 10K DAU ≈ 33.000 generaciones/mes → <strong style="color:var(--accent3)">~825 €/mes (≈5% de los ingresos)</strong>.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">⚠ Gemini NO tiene free tier:</strong> la API de pago cobra desde la PRIMERA generación (a diferencia de Firestore, Functions, Auth, App Check… que SÍ son gratis hasta un umbral). Por eso el coste IA <strong>nunca es 0 €</strong> mientras haya generaciones — solo es ~0 en Pre-launch (1 gen = €0,025). Con 5.000 generaciones ya pagas ~125 €, con 17.000 ~425 €, etc.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Margen ~93-94% sostenido a CUALQUIER escala.</strong> Con la app optimizada (getDoc · racha capada a 30 · sin listeners), Firestore es MARGINAL (~€26/mes a 10K DAU, no €1.165 del modelo viejo). El coste lo domina <strong style="color:var(--accent3)">la IA: Gemini = ~88% del coste a escala</strong> (es lo único que escala con el uso y no tiene free tier). Beneficio positivo desde Beta. Palanca #1 de optimización = modelo IA más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo · el Pro premium puede usar mejor modelo).</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste IA (Gemini 3.1 Flash-Lite · €0,0085/generación, jun-2026):</strong> generaciones/mes ≈ <strong>1 × MAU</strong> (estimación CONSERVADORA, algo por encima para ir sobre seguro). Modelo: Free = 1 gen/30 días + onboarding + <strong>Pro (3% MAU) = ILIMITADO</strong> (tira del promedio hacia arriba, los 3 botones "Generar con IA" se pueden usar muchas veces) + one-off (5% MAU). El buscador de alimentos NO usa Gemini (usa la BD de OpenFoodFacts). A 10K DAU ≈ 33.000 generaciones/mes → <strong style="color:var(--accent3)">~280 €/mes (≈1,8% de los ingresos)</strong> · 2.8× más barato desde el cambio a 3.1-flash-lite (30-jun, era ~825 €).</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">⚠ Gemini NO tiene free tier:</strong> la API de pago cobra desde la PRIMERA generación (a diferencia de Firestore, Functions, Auth, App Check… que SÍ son gratis hasta un umbral). Por eso el coste IA <strong>nunca es 0 €</strong> mientras haya generaciones — solo es ~0 en Pre-launch (1 gen = €0,0085). Con 5.000 generaciones ya pagas ~43 €, con 17.000 ~145 €, etc.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Margen ~97% sostenido a CUALQUIER escala</strong> (subió de ~94% al pasar a 3.1-flash-lite, 30-jun). Con la app optimizada (getDoc · racha capada a 30 · sin listeners), Firestore es MARGINAL (~€26/mes a 10K DAU, no €1.165 del modelo viejo). El coste lo sigue dominando <strong style="color:var(--accent3)">la IA: Gemini = ~72% del coste a escala</strong> (es lo único que escala con el uso y no tiene free tier · bajó del 88% al abaratar el modelo). Beneficio positivo desde Beta. Palanca #1 de optimización = modelo IA más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo · el Pro premium puede usar mejor modelo).</div>
   </div>
 
   <!-- ── GRÁFICO 1 · Ingresos vs Costes vs Beneficio por escala (9 tiers) -->
@@ -2277,14 +2364,14 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <!-- Valores numéricos en top de cada beneficio -->
         <g fill="var(--text)" font-size="8" text-anchor="middle" font-weight="700">
           <text x="125" y="278" fill="#f87171">−9</text>
-          <text x="225" y="213">65€</text>
-          <text x="325" y="145">731€</text>
-          <text x="425" y="125">1.452€</text>
-          <text x="525" y="106">2.918€</text>
-          <text x="625" y="80">7.360€</text>
-          <text x="725" y="60">14.551€</text>
-          <text x="825" y="41">29.305€</text>
-          <text x="925" y="15">73.212€</text>
+          <text x="225" y="213">68€</text>
+          <text x="325" y="145">760€</text>
+          <text x="425" y="125">1.507€</text>
+          <text x="525" y="106">3.029€</text>
+          <text x="625" y="80">7.640€</text>
+          <text x="725" y="60">15.096€</text>
+          <text x="825" y="41">30.410€</text>
+          <text x="925" y="15">75.967€</text>
         </g>
 
         <!-- Leyenda -->
@@ -2303,60 +2390,60 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
 
   <!-- ── GRÁFICO 2 · Breakdown de costes a 10K DAU ──────────────────── -->
-  <div class="section-label">Gráfico · breakdown de costes a 10K DAU (935 €/mes · mobile-first 99% · la IA domina)</div>
+  <div class="section-label">Gráfico · breakdown de costes a 10K DAU (390 €/mes · mobile-first 99% · la IA domina · 30-jun: 3.1-flash-lite, antes 935 €)</div>
 
   <div class="arch-card" style="margin-bottom:24px">
     <div style="padding:20px">
       <svg viewBox="0 0 760 280" style="width:100%;height:auto;font-family:'JetBrains Mono',monospace">
-        <!-- Stacked bar horizontal: 935€ total (Firestore corregido · IA Gemini ~825€ domina) -->
-        <!-- Posición: x = 200 + (€ acumulado / 935) · 540 -->
+        <!-- Stacked bar horizontal: 390€ total (3.1-flash-lite · IA Gemini ~280€ domina) -->
+        <!-- Posición: x = 200 + (€ acumulado / 390) · 540 -->
         <g>
-          <!-- Gemini 2.5 Flash 825€ (88%) → x=200, width = (825/935)·540 = 476 -->
-          <rect x="200" y="40"  width="476" height="40" fill="#a3e635"/>
-          <!-- Cloud Functions 40€ (4%) → x=676, width = 23 -->
-          <rect x="676" y="40"  width="23"  height="40" fill="#fbbf24"/>
-          <!-- Firestore reads+writes 26€ (3%) → x=699, width = 15 -->
-          <rect x="699" y="40"  width="15"  height="40" fill="#f87171"/>
-          <!-- Backups 23€ (2%) → x=714, width = 13 -->
-          <rect x="714" y="40"  width="13"  height="40" fill="#818cf8"/>
-          <!-- Apple+Play+dom 19€ (2%) → x=727, width = 11 -->
-          <rect x="727" y="40"  width="11"  height="40" fill="#f472b6"/>
-          <!-- Hosting 2€ (0%) → x=738, width = 2 -->
-          <rect x="738" y="40"  width="2"   height="40" fill="#c084fc"/>
+          <!-- Gemini 3.1 Flash-Lite 280€ (72%) → x=200, width = (280/390)·540 = 388 -->
+          <rect x="200" y="40"  width="388" height="40" fill="#a3e635"/>
+          <!-- Cloud Functions 40€ (10%) → x=588, width = 55 -->
+          <rect x="588" y="40"  width="55"  height="40" fill="#fbbf24"/>
+          <!-- Firestore reads+writes 26€ (7%) → x=643, width = 36 -->
+          <rect x="643" y="40"  width="36"  height="40" fill="#f87171"/>
+          <!-- Backups 23€ (6%) → x=679, width = 32 -->
+          <rect x="679" y="40"  width="32"  height="40" fill="#818cf8"/>
+          <!-- Apple+Play+dom 19€ (5%) → x=711, width = 26 -->
+          <rect x="711" y="40"  width="26"  height="40" fill="#f472b6"/>
+          <!-- Hosting 2€ (1%) → x=737, width = 3 -->
+          <rect x="737" y="40"  width="3"   height="40" fill="#c084fc"/>
           <!-- reCAPTCHA 0€ a esta escala → sin segmento en la barra -->
         </g>
 
         <!-- Total label -->
-        <text x="200" y="30" fill="var(--text)" font-size="11" font-weight="700">Total: 935 €/mes</text>
+        <text x="200" y="30" fill="var(--text)" font-size="11" font-weight="700">Total: 390 €/mes</text>
         <text x="740" y="30" fill="var(--text)" font-size="11" font-weight="700" text-anchor="end">100%</text>
 
         <!-- Leyenda en lista debajo · 2 columnas -->
         <g font-size="11">
           <!-- Col 1 -->
           <rect x="60" y="105" width="12" height="12" fill="#a3e635"/>
-          <text x="80" y="115" fill="var(--text)">Gemini 2.5 Flash (IA · sin free tier)</text>
-          <text x="280" y="115" fill="var(--text2)" text-anchor="end">825 €</text>
-          <text x="350" y="115" fill="var(--muted)" text-anchor="end">88%</text>
+          <text x="80" y="115" fill="var(--text)">Gemini 3.1 Flash-Lite (IA · sin free tier)</text>
+          <text x="280" y="115" fill="var(--text2)" text-anchor="end">280 €</text>
+          <text x="350" y="115" fill="var(--muted)" text-anchor="end">72%</text>
 
           <rect x="60" y="125" width="12" height="12" fill="#fbbf24"/>
           <text x="80" y="135" fill="var(--text)">Cloud Functions <tspan fill="var(--muted)" font-size="9">· OFF 0€</tspan></text>
           <text x="280" y="135" fill="var(--text2)" text-anchor="end">40 €</text>
-          <text x="350" y="135" fill="var(--muted)" text-anchor="end">4%</text>
+          <text x="350" y="135" fill="var(--muted)" text-anchor="end">10%</text>
 
           <rect x="60" y="145" width="12" height="12" fill="#f87171"/>
           <text x="80" y="155" fill="var(--text)">Firestore reads+writes <tspan fill="var(--muted)" font-size="9">· app optimizada</tspan></text>
           <text x="280" y="155" fill="var(--text2)" text-anchor="end">26 €</text>
-          <text x="350" y="155" fill="var(--muted)" text-anchor="end">3%</text>
+          <text x="350" y="155" fill="var(--muted)" text-anchor="end">7%</text>
 
           <rect x="60" y="165" width="12" height="12" fill="#818cf8"/>
           <text x="80" y="175" fill="var(--text)">Backups + PITR</text>
           <text x="280" y="175" fill="var(--text2)" text-anchor="end">23 €</text>
-          <text x="350" y="175" fill="var(--muted)" text-anchor="end">2%</text>
+          <text x="350" y="175" fill="var(--muted)" text-anchor="end">6%</text>
 
           <rect x="60" y="185" width="12" height="12" fill="#c084fc"/>
           <text x="80" y="195" fill="var(--text)">Hosting transfer (1% web)</text>
           <text x="280" y="195" fill="var(--text2)" text-anchor="end">2 €</text>
-          <text x="350" y="195" fill="var(--muted)" text-anchor="end">0%</text>
+          <text x="350" y="195" fill="var(--muted)" text-anchor="end">1%</text>
 
           <!-- Col 2 -->
           <rect x="400" y="105" width="12" height="12" fill="var(--accent2)" stroke="var(--accent2)" stroke-dasharray="2"/>
@@ -2367,7 +2454,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <rect x="400" y="125" width="12" height="12" fill="#f472b6"/>
           <text x="420" y="135" fill="var(--text)">Apple Dev + Play + dominio</text>
           <text x="640" y="135" fill="var(--text2)" text-anchor="end">19 €</text>
-          <text x="710" y="135" fill="var(--muted)" text-anchor="end">2%</text>
+          <text x="710" y="135" fill="var(--muted)" text-anchor="end">5%</text>
 
           <rect x="400" y="145" width="12" height="12" fill="#94a3b8"/>
           <text x="420" y="155" fill="var(--text)">reCAPTCHA (web)</text>
@@ -2389,7 +2476,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
         <!-- Insight abajo -->
         <text x="60"  y="225" fill="var(--text2)" font-size="11">
-          <tspan font-weight="700" fill="var(--accent3)">La IA (Gemini) es el 88% del coste</tspan> · pero solo ≈5,3% de los ingresos (15.486 € a 10K DAU · costes totales 935 € ≈ 6%) · es lo único que escala con el uso y no tiene free tier → palanca #1
+          <tspan font-weight="700" fill="var(--accent3)">La IA (Gemini) es el 72% del coste</tspan> · pero solo ≈1,8% de los ingresos (15.486 € a 10K DAU · costes totales 390 € ≈ 2,5%) · es lo único que escala con el uso y no tiene free tier → palanca #1
         </text>
         <text x="60"  y="245" fill="var(--text2)" font-size="11">
           <tspan font-weight="700" fill="var(--accent)">App Check nativo = 0 €:</tspan> DeviceCheck (iOS) / Play Integrity (Android) gratis ilimitado · sin reCAPTCHA Enterprise (eso sería solo para el 1% web)
@@ -2460,27 +2547,27 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <circle cx="915" cy="33" r="5"/>
         </g>
 
-        <!-- Margen PLANO ~94% a toda escala (precios reales · la IA escala lineal) -->
+        <!-- Margen PLANO ~97% a toda escala (3.1-flash-lite · la IA escala lineal) -->
         <rect x="320" y="28" width="450" height="10" fill="rgba(181,240,55,.08)" stroke="rgba(181,240,55,.3)" stroke-dasharray="3 3"/>
-        <text x="545" y="20" fill="var(--accent)" font-size="9" text-anchor="middle" font-weight="700">MARGEN PLANO ~94% (la IA escala lineal con ingresos)</text>
+        <text x="545" y="20" fill="var(--accent)" font-size="9" text-anchor="middle" font-weight="700">MARGEN PLANO ~97% (la IA escala lineal con ingresos)</text>
 
         <!-- Etiquetas valores mobile -->
         <g fill="var(--accent)" font-size="11" font-weight="700" text-anchor="middle">
-          <text x="110" y="71">83%</text>
-          <text x="225" y="49">93%</text>
-          <text x="340" y="47">94%</text>
-          <text x="455" y="47">94%</text>
-          <text x="570" y="47">94%</text>
-          <text x="685" y="47">94%</text>
-          <text x="800" y="47">94%</text>
-          <text x="915" y="47">94%</text>
+          <text x="110" y="71">87%</text>
+          <text x="225" y="49">97%</text>
+          <text x="340" y="47">97%</text>
+          <text x="455" y="47">97%</text>
+          <text x="570" y="47">97%</text>
+          <text x="685" y="47">97%</text>
+          <text x="800" y="47">97%</text>
+          <text x="915" y="47">97%</text>
         </g>
 
         <!-- Leyenda -->
         <g font-size="11">
           <line x1="60"  y1="244" x2="80" y2="244" stroke="var(--accent)" stroke-width="3"/>
           <text x="86" y="248" fill="var(--text2)">Margen mobile-first (app nativa · 99% móvil)</text>
-          <text x="430" y="248" fill="var(--muted)" font-style="italic">Se mantiene plano ~93-94% a toda escala · la IA escala lineal con ingresos</text>
+          <text x="430" y="248" fill="var(--muted)" font-style="italic">Se mantiene plano ~97% a toda escala · la IA escala lineal con ingresos</text>
         </g>
       </svg>
     </div>
@@ -2491,11 +2578,11 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="arch-card-header"><div class="arch-card-title">Lecturas clave · mobile-first (rev. 13-jun · precios reales Pro 9,99 / one-off 4,99)</div></div>
       <div style="padding:16px 20px;font-size:.78rem;color:var(--text2);line-height:1.7">
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">Break-even ~10 DAU</strong> · 1 Pro (8,49 € neto) + 1-2 regeneraciones (4,24 € netas) cubren los ~9 € de fijos (Apple+Google+dominio)</p>
-        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Margen ~93-94% PLANO a cualquier escala</strong> · con la app optimizada (getDoc), Firestore es marginal (~€26/mes a 10K DAU). El coste lo domina la IA, que escala lineal con los ingresos → el margen no se cae al crecer. Beneficio positivo desde Beta</p>
+        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Margen ~97% PLANO a cualquier escala</strong> (subió de ~94% al pasar a gemini-3.1-flash-lite el 30-jun) · con la app optimizada (getDoc), Firestore es marginal (~€26/mes a 10K DAU). El coste lo domina la IA, que escala lineal con los ingresos → el margen no se cae al crecer. Beneficio positivo desde Beta</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">App Check nativo = 0 €/mes ilimitado</strong> · DeviceCheck (iOS) / Play Integrity (Android) hardware-attested · UX cero fricción · sin coste de reCAPTCHA Enterprise (solo lo usaría el 1% web)</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">Crash + analytics = 0 €/mes</strong> · Firebase Crashlytics + Analytics forever-free unlimited (parte del Blaze) · ahorra ~35 €/mes a escala vs alternativas de pago · nativo iOS/Android sin cookies via IDFV/GAID</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent3)">App NATIVA, no web (99% móvil / 1% web)</strong> · pagos por IAP Apple/Google (15% ya en el ARPU neto 8,49 €) · <strong>0 € de comisiones de pasarela externa</strong>, App Check nativo gratis, hosting casi nulo (la app empaqueta sus assets). El canal es el móvil.</p>
-        <p><strong style="color:var(--accent3)">La IA (Gemini) es el ~88% del coste a 10K DAU</strong> (~€825 · sin free tier · escala con el uso). Firestore corregido a ~€26 (app optimizada · getDoc). Palanca #1 = modelo IA más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo)</p>
+        <p><strong style="color:var(--accent3)">La IA (Gemini) es el ~72% del coste a 10K DAU</strong> (~€280 con 3.1-flash-lite · sin free tier · escala con el uso). Firestore corregido a ~€26 (app optimizada · getDoc). Palanca #1 = modelo IA más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo)</p>
       </div>
     </div>
     <div class="arch-card">
@@ -2503,12 +2590,12 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div style="padding:16px 20px;font-size:.74rem;color:var(--text2);line-height:1.6;font-family:'JetBrains Mono',monospace">
         <p style="margin-bottom:7px"><strong style="color:var(--text2)">Beta · 50 DAU</strong>:<br>~170 MAU · ~1K registrados · 5 Pro subs</p>
         <p style="margin-bottom:7px"><strong style="color:var(--accent)">Early · 500 DAU</strong> <span style="color:var(--accent3)">★ break-even confortable</span>:<br>~1.700 MAU · ~10K registrados · 50 Pro subs</p>
-        <p style="margin-bottom:7px"><strong style="color:var(--accent)">1K DAU</strong>:<br>~3.300 MAU · ~20K registrados · 100 Pro subs · ~3.300 gen/mes · 1.452 €/mes beneficio</p>
-        <p style="margin-bottom:7px"><strong style="color:var(--accent)">Growth · 2K DAU</strong> <span style="color:var(--accent3)">★ sweet spot</span>:<br>~6.700 MAU · ~40K registrados · 200 Pro subs · ~6.700 gen/mes · 2.918 €/mes beneficio</p>
-        <p style="margin-bottom:7px"><strong style="color:var(--accent)">5K DAU</strong>:<br>~17K MAU · ~100K registrados · 500 Pro subs · ~17K gen/mes · 7.360 €/mes beneficio</p>
-        <p style="margin-bottom:7px"><strong style="color:var(--accent)">Scale · 10K DAU</strong>:<br>~33K MAU · ~200K registrados · 1K Pro subs · ~33K gen/mes · 14.551 €/mes beneficio</p>
-        <p style="margin-bottom:7px"><strong style="color:var(--accent)">20K DAU</strong>:<br>~67K MAU · ~400K registrados · 2K Pro subs · ~67K gen/mes · 29.305 €/mes beneficio</p>
-        <p><strong style="color:var(--accent)">Mass · 50K DAU</strong>:<br>~167K MAU · ~1M registrados · 5K Pro subs · ~167K gen/mes · 73.212 €/mes beneficio</p>
+        <p style="margin-bottom:7px"><strong style="color:var(--accent)">1K DAU</strong>:<br>~3.300 MAU · ~20K registrados · 100 Pro subs · ~3.300 gen/mes · 1.507 €/mes beneficio</p>
+        <p style="margin-bottom:7px"><strong style="color:var(--accent)">Growth · 2K DAU</strong> <span style="color:var(--accent3)">★ sweet spot</span>:<br>~6.700 MAU · ~40K registrados · 200 Pro subs · ~6.700 gen/mes · 3.029 €/mes beneficio</p>
+        <p style="margin-bottom:7px"><strong style="color:var(--accent)">5K DAU</strong>:<br>~17K MAU · ~100K registrados · 500 Pro subs · ~17K gen/mes · 7.640 €/mes beneficio</p>
+        <p style="margin-bottom:7px"><strong style="color:var(--accent)">Scale · 10K DAU</strong>:<br>~33K MAU · ~200K registrados · 1K Pro subs · ~33K gen/mes · 15.096 €/mes beneficio</p>
+        <p style="margin-bottom:7px"><strong style="color:var(--accent)">20K DAU</strong>:<br>~67K MAU · ~400K registrados · 2K Pro subs · ~67K gen/mes · 30.410 €/mes beneficio</p>
+        <p><strong style="color:var(--accent)">Mass · 50K DAU</strong>:<br>~167K MAU · ~1M registrados · 5K Pro subs · ~167K gen/mes · 75.967 €/mes beneficio</p>
       </div>
     </div>
   </div>
@@ -2664,11 +2751,11 @@ var INITIAL_CHECKS = {
   // 6B desplegado 31-may VIA OPENFOODFACTS: dump OFF de 25k alimentos ES
   // pre-cargado en Firestore /foods/ + buscador (FoodSearchModal) + barcode +
   // ajuste de gramos al objetivo de kcal (resolvió el ~73% aporte). Núcleo en
-  // functions/src/nutrition/. Modelo IA ACTUAL = gemini-2.5-flash (no Flash-Lite).
+  // functions/src/nutrition/. Modelo IA ACTUAL = gemini-3.1-flash-lite (30-jun-2026 · 2.4x mas rapido + 2.8x mas barato que 2.5-flash · validado vs 16 modelos).
   '6-0': true,  // Firebase CLI + functions/ (Node 22 ESM + TypeScript NodeNext). firebase init functions hecho · bloque functions en firebase.json.
   '6-1': true,  // API key Gemini verificada (regenerada bajo proyecto btal-app explícito · consolidada desde gen-lang-client).
   '6-1b': true, // Key como Secret de Firebase (defineSecret GEMINI_API_KEY) · NUNCA en el bundle del cliente (vive solo en el entorno de la Cloud Function).
-  '6-2': true,  // functions/src/generatePlan.ts · onCall Gen2 europe-west1, enforceAppCheck, bloquea anónimos, lee perfil del uid, llama Gemini 2.5 Flash —desde 31-may, antes Flash-Lite— (sin responseSchema · esqueleto JSON + Zod), persiste con Admin SDK respetando contratos. Menú objetivo-driven (Mifflin-St Jeor + prot g/kg) + rellena los 7 builtin (1dias..7dias).
+  '6-2': true,  // functions/src/generatePlan.ts · onCall Gen2 europe-west1, enforceAppCheck, bloquea anónimos, lee perfil del uid, llama Gemini 3.1 Flash-Lite —desde 31-may, antes Flash-Lite— (sin responseSchema · esqueleto JSON + Zod), persiste con Admin SDK respetando contratos. Menú objetivo-driven (Mifflin-St Jeor + prot g/kg) + rellena los 7 builtin (1dias..7dias).
   '6-3': true,  // Regeneración parcial vía `scope` (all / menu_compra / menu_only / entrenos_only) en el mismo callable · AiGenerateModal elige scope · compra DERIVADA del menú (no IA).
   '6-4': true,  // src/services/functions.ts · wrapper generatePlan con GenerateError tipado (limit_reached/rate_limited/capacity/...) + deleteAccountFull.
   '6-5': true,  // Botón "Generar con IA" en HoyPage/MenuPage/EntrenoPage (solo modo='ai') + AiGenerateModal con GeneratingScreen + AiGeneratedBadge (fecha) + chip estado en HoyPage (cuenta atrás en vivo hasta el desbloqueo / "Generación IA - LISTA").
