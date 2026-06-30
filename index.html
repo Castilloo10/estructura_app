@@ -301,6 +301,11 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 <!-- PANTALLA INICIO -->
 <div class="pane active" id="p-inicio">
 
+  <div class="pane-intro">
+    <h2>Pantalla de inicio</h2>
+    <p>Cómo entra cada tipo de usuario y qué ve al arrancar: el <strong style="color:var(--text)">nuevo usuario</strong> (onboarding con IA o manual), el <strong style="color:var(--text)">ya registrado</strong> (login directo a su programa) y el <strong style="color:var(--text)">modo prueba</strong> (invitado sin cuenta · datos reales con caducidad de 3 días). Empieza por el glosario de naming para seguir el resto del documento.</p>
+  </div>
+
   <div class="box" style="margin-bottom:24px">
     <div class="box-title">📖 Glosario de naming (convención fija de la app)</div>
     <div class="box-item"><strong>Programa</strong> — el conjunto completo: menú + compra + entreno (es lo que genera la IA con scope «Todo»)</div>
@@ -624,6 +629,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
 <!-- STACK -->
 <div class="pane" id="p-stack">
+  <div class="pane-intro">
+    <h2>Stack técnico</h2>
+    <p>Una sola base de código <strong style="color:var(--text)">React Native + Expo</strong> que compila a iOS y Android nativos (y sirve la web vía RN Web). Backend serverless en <strong style="color:var(--text)">Firebase</strong> (Auth, Firestore, Cloud Functions), IA de <strong style="color:var(--text)">Gemini 3.1 Flash-Lite</strong> y macros reales de OpenFoodFacts.</p>
+  </div>
   <div class="section-label">Stack real — React Native + Expo + Firebase, una sola base de código</div>
   <div class="stack-grid">
     <div class="stack-card">
@@ -735,6 +744,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
 <!-- ESTRUCTURA -->
 <div class="pane" id="p-arch">
+  <div class="pane-intro">
+    <h2>Estructura del proyecto</h2>
+    <p>El árbol de archivos del repo <code>btal-v2</code>. La app (<code>src/</code>) y las Cloud Functions (<code>functions/</code>) viven en el mismo monorepo, así el cálculo de macros, las validaciones y los tipos se comparten entre cliente y servidor sin duplicar lógica.</p>
+  </div>
   <div class="section-label">Árbol de archivos</div>
 
   <div class="tree-wrap">
@@ -883,8 +896,12 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
 <!-- HOJA DE RUTA -->
 <div class="pane" id="p-roadmap">
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
-    <div class="section-label" style="margin:0;flex:1">Del prototipo al producto en las stores</div>
+  <div class="pane-intro">
+    <h2>Hoja de ruta</h2>
+    <p>Del prototipo al producto en las stores, fase a fase. Cada paso tiene su checklist: marca tu progreso y se guarda en este navegador. El estado actual del proyecto está en el panel plegable de abajo.</p>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:24px 0 16px">
+    <div class="section-label" style="margin:0;flex:1">Checklist por fases — marca lo completado</div>
     <button class="roadmap-reset" onclick="resetAll()">↺ Reiniciar</button>
   </div>
 
@@ -1315,7 +1332,18 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 <!-- SEGURIDAD -->
 <div class="pane" id="p-security">
 
-  <div class="section-label">12 capas de seguridad para una app multi-usuario con pagos e IA</div>
+  <div class="pane-intro">
+    <h2>Seguridad</h2>
+    <p>12 capas para una app multiusuario con pagos e IA: desde el aislamiento de datos por usuario en las reglas de Firestore hasta App Check (anti-bots), 2FA TOTP, monetización blindada contra manipulación desde el cliente y borrado de cuenta conforme a RGPD.</p>
+    <div class="pi-stats">
+      <div class="pi-stat"><div class="v accent">12</div><div class="l">Capas de seguridad</div></div>
+      <div class="pi-stat"><div class="v">App Check</div><div class="l">Enforce activo · Auth + Firestore</div></div>
+      <div class="pi-stat"><div class="v">2FA TOTP</div><div class="l">Activo end-to-end</div></div>
+      <div class="pi-stat"><div class="v accent">RGPD</div><div class="l">Export + borrado en cascada</div></div>
+    </div>
+  </div>
+
+  <div class="section-label">Las 12 capas, una a una</div>
 
   <div class="stack-grid">
 
@@ -1715,14 +1743,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <tr><td colspan="6" style="padding:6px 12px;font-size:.66rem;color:var(--muted);font-style:italic">⚠ Tabla "por usuarios totales" (registrados · MAU ≈ 16,7% · 1 gen/MAU). <strong style="color:var(--accent2)">Modelo MOBILE-FIRST (IAP) · MISMO supuesto que la proyección de abajo (rev. 13-jun):</strong> paga el <strong>3% del MAU</strong> (Pro 9,99€) + el <strong>5% del MAU</strong> (regeneración 4,99€) — grupos disjuntos, nadie paga las dos cosas. La comisión IAP <strong>15%</strong> va sobre los ingresos brutos (~9€/92€/920€/9.170€/91.700€) → ~1,40€/14€/138€/1.375€/13.755€, incluida en el TOTAL COSTES. La <strong>infra pura</strong> (sin IAP) es prácticamente solo Gemini (IA) a escala (~1€/5€/44€/455€/4.608€). 15% es Small Business Program (&lt;1M$/año) · 30% por encima. 1M registrados ≈ 50K DAU.</td></tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--text)">Glosario:</strong> <strong>Registrados</strong> = cuentas creadas en total (las columnas de esta tabla). <strong>MAU</strong> (Monthly Active Users) = usuarios que abren la app al menos 1 vez al mes ≈ <strong>16,7% de los registrados</strong> (el resto son cuentas dormidas). <strong>DAU</strong> (Daily Active Users) = usuarios que abren la app un día cualquiera ≈ 30% del MAU. Ejemplo: 10.000 registrados → ~1.670 MAU → ~500 DAU. <strong style="color:var(--text)">Alcance:</strong> esta tabla no incluye backups (pospuestos a lanzamiento) ni los fijos Apple Dev/Play/dominio (~19€/mes) — la proyección por DAU de abajo sí los cuenta.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">Avatar (12-jun):</strong> la foto de perfil viaja como <strong>data-URI JPEG dentro del doc Firestore</strong> (compresión adaptativa hasta 1024px · tope 200K chars blindado en rules) → <strong>0€ de Firebase Storage para siempre</strong>; el único coste es egress marginal (~2-4€/mes a 10K DAU, ya en "Firebase Descarga"). Escape hatch post-launch si creciera: mover a Storage + URL.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Estimación: 50KB almacenamiento/usuario · 100KB descarga/mes · 1 generación IA/mes (Free). <strong style="color:var(--accent)">Actualizado 1-jun-2026:</strong> la generación "all" produce el menú semanal (7 días × 4 comidas) + RELLENA los 7 planes builtin de entreno → ~26.700 tokens/gen MEDIDOS (≈11.765 input + ~14.933 output, en 2 peticiones paralelas) → <strong style="color:var(--accent)">~€0,023/generación</strong> con <strong style="color:var(--accent)">Gemini 3.1 Flash-Lite</strong> ($0,25/$1,50 por 1M in/out, vigente jun-2026). Sustituyó a 2.5-flash ($0,30/$2,50, ~€0,052/gen · más verboso) el 30-jun: 2.4× más rápido + 2.21× más barato, con kcal final idéntica (la garantiza el ajuste de gramos con OpenFoodFacts, no el modelo). Marginal frente a Pro 9,99€ (un Pro paga ~430 generaciones).</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">OpenFoodFacts macros reales (Fase 6B, 31-may):</strong> dump pre-cargado en Firestore <code>foods/</code> (~25K alimentos ES, ~4 MB) · la generación y el buscador LEEN de la BD propia (cache-first) y solo consultan la API en vivo en cache-miss (límite 10/min de OFF nunca se toca a escala). Sync semanal vía Cloud Scheduler. Licencia ODbL · <strong style="color:var(--accent2)">0 € a cualquier escala</strong> · cobertura fuerte de marcas blancas españolas.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">Pago = IAP (In-App Purchase).</strong> Apple/Google obligan a usar IAP para bienes digitales en apps nativas (las pasarelas externas = rechazo en review). Comisión IAP <strong>15%</strong> (Small Business Program &lt;1M$/año · 30% por encima) vía <strong>RevenueCat</strong> (cross-platform · free &lt;$2,5k/mes). Ese 15% se descuenta de los ingresos (tabla de ingresos), no es coste de infra. Supuesto unificado 13-jun: <strong>3% del MAU</strong> suscribe Pro 9,99€ + <strong>5% del MAU</strong> compra la regeneración 4,99€ (el mismo de la proyección por DAU de abajo)</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* Firebase Functions: ~20€/mes a 100K · ~185€/mes a 1M (GB-segundos de generatePlan/searchFood + egress, no solo invocaciones)</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">Firebase Analytics + Crashlytics + App Check forever-free unlimited</strong> · ahorra ~26-35€/mes a escala vs alternativas de pago (ver tabla mobile-first abajo)</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* reCAPTCHA Enterprise (migrado desde v3 Classic el 28-may-2026): <strong style="color:var(--accent2)">1.000.000 assessments/mes gratis</strong> (vs 10K de Classic), luego ~$1/1K. Solo aplicaría a la web (~1% del tráfico · app nativa) · native usa Play Integrity (Android) / DeviceCheck (iOS) hardware-attested gratis ilimitado. Integrado vía App Check (key 6LdTQwEt...)</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--text)">Glosario:</strong> <strong>Registrados</strong> = cuentas creadas en total (las columnas). <strong>MAU</strong> = usuarios activos al mes ≈ <strong>16,7% de los registrados</strong>. <strong>DAU</strong> = usuarios activos al día ≈ 30% del MAU. Ej.: 10.000 registrados → ~1.670 MAU → ~500 DAU. No incluye backups (pospuestos) ni los fijos Apple Dev/Play/dominio (~19€/mes) — la proyección por DAU de abajo sí los cuenta.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">0 € a cualquier escala:</strong> App Check (DeviceCheck/Play Integrity), Analytics, Crashlytics, Auth + 2FA, reCAPTCHA (web · 1M/mes gratis) y OpenFoodFacts (BD propia en <code>foods/</code>, API solo en cache-miss) son gratis ilimitados · el <strong>avatar</strong> viaja como data-URI dentro del doc Firestore → 0 € de Storage para siempre (solo egress marginal, ya en "Firebase Descarga").</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">La IA (Gemini) es el único coste que escala con el uso</strong> — ~€0,023/generación con Gemini 3.1 Flash-Lite (medido). Desglose de tokens y comparativa de modelos en las dos secciones siguientes.</div>
   </div>
 
   <div class="section-label">Comparativa modelo IA · Gemini antes vs ahora (jun-2026) · coste POR GENERACIÓN (no mensual)</div>
@@ -1843,9 +1866,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div style="margin-bottom:32px">
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Supuestos:</strong> DAU/MAU = 30% (MAU ≈ DAU × 3,3) · <strong>1 generación IA / MAU / mes</strong> (estimación CONSERVADORA: Free = 1 gen/30 días, pero Pro 3% del MAU es ILIMITADO y tira del promedio hacia arriba). Cada generación "Todo" = <strong>2 peticiones a Gemini</strong> (menú+suplementos y entreno van en 2 llamadas focalizadas en paralelo · split que bajó −43% la latencia) y ronda <strong>~26.700 tokens MEDIDOS</strong> (≈11.765 entrada + ~14.933 salida · usageMetadata real de Gemini).</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste/gen ≈ €0,023</strong> con gemini-3.1-flash-lite ($0,25 in / $1,50 out por 1M tokens, oficial jun-2026 · medido con tokens reales). La columna "vs 2.5-flash" (€0,052/gen · más verboso, 21K salida) muestra lo que costaría con el modelo anterior → <strong style="color:var(--accent)">se ahorra ~2,21×</strong> a cualquier escala desde el cambio del 30-jun. El buscador de alimentos NO cuenta (usa la BD local de OpenFoodFacts, 0 peticiones a Gemini).</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">Sin free tier:</strong> Gemini cobra desde la 1ª petición, pero el coste se mantiene <strong>marginal frente a los ingresos</strong> (~5% a 10K DAU) porque escala lineal con el uso y los ingresos crecen más rápido (Pro + one-off). Palancas de optimización: <strong>prompt de menú más corto</strong> (hoy son 9.431 tokens de entrada), <strong>batch API (−50%)</strong>, cache de generaciones similares, o reservar un modelo más capaz solo a Pro.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Supuestos:</strong> DAU/MAU = 30% (MAU ≈ DAU × 3,3) · <strong>1 generación IA / MAU / mes</strong> (conservador: Free = 1/mes, pero Pro 3% es ilimitado y tira del promedio hacia arriba) · coste/gen <strong>€0,023</strong> medido. La columna "vs 2.5-flash" muestra el ahorro de <strong>~2,21×</strong> desde el cambio del 30-jun. <strong style="color:var(--accent3)">Sin free tier</strong> (Gemini cobra desde la 1ª petición) pero marginal frente a los ingresos (~5% a 10K DAU). <strong style="color:var(--accent3)">Palancas de ahorro:</strong> prompt de menú más corto (hoy 9.431 tokens de entrada), batch API (−50%) o cache de generaciones similares.</div>
   </div>
 
   <div class="group-header"><span class="gh-num">3</span> Ingresos y proyección <span class="gh-sub">De dónde sale el dinero, hoja de ruta de monetización y proyección por escala</span></div>
@@ -1981,19 +2002,11 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <div class="arch-card" style="margin-bottom:16px;border-left:3px solid var(--accent)">
     <div class="arch-card-header"><div class="arch-card-title">Assumptions del modelo · canal primario nativo</div></div>
     <div style="padding:16px 20px;font-size:.78rem;color:var(--text2);line-height:1.7">
-      <strong style="color:var(--text)">Pro plan vía IAP:</strong> 9,99 €/mes (precio implementado en la app · sin plan anual de momento) → <strong>ARPU neto 8,49 €/mes</strong> (Apple/Google 15% Small Business retenido)<br>
-      <strong style="color:var(--text)">One-off Regeneración inmediata:</strong> 4,99 € → <strong>4,24 € neto</strong> tras IAP · ~5% del MAU/mes<br>
-      <strong style="color:var(--text)">Conversión Free → Pro:</strong> 3% del MAU (rango realista 2-5%)<br>
-      <strong style="color:var(--accent3)">Elasticidad de precio NO modelada:</strong> a mayor precio la conversión real puede quedar por debajo del 3%/5% asumido · vigilar con datos reales tras el lanzamiento<br>
-      <strong style="color:var(--text)">¿Qué es DAU y MAU?</strong> <strong>DAU</strong> (Daily Active Users) = usuarios que abren la app un día cualquiera · <strong>MAU</strong> (Monthly Active Users) = usuarios que la abren al menos 1 vez al mes. Los tramos de la tabla van por DAU (la métrica de "tamaño real" de una app); los pagos se calculan sobre el MAU (todo el que entra en el mes puede pagar)<br>
-      <strong style="color:var(--text)">DAU / MAU ratio:</strong> 30% (fitness apps son high-engagement) → MAU ≈ DAU × 3,3<br>
-      <strong style="color:var(--text)">Retención 30 días:</strong> 15% (industry avg)<br>
-      <strong style="color:var(--accent)">App Check nativo:</strong> DeviceCheck (iOS) + Play Integrity (Android) <strong>= 0 €/mes ilimitado</strong> · hardware-attested · invisible al usuario · <strong>Enforce activo en Auth API desde 26-may</strong><br>
-      <strong style="color:var(--accent)">Firebase Analytics + Crashlytics:</strong> <strong>0 €/mes forever unlimited</strong> · web SDK con consent banner GDPR + nativo (IDFV/GAID) sin cookies (nativo · Fase 4.5/5) · ahorra ~35 €/mes a escala<br>
-      <strong style="color:var(--accent)">Firestore rules monetización blindada:</strong> campos plan/generaciones/plan_pro/fecha_expiracion/fecha_ultima_generacion seed-only desde cliente · webhook RevenueCat + Cloud Functions con Admin SDK bypass · imposible upgrade vía DevTools<br>
-      <strong style="color:var(--accent)">2FA TOTP:</strong> activo end-to-end desde 26-may · 0 € (parte de Firebase Auth)<br>
-      <strong style="color:var(--accent)">Comisiones de pago externas:</strong> 0 € · Apple/Google manejan toda la facturación (su 15% IAP ya está en el ARPU neto)<br>
-      <strong style="color:var(--accent)">App NATIVA iOS/Android (React Native + Expo) · 99% del uso.</strong> El canal web es solo el ~1% residual (compartir/SEO/landing). Pagos = IAP Apple/Google (15%, ya en el ARPU neto) · <strong>0 € de pasarelas externas en el modelo</strong>. App Check nativo (DeviceCheck/Play Integrity) gratis · sin reCAPTCHA Enterprise. <strong style="color:var(--muted)">El canal primario es móvil.</strong>
+      <strong style="color:var(--text)">Pro vía IAP:</strong> 9,99 €/mes → <strong>ARPU neto 8,49 €</strong> (Apple/Google retienen el 15% Small Business) · ~3% del MAU (rango realista 2-5%)<br>
+      <strong style="color:var(--text)">One-off Regeneración inmediata:</strong> 4,99 € → <strong>4,24 € neto</strong> tras IAP · ~5% del MAU/mes (grupo distinto del Pro)<br>
+      <strong style="color:var(--text)">DAU vs MAU:</strong> los tramos de la tabla van por <strong>DAU</strong> (tamaño real de la app); los pagos se calculan sobre el <strong>MAU</strong>. Ratio 30% (fitness = alta retención) → MAU ≈ DAU × 3,3 · retención 30 días ~15%<br>
+      <strong style="color:var(--accent3)">Elasticidad NO modelada:</strong> a mayor precio la conversión real puede quedar por debajo del 3%/5% asumido · vigilar con datos reales tras el lanzamiento<br>
+      <strong style="color:var(--accent)">Infra y seguridad ≈ 0 €:</strong> App Check nativo, Analytics, Crashlytics, 2FA y reglas de monetización blindadas son gratis (detalle en la tabla de costes y el panel de Seguridad) · pagos solo por IAP, sin pasarelas externas · <strong>canal 99% nativo</strong> (web ~1% residual).
     </div>
   </div>
 
