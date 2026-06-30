@@ -612,7 +612,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="step-left"><div class="num coral">03</div><div class="vline"></div></div>
         <div class="step-body">
           <div class="step-title">Puede editar todo en modo prueba</div>
-          <div class="step-desc">Los cambios se guardan en Firestore bajo el uid anónimo y persisten hasta que la sesión caduca (<code>expiresAt</code> · TTL de 3 días desde la creación, no renovable).</div>
+          <div class="step-desc">Los cambios se guardan en Firestore bajo el uid anónimo y persisten hasta que la sesión caduca (los 3 días del paso 1).</div>
         </div>
       </div>
       <div class="step">
@@ -672,7 +672,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="stack-card">
       <div class="stack-layer">Backend serverless</div>
       <div class="stack-name">Cloud Functions</div>
-      <div class="stack-why">Se activa en modo IA, regeneraciones parciales y procesado de pagos. <code>generatePlan</code> comprueba siempre <code>fecha_ultima_generacion</code> y <code>plan_pro</code> antes de llamar a Gemini para garantizar que no se bypasea el límite desde el frontend. <strong>Requiere plan Blaze</strong> — el plan gratuito Spark no permite llamadas a APIs externas. Coste real (estimado, depende mucho de duración de cada función): hasta 10k usuarios prácticamente 0€. A 100k usuarios ~5-15€/mes (cómputo + egress). A 1M usuarios ~50-100€/mes. La factura no es solo invocaciones sino también <code>GB-segundos</code> de cómputo y tráfico de salida. Usar <strong>Functions Gen 2</strong> (timeouts más largos y secrets nativos).</div>
+      <div class="stack-why">Se activa en modo IA, regeneraciones parciales y procesado de pagos. <code>generatePlan</code> comprueba siempre <code>fecha_ultima_generacion</code> y <code>plan_pro</code> en el servidor antes de llamar a Gemini, para que el límite no se pueda bypasear desde el frontend. <strong>Requiere plan Blaze</strong> (el gratuito Spark no permite APIs externas). Usar <strong>Functions Gen 2</strong> (timeouts largos + secrets nativos). El coste por escala está en Modelo de negocio (la factura son <code>GB-segundos</code> de cómputo + egress, no solo invocaciones).</div>
       <div class="stack-items">
         <div class="stack-item">generatePlan — IA con scopes: all / menu_compra / menu_only / entrenos_only</div>
         <div class="stack-item">searchFood — buscador OpenFoodFacts (cache-first)</div>
@@ -686,7 +686,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="stack-card">
       <div class="stack-layer">Inteligencia artificial</div>
       <div class="stack-name">Gemini 3.1 Flash-Lite</div>
-      <div class="stack-why">Modelo en producción: <strong>gemini-3.1-flash-lite</strong> (30-jun-2026 · 2.4× más rápido + 2.21× más barato que 2.5-flash, validado vs 16 modelos modernos · el viejo 2.5-flash-LITE se había descartado por infra-dimensionar las raciones, pero eso lo arregla el ajuste server-side de gramos, no el modelo). La API es <strong>de pago, sin free tier</strong>: una generación completa (menú + entreno + compra) ronda <strong>~26.700 tokens MEDIDOS</strong> (≈11.765 de entrada + ~14.933 de salida, en 2 peticiones paralelas) ≈ <strong>€0,023 por generación</strong> — un Pro de 9,99€ cubre ~430 generaciones. <code>maxOutputTokens</code> a 65536 para que el scope «Todo» no se trunque. La API key nunca sale del servidor (secreto en Cloud Functions). Sanitizar siempre los datos del perfil antes de meterlos en el prompt para evitar <strong>prompt injection</strong>.</div>
+      <div class="stack-why">Modelo en producción: <strong>gemini-3.1-flash-lite</strong> (desde 30-jun-2026 · 2,4× más rápido y 2,21× más barato que 2.5-flash, elegido tras probar 16 modelos modernos). API <strong>de pago, sin free tier</strong>: una generación completa ≈ <strong>€0,023</strong> (un Pro de 9,99€ cubre ~430) — el desglose de tokens y la comparativa de modelos están en Modelo de negocio. <code>maxOutputTokens</code> a 65536 para que el scope «Todo» no se trunque. La API key nunca sale del servidor (secreto en Cloud Functions) y el perfil se sanitiza antes del prompt para evitar <strong>prompt injection</strong>.</div>
       <div class="stack-items">
         <div class="stack-item">Prompt dinámico por perfil</div>
         <div class="stack-item">Output JSON estructurado (validado con Zod)</div>
