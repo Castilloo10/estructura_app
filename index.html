@@ -909,10 +909,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <details class="status-banner">
     <summary class="status-banner-summary">
       <span class="status-banner-title">● Estado actual del proyecto</span>
-      <span class="status-banner-sub">13-jun-2026 · App React Native + Expo <strong>COMPLETA con backend real</strong> · siguiente: <strong>Fase 4.5 — EAS dev build</strong> (Google sign-in, Play Integrity, IAP, Liquid Glass) · <em>clic para ver el detalle</em></span>
+      <span class="status-banner-sub">5-jul-2026 · App completa + <strong>dev builds Android nativos</strong> (Google sign-in · App Check Play Integrity real · biométrico · push · Face ID) + <strong>portal admin en producción</strong> · siguiente: <strong>cuentas de tienda → IAP + build iOS</strong> · <em>clic para ver el detalle</em></span>
     </summary>
     <div class="status-banner-body">
-      <p class="status-banner-date">La app <strong>React Native + Expo está completa y funcionando contra el backend real</strong>: 5 tabs + onboarding + ajustes + editores + flujo IA, con auth, Firestore y Cloud Functions en producción. Monetización por <strong>IAP (RevenueCat)</strong> a lanzamiento. El detalle histórico de cada fase vive en el checklist de abajo y en las memorias del proyecto.</p>
+      <p class="status-banner-date">La app <strong>React Native + Expo está completa y funcionando contra el backend real</strong> (5 tabs + onboarding + ajustes + editores + flujo IA · auth, Firestore y Cloud Functions en producción) y corre ya en <strong>dev/preview builds Android nativos</strong> con los módulos nativos cableados (Google sign-in, App Check Play Integrity, biométrico, push, Face ID). El <strong>portal de administración está construido y en producción</strong> (<code>btal-admin.web.app</code>). Falta el <strong>build iOS</strong> y activar el <strong>IAP</strong> (ambos bloqueados por las cuentas de tienda). El detalle histórico de cada fase vive en el checklist de abajo y en las memorias del proyecto.</p>
       <div class="status-banner-cols">
         <div class="status-banner-col">
           <h4>✅ Hecho</h4>
@@ -920,25 +920,28 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done">App RN + Expo completa: 5 tabs · onboarding · ajustes · editores · flujo IA con wizard</li>
             <li class="done"><strong>Backend real cableado</strong>: auth email + 2FA TOTP + invitado (TTL 3 días) · Firestore con write-through · avatar data-URI · export RGPD · vincular invitado → cuenta</li>
             <li class="done">Functions desplegadas: <code>generatePlan</code> (scopes + Zod + reserva atómica) · <code>searchFood</code> · <code>deleteAccount</code> · <code>revokeOtherSessions</code> + scheduled <code>cleanupExpiredGuests</code> / <code>syncOffDeltas</code></li>
-            <li class="done">IA Gemini (gemini-3.1-flash-lite) + <strong>macros reales OpenFoodFacts</strong> + buscador + barcode</li>
-            <li class="done">Seguridad: <strong>App Check ENFORCE</strong> · rules monetización seed-only + tope avatar · MFA TOTP</li>
-            <li class="done">93 tests de la app + 99 de functions (Vitest)</li>
-            <li class="done">Auditoría completa 12-jun (~70 fixes aplicados) · React Compiler activo</li>
-            <li class="done">Preferencia «Animaciones reducidas» por dispositivo</li>
-            <li class="done">Legal in-app: privacidad + términos + cookies</li>
-            <li class="done"><strong>Tema claro/oscuro completo</strong> (reactivo · default claro · incl. splash/login/onboarding) + feature <strong>peso corporal</strong> (registro + gráfica + objetivo) + temporizador de descanso</li>
-            <li class="done"><strong>Pasada de accesibilidad</strong> (lector de pantalla, contraste WCAG en claro, escalado de fuente) + pulido UX 26-28 jun</li>
-            <li class="done"><strong>Repo en GitHub</strong> (privado): <code>BTal-App/btal-v2</code> · main al día (antes era local-only)</li>
+            <li class="done">IA Gemini (gemini-3.1-flash-lite) + <strong>macros reales OpenFoodFacts</strong> + buscador + barcode · <strong>prompts menú/entreno en paralelo</strong> (−43% latencia) + guardas deterministas de restricciones</li>
+            <li class="done"><strong>Dev/preview builds Android nativos (EAS)</strong> con los módulos nativos cableados: <strong>Google sign-in</strong> nativo · <strong>App Check Play Integrity REAL</strong> (sin token debug) · <strong>login biométrico</strong> (Face ID/huella) · <strong>push remoto</strong> end-to-end + notificaciones locales (comida/sup/entreno)</li>
+            <li class="done"><strong>Portal de administración en producción</strong> (<code>btal-admin.web.app</code>): métricas · gestión de usuarios (plan/saldo/push/ficha) · registro de auditoría · caps de IA · administradores con <strong>login Face ID (WebAuthn/passkeys)</strong> + puerta 2FA + auto-logout · 3 auditorías aplicadas</li>
+            <li class="done"><strong>Visor de técnica de ejercicios</strong> (fotos por ejercicio · fuzzy ES + selector) · antes el ▶ abría YouTube</li>
+            <li class="done">Seguridad: <strong>App Check ENFORCE</strong> (Play Integrity/DeviceCheck + reCAPTCHA web) · rules monetización seed-only + tope avatar · MFA TOTP</li>
+            <li class="done"><strong>99 tests de la app + 143 de functions</strong> (Vitest) · React Compiler activo</li>
+            <li class="done"><strong>3 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · seguridad 26-jun · <strong>4-jul (38 fixes verificados</strong> — incl. 2 fugas dietéticas HIGH: pescado/marisco a veganos y gluten a celíacos)</li>
+            <li class="done">Preferencia «Animaciones reducidas» por dispositivo · Legal in-app (privacidad + términos + cookies)</li>
+            <li class="done"><strong>Tema claro/oscuro completo</strong> (reactivo · default claro) + feature <strong>peso corporal</strong> (registro + gráfica + objetivo) + temporizador de descanso</li>
+            <li class="done"><strong>Pasada de accesibilidad</strong> (lector de pantalla, contraste WCAG, escalado de fuente) + pulido UX 26-28 jun</li>
+            <li class="done"><strong>Repo en GitHub</strong> (privado): <code>BTal-App/btal-v2</code> · main al día · portal admin desplegado por Firebase Hosting</li>
           </ul>
         </div>
         <div class="status-banner-col">
           <h4>⏳ Pendiente real</h4>
           <ul class="status-banner-list">
-            <li class="pend">Prueba de generación IA con scope «Todo» (la hace el owner)</li>
-            <li class="pend"><strong>Fase 4.5 — EAS dev build</strong>: Google sign-in nativo · App Check Play Integrity sin token debug · IAP RevenueCat · Liquid Glass iOS 26</li>
-            <li class="pend"><strong>Fase 5</strong>: EAS Build / EAS Update + canal web (React Native Web)</li>
-            <li class="pend">Publicación en stores: Play Console (25$) + Apple Developer (99€/año) + assets store</li>
-            <li class="pend"><strong>Admin Dashboard</strong> (diseño · Fase 10 · post-monetización)</li>
+            <li class="pend"><strong>Cuentas de tienda</strong> (Apple Developer 99€/año + Play Console 25$) — <strong>bloqueante nº1</strong>: sin ellas no hay IAP ni publicación</li>
+            <li class="pend"><strong>IAP real (RevenueCat)</strong>: webhook + cliente ya codificados (latentes) · falta desplegar el webhook + claves + productos en las stores + nuevo build</li>
+            <li class="pend"><strong>Build iOS</strong>: registrar la app iOS en Firebase · Google + Apple sign-in · App Attest/DeviceCheck · Liquid Glass iOS 26 · TestFlight</li>
+            <li class="pend"><strong>Android release</strong>: Play internal track (valida Play Integrity real) + registrar el SHA-256 de la clave de firmado de Google + keystore de release</li>
+            <li class="pend"><strong>Fase 5</strong>: canal web (React Native Web · DOM/SEO) + re-cablear cookies/Analytics web</li>
+            <li class="pend">Extras nativos post-launch: widgets iOS/Android · Apple Watch · precios colaborativos</li>
           </ul>
           <p style="font-size:.66rem;color:var(--muted);margin-top:8px;font-style:italic">Stack elegido: crash/analytics = Firebase Crashlytics + Analytics (nativo, Fase 4.5+) · macros = OpenFoodFacts · pagos = IAP (RevenueCat).</p>
         </div>
@@ -965,7 +968,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">RN</div>
         <div class="phase-info">
           <div class="phase-title">App React Native + Expo (la app) <span class="phase-etapa">▶ EN CURSO</span></div>
-          <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 13-jun: UI completa + backend real</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD) · 77+36 tests · React Compiler ON · auditoría 12-jun aplicada. <strong>Siguiente: Fase 4.5 = EAS dev build</strong> (Google sign-in · App Check Play Integrity · IAP RevenueCat · Liquid Glass iOS 26).</div>
+          <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 5-jul: app completa + dev builds Android nativos</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD · <strong>Google sign-in · App Check Play Integrity real · biométrico · push · Face ID</strong>) · 99+143 tests · React Compiler ON · 3 auditorías aplicadas (12-jun, seguridad 26-jun, 38 fixes 4-jul). <strong>Siguiente (bloqueado por cuentas de tienda): IAP RevenueCat + build iOS</strong> (Apple sign-in · App Attest/DeviceCheck · Liquid Glass iOS 26).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -982,13 +985,13 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Stores de estado (patrón bulletproof bajo React Compiler)</div><div class="ck-note">Estado global en stores propios (<code>useSyncExternalStore</code>) con write-through a Firestore · optimistic updates + revert · patrón estable bajo React Compiler.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="rn-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Feel nativo iOS 26 + 120Hz <span class="ck-tag new">render nativo real</span> <span class="ck-tag new">Fase 4.5 · siguiente</span></div><div class="ck-note"><strong>Liquid Glass real</strong> vía <code>expo-glass-effect</code> (Expo SDK 54) · ProMotion 120Hz de serie · haptics · gestos nativos. Live Activities / Dynamic Island / widgets como módulos nativos cuando convenga. Availability check para iOS 26+ con fallback en iPhones viejos.</div></div></div>
+        <div class="ck-row" data-id="rn-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Feel nativo + 120Hz <span class="ck-tag new">render nativo real</span> <span class="ck-tag new">Android ✓</span></div><div class="ck-note"><strong>Render NATIVO real</strong> ya corriendo en dev/preview builds Android (120Hz, gestos y materiales del SO · no WebView). <strong>Liquid Glass iOS 26</strong> vía <code>expo-glass-effect</code> (Expo SDK 54) queda para el build iOS (necesita Mac · availability check iOS 26+ con fallback). Live Activities / Dynamic Island / widgets como módulos nativos post-launch.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">React Native Web · canal web</div><div class="ck-note">Configurar RN Web para que el mismo código sirva la web (render a <strong>DOM</strong> → indexable, sirve landing/SEO/compartir). Archivos <code>.web.tsx</code> / <code>.native.tsx</code> donde la plataforma difiera (tab bar, ciertos gestos, materiales iOS). <strong>Nota:</strong> por defecto la web es <strong>solo-navegador</strong> (sin "instalar PWA"). El "instalar la web" en el móvil lo cubre la <strong>app nativa de la store</strong>. Re-añadir PWA a RN Web (manifest + Service Worker) es <strong>opcional · últimos retoques, NO ahora</strong>.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">EAS Build + EAS Update <span class="ck-tag new">sin Mac</span></div><div class="ck-note">EAS Build compila iOS y Android <strong>en la nube</strong> (iOS sin Mac local) · development build para probar módulos nativos en el dispositivo · <strong>EAS Update</strong> empuja parches JS/UI OTA sin pasar por la store.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="rn-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Módulos nativos (config plugins) <span class="ck-tag new">Fase 4.5 · siguiente</span></div><div class="ck-note">App Check (Play Integrity / DeviceCheck) · Google + Apple sign-in · biometric App Lock · <strong>IAP vía RevenueCat</strong> (ver Fase 7) · <strong>Crashlytics nativo</strong> · push notifications. Todo como Expo config plugins / Expo Modules. (Aquí cae el crash tracking nativo, antes 13-0/13-1.)</div></div></div>
+        <div class="ck-row" data-id="rn-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Módulos nativos (config plugins) <span class="ck-tag new">Android hecho · iOS + IAP pendientes</span></div><div class="ck-note"><strong>HECHO en Android (dev/preview builds EAS):</strong> App Check <strong>Play Integrity REAL</strong> (sin token debug) · <strong>Google sign-in</strong> nativo (@react-native-google-signin) · <strong>login biométrico</strong> Face ID/huella (expo-secure-store) · <strong>push remoto</strong> end-to-end + notificaciones locales. <strong>PENDIENTE:</strong> iOS (Apple + Google sign-in, App Attest/DeviceCheck), <strong>IAP RevenueCat</strong> (cuentas de tienda · ver Fase 7), Crashlytics nativo. Todo como Expo config plugins / Expo Modules.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-10" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">QA final en dispositivos físicos (iPhone + Android) antes de publicar</div><div class="ck-note">Pasada completa en iPhone + Android físicos (Expo Go / dev client): todas las features, suite de tests en verde, rendimiento, gestos y teclado.</div></div></div>
       </div>
@@ -1120,8 +1123,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="phase-header">
         <div class="phase-num">7</div>
         <div class="phase-info">
-          <div class="phase-title">Monetización · IAP (Apple/Google) <span class="phase-etapa">Pendiente · tras Fase 4.5</span></div>
-          <div class="phase-sub"><strong>⚠ Pagos solo por IAP</strong> — Apple/Google rechazan pasarelas externas para bienes digitales (= rechazo en review), así que la monetización es <strong>In-App Purchase</strong> (StoreKit iOS + Play Billing Android) vía <strong>RevenueCat</strong> (cross-platform · SDK React Native · free &lt;$2,5k/mes). Pago único 4,99€ + Pro 9,99€/mes · comisión 15% (Small Business Program). El modelo de datos del Pro (<code>PlanIA</code> free/pro/one_off) YA existe de la Fase 6 · falta el flujo de compra. Se implementa <strong>en React Native</strong> en fase de lanzamiento (requiere cuenta Apple Dev 99€ + Play Console 25$ + productos en las stores).</div>
+          <div class="phase-title">Monetización · IAP (Apple/Google) <span class="phase-etapa">Código latente · falta cuentas + desplegar</span></div>
+          <div class="phase-sub"><strong>⚠ Pagos solo por IAP</strong> — Apple/Google rechazan pasarelas externas para bienes digitales (= rechazo en review), así que la monetización es <strong>In-App Purchase</strong> (StoreKit iOS + Play Billing Android) vía <strong>RevenueCat</strong> (cross-platform · SDK React Native · free &lt;$2,5k/mes). Pago único 4,99€ + Pro 9,99€/mes · comisión 15% (Small Business Program). <strong>Ya codificado y latente</strong>: el modelo de datos <code>PlanIA</code> (free/pro/one_off), el <strong>webhook RevenueCat</strong> (fuente de verdad del plan · idempotente · <em>aún sin desplegar</em>) y el cliente nativo (lazy + guarda · mock en dev). <strong>Falta para activarlo</strong>: cuentas de tienda (Apple 99€ + Play 25$) + productos en las stores + claves RevenueCat + desplegar el webhook + nuevo build.</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1149,8 +1152,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="phase-header">
         <div class="phase-num">9</div>
         <div class="phase-info">
-          <div class="phase-title">Lanzamiento en stores + extras nativos post-launch <span class="phase-etapa">Pendiente · tras Fase 4.5</span></div>
-          <div class="phase-sub">El camino es directo: <strong>EAS Build compila iOS y Android en la nube</strong> (rn-8 · iOS SIN Mac local) → cuentas de desarrollador (Play Console 25$ + Apple Dev 99€/año) → subir a Play Store / App Store. Auth nativa (Google/Apple), IAP (RevenueCat), smartwatch/widgets y biometric se implementan como módulos nativos / config plugins de Expo (Fase 4.5+).</div>
+          <div class="phase-title">Lanzamiento en stores + extras nativos post-launch <span class="phase-etapa">Parcial · Google/biométrico/visor hechos · publicar tras cuentas</span></div>
+          <div class="phase-sub"><strong>EAS Build ya compila builds Android nativos</strong> (rn-8 · en la nube · iOS sin Mac cuando se haga). <strong>Hecho:</strong> Google sign-in Android, login biométrico y visor de ejercicios. <strong>Falta:</strong> cuentas de desarrollador (Play Console 25$ + Apple Dev 99€/año) → subir a Play Store / App Store (Android release + iOS/TestFlight). Auth Apple, IAP (RevenueCat), smartwatch/widgets → módulos nativos / config plugins de Expo (post-cuentas).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1159,7 +1162,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="9-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Publicar en Apple App Store</div><div class="ck-note">Necesitas Apple Developer Program (99€/año) · build desde Xcode · subir con Transporter</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="9-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Auth nativa Google/Apple en React Native <span class="ck-tag cmd">@react-native-google-signin + expo-apple-authentication</span></div><div class="ck-note">Se implementa en la Fase 4.5 con el dev build · ver rn-9.</div></div></div>
+        <div class="ck-row" data-id="9-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Auth nativa Google/Apple en React Native <span class="ck-tag new">Google Android ✓</span></div><div class="ck-note"><strong>Google sign-in Android HECHO</strong> (nativo · @react-native-google-signin · dev build · SHA-1 EAS+debug registrados). Apple sign-in + Google iOS quedan para el build iOS. Ver rn-9.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="9-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Sign in with Apple <span class="ck-tag warn">obligatorio iOS</span></div><div class="ck-note">Obligatorio si hay login con Google (Guideline 4.8). Se implementa en la Fase 4.5 con el dev build · ver rn-9.</div></div></div>
         <!-- 9-8/9-9 no existen · renumeración histórica -->
@@ -1180,9 +1183,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="9-17" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">📱 Android App Widget · AppWidgetProvider <span class="ck-tag warn">post-launch · 1 sem Kotlin</span></div><div class="ck-note">Widget en home screen Android. React Native NO incluye widgets · módulo AppWidget en Android Studio con Kotlin + RemoteViews (subset limitado de Views, no Compose en widgets clásicos · Glance API moderna es Compose-based pero requiere Android 12+). Sync con app principal vía SharedPreferences (mismo storage que Wear OS Tile). Refresh via PendingIntent o WorkManager. Stack Widget (Android 12+) permite rotación entre vistas. <strong>Importancia</strong>: Android users usan widgets bastante menos que iOS users históricamente · prioridad menor pero hacer si Etapa 4 Wear OS Tile se justifica también (mismo código de data bridge)</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="9-18" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">🔐 Biometric App Lock · Face ID / Touch ID / BiometricPrompt <span class="ck-tag cmd">expo-local-authentication</span> <span class="ck-tag warn">Fase 9 · 1-2 días</span></div><div class="ck-note">Opt-in toggle en Settings → "Bloquear con Face ID". Firebase Auth sigue persistiendo la sesión normalmente · el biométrico es UNA CAPA EXTRA encima del routing: cada cold start (y opcionalmente tras N min de inactividad) la app pide Face ID antes de mostrar el dashboard. Si el user cancela, fallback "Usar contraseña" → forzar signOut + login normal. <strong>Módulo</strong>: <code>expo-local-authentication</code> (soporta Face ID, Touch ID, BiometricPrompt Android, Optic ID iPad Pro M4). <strong>Storage</strong>: solo flag boolean en <code>preferences.biometricLock</code> · NO guardamos credenciales en Keychain (Firebase Auth ya persiste). <strong>UX</strong>: patrón "App Lock" (Robinhood/BBVA/Revolut) en lugar de "Login con biometría" · más útil contra el caso real "alguien coge mi móvil". El canal web queda sin esto (WebAuthn como nice-to-have post-launch)</div></div></div>
+        <div class="ck-row" data-id="9-18" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">🔐 Login biométrico · Face ID / Touch ID / BiometricPrompt <span class="ck-tag cmd">expo-secure-store</span> <span class="ck-tag new">HECHO (Android)</span></div><div class="ck-note"><strong>IMPLEMENTADO como LOGIN biométrico</strong> (el owner descartó el patrón "App Lock" · modelo banca: guardar credenciales en secure-store y entrar con Face ID/huella). Probado en Android; iOS con el build iOS. <em>Diseño original del App Lock, para referencia:</em> Opt-in toggle en Settings → "Bloquear con Face ID". Firebase Auth sigue persistiendo la sesión normalmente · el biométrico es UNA CAPA EXTRA encima del routing: cada cold start (y opcionalmente tras N min de inactividad) la app pide Face ID antes de mostrar el dashboard. Si el user cancela, fallback "Usar contraseña" → forzar signOut + login normal. <strong>Módulo</strong>: <code>expo-local-authentication</code> (soporta Face ID, Touch ID, BiometricPrompt Android, Optic ID iPad Pro M4). <strong>Storage</strong>: solo flag boolean en <code>preferences.biometricLock</code> · NO guardamos credenciales en Keychain (Firebase Auth ya persiste). <strong>UX</strong>: patrón "App Lock" (Robinhood/BBVA/Revolut) en lugar de "Login con biometría" · más útil contra el caso real "alguien coge mi móvil". El canal web queda sin esto (WebAuthn como nice-to-have post-launch)</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="9-19" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Visor de técnica de ejercicios <span class="ck-tag warn">post-launch</span></div><div class="ck-note">Fotos inicio/fin por ejercicio desde free-exercise-db (dominio público) · mapear ~150 nombres ES → id · hoy el ▶ abre búsqueda de YouTube in-app</div></div></div>
+        <div class="ck-row" data-id="9-19" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Visor de técnica de ejercicios <span class="ck-tag new">HECHO 29-jun</span></div><div class="ck-note"><strong>HECHO</strong>: fotos por ejercicio (free-exercise-db · dominio público) con bucket propio + fallback jsdelivr · fuzzy peso-IDF + sinónimos/alias ES (auditado) · ▶ + selector de foto en todos los ejercicios · catálogo +54. Antes el ▶ solo abría búsqueda de YouTube.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="9-20" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Precios colaborativos de la compra <span class="ck-tag warn">post-launch</span></div><div class="ck-note">Los usuarios rellenan precios; 5 usuarios distintos con el MISMO precio (producto+súper) → precio firme; si no, media sin outliers "≈ estimado" · 1 voto/uid + App Check · caduca a 6 meses · requiere base de usuarios</div></div></div>
       </div>
@@ -1193,8 +1196,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="phase-header">
         <div class="phase-num">10</div>
         <div class="phase-info">
-          <div class="phase-title">Panel de métricas privado <span class="phase-etapa">Pendiente · post-monetización</span></div>
-          <div class="phase-sub">Pantalla Admin del canal web (RN Web) + Firestore · solo visible para ti · 0€ adicional</div>
+          <div class="phase-title">Panel de administración <span class="phase-etapa phase-etapa--done">✓ Hecho · en producción</span></div>
+          <div class="phase-sub"><strong>Portal admin construido y desplegado</strong> (<code>btal-admin.web.app</code> · Vite + React standalone, no RN Web): métricas (usuarios/pro/activos/invitados/registrados/altas por mes) · gestión de usuarios (plan, saldo, push, borrar, deshabilitar, ficha completa) · registro de auditoría · caps de IA (mensual/diario sin redeploy) · administradores con <strong>login Face ID (WebAuthn/passkeys)</strong> + puerta 2FA + auto-logout 60&nbsp;min · nivel OWNER por claim. App Check enforce + CSP. 3 auditorías aplicadas. <em>Pendiente: enlazar RevenueCat (MRR/churn) y tiempo de uso cuando estén IAP/Analytics conectados.</em></div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1231,7 +1234,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">11</div>
         <div class="phase-info">
           <div class="phase-title">🔒 Seguridad ante ataques <span class="phase-etapa phase-etapa--launch">Lanzamiento · core hecho · tails: release keystore + backups + auditoría final</span></div>
-          <div class="phase-sub">App Check + reCAPTCHA + backups + auditoría final · 11-6 (plan incidentes) cerrado en Sprint 1 (2026-05-12)</div>
+          <div class="phase-sub">App Check + reCAPTCHA + backups + auditoría final · 11-6 (plan incidentes) cerrado en Sprint 1 (2026-05-12). <strong>3 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · <strong>seguridad nivel máximo 26-jun</strong> (2 bypass de monetización + ~40 fixes) · <strong>4-jul (38 fixes verificados adversarialmente</strong> — incl. 2 fugas dietéticas HIGH). Tails de lanzamiento: keystore de release + backups Firestore + auditoría final antes de publicar.</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1260,16 +1263,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">12</div>
         <div class="phase-info">
           <div class="phase-title">Testing + CI/CD <span class="phase-etapa phase-etapa--done">Suites ✓ · CI/CD pendiente</span></div>
-          <div class="phase-sub">Suites al día EN el repo de la app: 77 tests (vitest · stores/utils/núcleo) + 36 de functions (eligibility/nutrition/persist). CI/CD pendiente de re-montar tras el <code>git init</code> del repo (Fase 4.5).</div>
+          <div class="phase-sub">Suites al día EN el repo de la app: 99 tests (vitest · stores/utils/núcleo) + 143 de functions (eligibility/nutrition/persist). CI/CD pendiente de re-montar tras el <code>git init</code> del repo (Fase 4.5).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">77 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
+        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">99 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de componentes y lógica crítica</div><div class="ck-note">Cubren lo que al romperse cuesta dinero o pierde datos: stores (write-through · optimistic updates), cálculo de macros y calorías, rachas, validaciones y parsers.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="12-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de functions (eligibility / nutrition / persist)</div><div class="ck-note">36 tests del backend: elegibilidad de generación (Free/Pro · rate limit), núcleo de nutrición (escalado, unidades) y persistencia. <code>firebase emulators:start</code> sigue disponible para pruebas de integración locales sin tocar producción.</div></div></div>
+        <div class="ck-row" data-id="12-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de functions (eligibility / nutrition / persist)</div><div class="ck-note">143 tests del backend: elegibilidad de generación (Free/Pro · rate limit), núcleo de nutrición (escalado, unidades) y persistencia. <code>firebase emulators:start</code> sigue disponible para pruebas de integración locales sin tocar producción.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Re-montar CI/CD + E2E sobre el repo de la app</div><div class="ck-note">Tras el git init (Fase 4.5): workflows lint+test+build, branch protection, deploy de functions, y E2E (Maestro para nativo o Playwright para el canal RN Web)</div></div></div>
       </div>
@@ -2835,8 +2838,8 @@ var INITIAL_CHECKS = {
 
   // FASE 12 · Testing — suites al día EN el repo de la app · CI/CD pendiente del git init (Fase 4.5)
   '12-0': true, // Vitest configurado en el repo · suite inaugural.
-  '12-1': true, // Tests de lógica/componentes (vitest) · 77 tests.
-  '12-2': true, // Tests de Cloud Functions · 36 tests (eligibility + nutrition + persist).
+  '12-1': true, // Tests de lógica/componentes (vitest) · 99 tests.
+  '12-2': true, // Tests de Cloud Functions · 143 tests (eligibility + nutrition + persist).
   // 12-7 (re-montar CI/CD + E2E sobre el repo de la app tras el git init) PENDIENTE · no marcado.
 
   // FASE 14 · Legal — checkbox de aviso médico cableado en onboarding (bloquea avance,
@@ -2853,7 +2856,7 @@ var INITIAL_CHECKS = {
   // UI COMPLETA + BACKEND REAL: 5 tabs + onboarding + ajustes + editores + flujo
   // IA cableado a Firebase de verdad (auth email+2FA TOTP, Firestore write-through,
   // generatePlan callable, avatar data-URI, export RGPD, vincular invitado→cuenta,
-  // gating IA de invitado) + legal in-app + 77 tests vitest + React Compiler ON.
+  // gating IA de invitado) + legal in-app + 99 tests vitest + React Compiler ON.
   // Auditoría exhaustiva 12-jun (~70 fixes: refund total generatePlan, parser "ud",
   // extras→compra, rollover medianoche, dirty-guards, prefs por dispositivo,
   // reduceMotion TOTAL 13-jun). functions/ canónicas en el repo de la app y desplegadas.
@@ -2863,9 +2866,29 @@ var INITIAL_CHECKS = {
   'rn-3': true, // Firebase REAL (11-12 jun): auth (email/password + TOTP + invitado anónimo con TTL) + Firestore (loadSession hidrata stores · write-through en todos los setters) + callables (generatePlan/deleteAccount/revokeOtherSessions/searchFood) · App Check debug token solo en .env.local __DEV__
   'rn-4': true, // 5 tabs (Hoy/Menú/Compra/Entreno/Registro) + perfil/ajustes + modales nativos (BSheet)
   'rn-5': true, // Stores de estado (profile/prefs/registro/sup/guest/toast + ErrorProvider) · patrón bulletproof bajo React Compiler
-  // rn-6 (Liquid Glass iOS 26) · rn-9 (módulos nativos: App Check Play Integrity,
-  // Google/Apple sign-in, IAP RevenueCat) = Fase 4.5 (EAS dev build · siguiente).
-  // rn-7 (canal web · RN Web) · rn-8 (EAS Build/Update) = Fase 5. rn-10 (QA final en dispositivos) al cierre.
+  'rn-6': true, // Feel nativo + 120Hz REALES vía dev/preview builds EAS (30-jun→5-jul). Liquid Glass iOS 26 (expo-glass-effect) queda para el build iOS (necesita Mac · no bloquea).
+  'rn-8': true, // EAS Build operativo (dev + preview builds Android generados) + EAS Update (OTA) · el build iOS queda pendiente.
+  // rn-7 (canal web · RN Web) = Fase 5 · pendiente.
+  // rn-9 (módulos nativos) PARCIAL → HECHO en Android: App Check Play Integrity REAL,
+  // Google sign-in nativo, login biométrico (Face ID/huella · expo-secure-store),
+  // push remoto end-to-end + notificaciones locales. PENDIENTE: iOS (sign-in Apple/
+  // Google, App Attest/DeviceCheck), IAP RevenueCat (cuentas de tienda), Crashlytics.
+  // rn-10 (QA final en dispositivos) al cierre.
+
+  // FASE 9 · Lanzamiento + extras nativos
+  '9-19': true, // Visor de técnica de ejercicios HECHO 29-jun (fotos free-exercise-db + fuzzy ES + ▶ selector). Antes el ▶ abría YouTube.
+  '9-18': true, // Biométrico IMPLEMENTADO como LOGIN biométrico (el owner descartó el patrón "App Lock" · bancos). Android probado. iOS con el build iOS.
+
+  // FASE 10 · Panel admin — CONSTRUIDO y EN PRODUCCIÓN (btal-admin.web.app · Vite+React
+  // standalone, NO RN Web). Métricas (usuarios/pro/activos/invitados/registrados/altas
+  // por mes) + gestión de usuarios (plan, saldo, push, borrar, deshabilitar, ficha
+  // completa) + registro de auditoría + caps de IA (mensual/diario sin redeploy) +
+  // administradores con login Face ID (WebAuthn/passkeys) + puerta 2FA + auto-logout 60min.
+  // 3 auditorías de maquetado/seguridad + varias correcciones aplicadas. App Check enforce + CSP.
+  '10-0': true, '10-1': true, '10-2': true, '10-3': true, '10-4': true, '10-5': true,
+  '10-7': true, '10-11': true,
+  // 10-6 (enlace RevenueCat) · 10-8 (MRR) · 10-9 (churn) · 10-10 (tiempo de uso) esperan
+  // a RevenueCat/Analytics conectados (Fase 4.5/7).
 };
 
 function loadChecks(){
