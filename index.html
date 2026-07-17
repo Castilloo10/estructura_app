@@ -909,10 +909,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <details class="status-banner">
     <summary class="status-banner-summary">
       <span class="status-banner-title">● Estado actual del proyecto</span>
-      <span class="status-banner-sub">5-jul-2026 · App completa + <strong>dev builds Android nativos</strong> (Google sign-in · App Check Play Integrity real · biométrico · push · Face ID) + <strong>portal admin en producción</strong> · siguiente: <strong>cuentas de tienda → IAP + build iOS</strong> · <em>clic para ver el detalle</em></span>
+      <span class="status-banner-sub">17-jul-2026 · App completa + <strong>dev builds Android nativos</strong> (Google sign-in · App Check Play Integrity real · biométrico · push · Face ID) + <strong>portal admin en producción</strong> + <strong>Sentry (crashes) integrado end-to-end</strong> · siguiente: <strong>cuentas de tienda → Sign in with Apple + IAP RevenueCat + build iOS</strong> · <em>clic para ver el detalle</em></span>
     </summary>
     <div class="status-banner-body">
-      <p class="status-banner-date">La app <strong>React Native + Expo está completa y funcionando contra el backend real</strong> (5 tabs + onboarding + ajustes + editores + flujo IA · auth, Firestore y Cloud Functions en producción) y corre ya en <strong>dev/preview builds Android nativos</strong> con los módulos nativos cableados (Google sign-in, App Check Play Integrity, biométrico, push, Face ID). El <strong>portal de administración está construido y en producción</strong> (<code>btal-admin.web.app</code>). Falta el <strong>build iOS</strong> y activar el <strong>IAP</strong> (ambos bloqueados por las cuentas de tienda). El detalle histórico de cada fase vive en el checklist de abajo y en las memorias del proyecto.</p>
+      <p class="status-banner-date">La app <strong>React Native + Expo está completa y funcionando contra el backend real</strong> (5 tabs + onboarding + ajustes + editores + flujo IA · auth, Firestore y Cloud Functions en producción) y corre ya en <strong>dev/preview builds Android nativos</strong> con los módulos nativos cableados (Google sign-in, App Check Play Integrity, biométrico, push, Face ID). El <strong>portal de administración está construido y en producción</strong> (<code>btal-admin.web.app</code>) y <strong>Sentry captura crashes</strong> de app y panel (source maps subiéndose en cada build de EAS). El código está sorprendentemente <strong>iOS-ready</strong>: el único hueco de código real que queda es <strong>Sign in with Apple</strong>; el resto de lo pendiente son <strong>cuentas y configuración</strong> (tiendas, RevenueCat, credenciales iOS), no programación. El detalle está en <code>docs/lanzamiento.md</code> (checklist maestro pendiente-only), el checklist de abajo y las memorias del proyecto.</p>
       <div class="status-banner-cols">
         <div class="status-banner-col">
           <h4>✅ Hecho</h4>
@@ -931,19 +931,25 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done"><strong>Tema claro/oscuro completo</strong> (reactivo · default claro) + feature <strong>peso corporal</strong> (registro + gráfica + objetivo) + temporizador de descanso</li>
             <li class="done"><strong>Pasada de accesibilidad</strong> (lector de pantalla, contraste WCAG, escalado de fuente) + pulido UX 26-28 jun</li>
             <li class="done"><strong>Repo en GitHub</strong> (privado): <code>BTal-App/btal-v2</code> · main al día · portal admin desplegado por Firebase Hosting</li>
+            <li class="done"><strong>Sentry (crash reporting) end-to-end</strong>: app RN + panel admin + textos legales · región EU · sin PII (solo uid anónimo) · <strong>source maps</strong> subiéndose en cada build de EAS (slug <code>react-native</code>, token en EAS)</li>
+            <li class="done"><strong>Modelo unificado de comidas y entrenos</strong>: cualquier caso escrito en las notas funciona (ayuno 16/8, turnos, N comidas, deporte fijo en un día, CrossFit sin ejercicios) + guarda determinista de días de actividad fijados («los domingos corro»)</li>
+            <li class="done"><strong>Troceo del menú</strong> desplegado (2 llamadas en paralelo): +variedad, |Δkcal| 5,2→2,6 %, −36 % latencia, 0 violaciones de restricciones · el entreno se queda en 1 llamada (medido)</li>
+            <li class="done"><strong>Catálogo rediseñado</strong> <code>products/</code> + <code>foodIndex/</code> (~247k productos OFF + BEDCA · cruce 99,8 %) · sync semanal de OpenFoodFacts arreglado (schema 1004) con alerta e histórico en el panel</li>
+            <li class="done"><strong>Imágenes de ejercicios a precisión 1.0</strong> (matcher estricto · si no es 100 % seguro, sin foto) · <strong>caps de IA</strong> 100/día · 2.000/mes (editables desde el panel)</li>
           </ul>
         </div>
         <div class="status-banner-col">
           <h4>⏳ Pendiente real</h4>
           <ul class="status-banner-list">
-            <li class="pend"><strong>Cuentas de tienda</strong> (Apple Developer 99€/año + Play Console 25$) — <strong>bloqueante nº1</strong>: sin ellas no hay IAP ni publicación</li>
-            <li class="pend"><strong>IAP real (RevenueCat)</strong>: webhook + cliente ya codificados (latentes) · falta desplegar el webhook + claves + productos en las stores + nuevo build</li>
-            <li class="pend"><strong>Build iOS</strong>: registrar la app iOS en Firebase · Google + Apple sign-in · App Attest/DeviceCheck · Liquid Glass iOS 26 · TestFlight</li>
-            <li class="pend"><strong>Android release</strong>: Play internal track (valida Play Integrity real) + registrar el SHA-256 de la clave de firmado de Google + keystore de release</li>
-            <li class="pend"><strong>Fase 5</strong>: canal web (React Native Web · DOM/SEO) + re-cablear cookies/Analytics web</li>
-            <li class="pend">Extras nativos post-launch: widgets iOS/Android · Apple Watch · precios colaborativos</li>
+            <li class="pend"><strong>Cuentas de tienda</strong> (Apple Developer 99€/año · verifica identidad 1-7 días ← camino crítico · Play Console 25$ · cuenta RevenueCat gratis) — <strong>bloqueante nº1</strong></li>
+            <li class="pend"><strong>iOS · código</strong>: <strong>Sign in with Apple</strong> (único hueco de código real · sin él Apple rechaza, guideline 4.8) + <code>GoogleService-Info.plist</code> + <code>expo-build-properties</code> (frameworks estáticos) + plugin Google sign-in iOS</li>
+            <li class="pend"><strong>iOS · credenciales</strong>: certificados EAS + bloque iOS en <code>eas.json</code> + key APNs + App Check App Attest/DeviceCheck (.p8 · iPhone real)</li>
+            <li class="pend"><strong>Monetización (código YA escrito)</strong>: crear los productos en Play Console + App Store Connect · entitlement <code>pro</code> + offering en RevenueCat · pegar las claves + desplegar el webhook (con su secreto) + test de compra en sandbox</li>
+            <li class="pend"><strong>Android release</strong>: keystore de release + registrar el SHA-256 de la firma de Google Play + subir AAB a internal testing</li>
+            <li class="pend"><strong>Fichas de tienda</strong>: capturas + <strong>Privacy Nutrition Labels</strong> (Apple) + <strong>Data Safety</strong> (Google) + rating ~12+</li>
+            <li class="pend"><strong>Post-launch</strong> (no bloquea): Firebase <strong>Analytics</strong> nativo · canal web (RN Web) · widgets iOS/Android · Apple Watch · Live Activity · precios colaborativos · plan anual/Family Sharing</li>
           </ul>
-          <p style="font-size:.66rem;color:var(--muted);margin-top:8px;font-style:italic">Stack elegido: crash/analytics = Firebase Crashlytics + Analytics (nativo, Fase 4.5+) · macros = OpenFoodFacts · pagos = IAP (RevenueCat).</p>
+          <p style="font-size:.66rem;color:var(--muted);margin-top:8px;font-style:italic">Stack: crashes = <strong>Sentry</strong> (ya integrado, EU, sin PII) · métricas de producto = Firebase Analytics (pendiente nativo) · macros = OpenFoodFacts + BEDCA · pagos = IAP (RevenueCat).</p>
         </div>
       </div>
     </div>
@@ -991,7 +997,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">EAS Build + EAS Update <span class="ck-tag new">sin Mac</span></div><div class="ck-note">EAS Build compila iOS y Android <strong>en la nube</strong> (iOS sin Mac local) · development build para probar módulos nativos en el dispositivo · <strong>EAS Update</strong> empuja parches JS/UI OTA sin pasar por la store.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="rn-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Módulos nativos (config plugins) <span class="ck-tag new">Android hecho · iOS + IAP pendientes</span></div><div class="ck-note"><strong>HECHO en Android (dev/preview builds EAS):</strong> App Check <strong>Play Integrity REAL</strong> (sin token debug) · <strong>Google sign-in</strong> nativo (@react-native-google-signin) · <strong>login biométrico</strong> Face ID/huella (expo-secure-store) · <strong>push remoto</strong> end-to-end + notificaciones locales. <strong>PENDIENTE:</strong> iOS (Apple + Google sign-in, App Attest/DeviceCheck), <strong>IAP RevenueCat</strong> (cuentas de tienda · ver Fase 7), Crashlytics nativo. Todo como Expo config plugins / Expo Modules.</div></div></div>
+        <div class="ck-row" data-id="rn-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Módulos nativos (config plugins) <span class="ck-tag new">Android hecho · iOS + IAP pendientes</span></div><div class="ck-note"><strong>HECHO en Android (dev/preview builds EAS):</strong> App Check <strong>Play Integrity REAL</strong> (sin token debug) · <strong>Google sign-in</strong> nativo (@react-native-google-signin) · <strong>login biométrico</strong> Face ID/huella (expo-secure-store) · <strong>push remoto</strong> end-to-end + notificaciones locales. <strong>Sentry</strong> (crash reporting) ya integrado (app + panel + source maps). <strong>PENDIENTE:</strong> iOS (Apple + Google sign-in, App Attest/DeviceCheck), <strong>IAP RevenueCat</strong> (cuentas de tienda · ver Fase 7). Todo como Expo config plugins / Expo Modules.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-10" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">QA final en dispositivos físicos (iPhone + Android) antes de publicar</div><div class="ck-note">Pasada completa en iPhone + Android físicos (Expo Go / dev client): todas las features, suite de tests en verde, rendimiento, gestos y teclado.</div></div></div>
       </div>
@@ -1283,8 +1289,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="phase-header">
         <div class="phase-num">13</div>
         <div class="phase-info">
-          <div class="phase-title">Analytics + Error tracking <span class="phase-etapa phase-etapa--done">Decisión + diseño ✓ · cableado nativo en 4.5/5</span></div>
-          <div class="phase-sub">Decisión cerrada: <strong>Firebase Analytics + Crashlytics</strong> (gratis ilimitado · saber qué hacen los users y enterarte de los bugs antes que ellos) + diseño de eventos hecho. El cableado real es nativo, en la Fase 4.5/5 (<code>@react-native-firebase</code> / <code>expo-firebase-analytics</code> · IDFV/GAID sin cookies).</div>
+          <div class="phase-title">Analytics + Error tracking <span class="phase-etapa phase-etapa--done">Crashes = Sentry ✓ · Analytics nativo pendiente</span></div>
+          <div class="phase-sub"><strong>Error tracking = Sentry, YA integrado</strong> end-to-end (app RN + panel + source maps · región EU · sin PII · gratis 5k errores/mes) — sustituye al Crashlytics que se planeó en v1 (nunca se cableó en RN). <strong>Firebase Analytics</strong> (métricas de producto · saber qué hacen los users) sigue con la decisión cerrada + eventos diseñados, pero el cableado nativo (<code>@react-native-firebase</code> · IDFV/GAID sin cookies) queda <strong>pendiente</strong> (post-lanzamiento, no bloquea).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1293,7 +1299,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="13-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Diseño de los eventos clave <span class="ck-tag new">diseño ✓ · se emiten al cablear Analytics nativo</span></div><div class="ck-note">signup_completed, onboarding_step, plan_generated, upgrade_to_pro, subscription_*, meal_edited, workout_logged, mode_changed. Se emitirán vía <code>trackEvent(name, params)</code> cuando se cablee Analytics nativo (Fase 4.5/5).</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="13-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Alertas por email cuando algo se rompe</div><div class="ck-note">Firebase Crashlytics manda alertas automáticas: nuevo crash, regresión o pico de "velocity" (% de sesiones que crashean). Se configuran en la consola por email (e integrables con Slack vía Cloud Function). Sin esto te enteras tarde</div></div></div>
+        <div class="ck-row" data-id="13-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Alertas por email cuando algo se rompe <span class="ck-tag new">Sentry ✓</span></div><div class="ck-note"><strong>Sentry</strong> manda alertas automáticas de crashes/errores nuevos y regresiones (email · integrable con Slack). Ya integrado en app y panel con source maps, así que los stacks salen legibles. Sin esto te enteras tarde.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="13-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Dashboard de salud en la pantalla Admin</div><div class="ck-note">Pantalla Admin del canal web (RN Web) · Fase 10. Embedir las gráficas clave (errores 24h, MAU, MRR, churn) en una sola pantalla. Lo abres por la mañana y sabes en 10 segundos si todo va bien</div></div></div>
       </div>
@@ -1485,10 +1491,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="stack-card">
       <div class="stack-layer">Capa 12 · Monitoring</div>
       <div class="stack-name">Alertas + observabilidad</div>
-      <div class="stack-why">No tener alertas es como conducir con los ojos cerrados. Mínimos: (1) <strong>presupuesto Firebase</strong> con alerta a 5€/día — si un bug en una Cloud Function entra en bucle, te enteras antes de que la factura sea de cientos. (2) <strong>Firebase Crashlytics</strong> con alerta ante un crash nuevo, una regresión o un pico de velocity. (3) <strong>RevenueCat</strong> notifica eventos de pago (cancelaciones, reembolsos, billing issues) vía dashboard y webhook. Documentar plan de respuesta a incidentes y kill switch (<code>maintenance_mode</code> en Firestore).</div>
+      <div class="stack-why">No tener alertas es como conducir con los ojos cerrados. Mínimos: (1) <strong>presupuesto Firebase</strong> con alerta a 5€/día — si un bug en una Cloud Function entra en bucle, te enteras antes de que la factura sea de cientos. (2) <strong>Sentry</strong> (ya integrado · app + panel, región EU, sin PII, gratis 5k errores/mes) con alerta ante un crash nuevo o una regresión, y source maps para leer el stack. (3) <strong>RevenueCat</strong> notifica eventos de pago (cancelaciones, reembolsos, billing issues) vía dashboard y webhook. (4) <strong>caps globales de IA</strong> (100/día · 2.000/mes) + alerta push si el sync semanal del catálogo falla 2 veces. Documentar plan de respuesta a incidentes y kill switch (<code>maintenance_mode</code> en Firestore).</div>
       <div class="stack-items">
         <div class="stack-item">Presupuesto Firebase 5€/día</div>
-        <div class="stack-item">Crashlytics alertas de crashes</div>
+        <div class="stack-item">Sentry alertas de crashes ✓</div>
         <div class="stack-item">RevenueCat eventos de pago</div>
         <div class="stack-item">Kill switch documentado</div>
       </div>
@@ -1522,7 +1528,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
          · Validación server-side con Zod o similar<br>
          · Webhook RevenueCat firmado + idempotente<br>
          · Backups diarios de Firestore<br>
-         · Crashlytics capturando crashes en la app y errores en functions<br>
+         · Sentry capturando crashes de la app y del panel (source maps activos · sin PII)<br>
          · Política de privacidad y términos publicados</p>
     </div>
   </div>
@@ -1680,7 +1686,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(55,240,168,.03)">
-          <td style="padding:10px 12px;color:var(--accent2);font-weight:600">Firebase Crashlytics <span style="color:var(--muted);font-weight:400;font-size:.7rem">(nativo · Fase 4.5/5)</span></td>
+          <td style="padding:10px 12px;color:var(--accent2);font-weight:600">Sentry (crashes) <span style="color:var(--muted);font-weight:400;font-size:.7rem">(integrado · plan free 5k errores/mes)</span></td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent2)">0€ ✅</td>
@@ -1747,7 +1753,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       </tbody>
     </table>
     <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--text)">Glosario:</strong> <strong>Registrados</strong> = cuentas creadas en total (las columnas). <strong>MAU</strong> = usuarios activos al mes ≈ <strong>16,7% de los registrados</strong>. <strong>DAU</strong> = usuarios activos al día ≈ 30% del MAU. Ej.: 10.000 registrados → ~1.670 MAU → ~500 DAU. No incluye backups (pospuestos) ni los fijos Apple Dev/Play/dominio (~19€/mes) — la proyección por DAU de abajo sí los cuenta.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">0 € a cualquier escala:</strong> App Check (DeviceCheck/Play Integrity), Analytics, Crashlytics, Auth + 2FA, reCAPTCHA (web · 1M/mes gratis) y OpenFoodFacts (BD propia en <code>foods/</code>, API solo en cache-miss) son gratis ilimitados · el <strong>avatar</strong> viaja como data-URI dentro del doc Firestore → 0 € de Storage para siempre (solo egress marginal, ya en "Firebase Descarga").</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">0 € a cualquier escala:</strong> App Check (DeviceCheck/Play Integrity), Analytics, Sentry (crashes · free 5k/mes), Auth + 2FA, reCAPTCHA (web · 1M/mes gratis) y OpenFoodFacts (BD propia en <code>foods/</code>, API solo en cache-miss) son gratis ilimitados · el <strong>avatar</strong> viaja como data-URI dentro del doc Firestore → 0 € de Storage para siempre (solo egress marginal, ya en "Firebase Descarga").</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">La IA (Gemini) es el único coste que escala con el uso</strong> — ~€0,023/generación con Gemini 3.1 Flash-Lite (medido). Desglose de tokens y comparativa de modelos en las dos secciones siguientes.</div>
   </div>
 
@@ -2009,7 +2015,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <strong style="color:var(--text)">One-off Regeneración inmediata:</strong> 4,99 € → <strong>4,24 € neto</strong> tras IAP · ~5% del MAU/mes (grupo distinto del Pro)<br>
       <strong style="color:var(--text)">DAU vs MAU:</strong> los tramos de la tabla van por <strong>DAU</strong> (tamaño real de la app); los pagos se calculan sobre el <strong>MAU</strong>. Ratio 30% (fitness = alta retención) → MAU ≈ DAU × 3,3 · retención 30 días ~15%<br>
       <strong style="color:var(--accent3)">Elasticidad NO modelada:</strong> a mayor precio la conversión real puede quedar por debajo del 3%/5% asumido · vigilar con datos reales tras el lanzamiento<br>
-      <strong style="color:var(--accent)">Infra y seguridad ≈ 0 €:</strong> App Check nativo, Analytics, Crashlytics, 2FA y reglas de monetización blindadas son gratis (detalle en la tabla de costes y el panel de Seguridad) · pagos solo por IAP, sin pasarelas externas · <strong>canal 99% nativo</strong> (web ~1% residual).
+      <strong style="color:var(--accent)">Infra y seguridad ≈ 0 €:</strong> App Check nativo, Analytics, Sentry (crashes), 2FA y reglas de monetización blindadas son gratis (detalle en la tabla de costes y el panel de Seguridad) · pagos solo por IAP, sin pasarelas externas · <strong>canal 99% nativo</strong> (web ~1% residual).
     </div>
   </div>
 
@@ -2632,7 +2638,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">Break-even ~10 DAU</strong> · 1 Pro (8,49 € neto) + 1-2 regeneraciones (4,24 € netas) cubren los ~9 € de fijos (Apple+Google+dominio)</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">Margen ~94% PLANO a cualquier escala</strong> · con la app optimizada (getDoc), Firestore es marginal (~€26/mes a 10K DAU). El coste lo domina la IA (Gemini, ~87%), que escala lineal con los ingresos → el margen no se cae al crecer. El cambio a 3.1-flash-lite (30-jun) ahorra ~2,21× en IA vs 2.5-flash. Beneficio positivo desde Beta</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">App Check nativo = 0 €/mes ilimitado</strong> · DeviceCheck (iOS) / Play Integrity (Android) hardware-attested · UX cero fricción · sin coste de reCAPTCHA Enterprise (solo lo usaría el 1% web)</p>
-        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Crash + analytics = 0 €/mes</strong> · Firebase Crashlytics + Analytics forever-free unlimited (parte del Blaze) · ahorra ~35 €/mes a escala vs alternativas de pago · nativo iOS/Android sin cookies via IDFV/GAID</p>
+        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Crash + analytics = 0 €/mes</strong> · crashes en <strong>Sentry</strong> (plan free 5k errores/mes, región EU, sin PII) + Firebase Analytics forever-free unlimited para métricas de producto (parte del Blaze) · sin cookies via IDFV/GAID</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent3)">App NATIVA, no web (99% móvil / 1% web)</strong> · pagos por IAP Apple/Google (15% ya en el ARPU neto 8,49 €) · <strong>0 € de comisiones de pasarela externa</strong>, App Check nativo gratis, hosting casi nulo (la app empaqueta sus assets). El canal es el móvil.</p>
         <p><strong style="color:var(--accent3)">La IA (Gemini) es el ~87% del coste a 10K DAU</strong> (~€759 con 3.1-flash-lite · €0,023/gen medido · sin free tier · escala con el uso). Firestore corregido a ~€26 (app optimizada · getDoc). Palanca #1 = prompt de menú más corto (9.431 tokens entrada) + modelo más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo)</p>
       </div>
