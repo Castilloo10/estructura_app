@@ -124,6 +124,11 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 
 /* DIVIDER */
 .section-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:32px 0 16px;display:flex;align-items:center;gap:10px}
+/* Apartado "Pendientes generales" */
+.pend-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:4px 18px 16px;margin-bottom:14px}
+.ph-link{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent3);background:transparent;border:1px solid var(--border);padding:2px 8px;border-radius:5px;cursor:pointer;transition:all .18s;text-transform:none;letter-spacing:0;white-space:nowrap}
+.ph-link:hover{border-color:var(--accent3);color:var(--accent)}
+.phase-flash{outline:2px solid var(--accent);outline-offset:6px;border-radius:10px;transition:outline .2s}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* GROUP HEADER · cabecera grande para agrupar secciones dentro de un panel (rediseño jun-2026) */
@@ -291,6 +296,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <button class="tab" onclick="show('stack')">Stack</button>
     <button class="tab" onclick="show('arch')">Estructura</button>
     <button class="tab" onclick="show('roadmap')">🗺 Hoja de ruta</button>
+    <button class="tab" onclick="show('pendientes')">⏳ Pendientes</button>
     <button class="tab" onclick="show('security')">🔒 Seguridad</button>
     <button class="tab" onclick="show('negocio')">💰 Modelo de negocio</button>
   </div>
@@ -1336,6 +1342,95 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
   </div>
+</div>
+
+
+<!-- PENDIENTES GENERALES -->
+<div class="pane" id="p-pendientes">
+
+  <div class="pane-intro">
+    <h2>⏳ Pendientes generales</h2>
+    <p><strong>Lista de trabajo operativa</strong> — complemento de la <strong>Hoja de ruta</strong>: aquí está TODO lo que queda a día de hoy (<strong>23-jul-2026</strong>), verificado contra el código real. Ya <strong>no queda programación de lanzamiento</strong>; lo que falta son <strong>cuentas, configuración de tiendas y QA con dispositivo</strong>. Cada bloque enlaza a su fase — pulsa <code>Fase → </code> para saltar a la Hoja de ruta.</p>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">🔴 Bloqueantes · Cuentas y fiscal<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('-1')">Fase -1 →</button><button class="ph-link" onclick="goToPhase('7')">Fase 7 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend"><strong>Apple Developer</strong> 99 €/año — verifica identidad <strong>1-7 días</strong> ← camino crítico, arrancar primero</li>
+      <li class="pend"><strong>Google Play Console</strong> 25 $ (pago único · se activa en horas)</li>
+      <li class="pend"><strong>Email de soporte</strong> visible (Apple y Google lo exigen en la ficha)</li>
+      <li class="pend"><strong>Fiscal</strong>: gestor/autónomo (tarifa plana) · alta censal Hacienda 036/037 (al encender compras) · NIF + IBAN</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">🍏 iOS · credenciales y config <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no es código)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('rn')">Fase RN →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend">Habilitar el <strong>proveedor Apple en Firebase</strong> (Service ID + <code>.p8</code>) para que funcione Sign in with Apple (código ya hecho)</li>
+      <li class="pend">Certificados/perfiles iOS en <strong>EAS</strong> + rellenar los <code>REPLACE_…</code> de <code>eas.json</code> <em>(verificado: siguen sin rellenar)</em></li>
+      <li class="pend">Subir la <strong>key APNs</strong> a EAS (push remota iOS)</li>
+      <li class="pend">Registrar <strong>App Check App Attest/DeviceCheck</strong> (<code>.p8</code> · requiere iPhone físico)</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">💰 Monetización <span style="color:var(--accent2);text-transform:none;letter-spacing:0">(código + webhook YA desplegados)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('7')">Fase 7 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend">Crear los 2 productos en <strong>App Store Connect + Play Console</strong> (<code>pro_monthly</code> 9,99 € · <code>regen_immediate</code> 4,99 €)</li>
+      <li class="pend">En RevenueCat: entitlement <code>pro</code> + offering <code>current</code> + <strong>pegar la URL+secreto del webhook</strong></li>
+      <li class="pend">Meter <code>EXPO_PUBLIC_RC_IOS_KEY</code> / <code>…_ANDROID_KEY</code> en EAS</li>
+      <li class="pend"><strong>Alinear <code>REGEN_PRODUCT_IDS</code></strong> con los product IDs reales de las stores (hoy <code>btal_regen</code> / <code>regen_inmediata</code>)</li>
+      <li class="pend"><strong>Test en sandbox</strong>: compra → webhook → Firestore → entitlement, en iOS y Android</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">🤖 Android release + publicar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('9')">Fase 9 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend">Keystore de release + registrar el <strong>SHA-256</strong> de Google Play en Firebase (Google sign-in en producción)</li>
+      <li class="pend">Subir el <strong>AAB</strong> a internal testing → producción</li>
+      <li class="pend"><strong>Fichas de tienda</strong> (textos + capturas ✅ hechos): <strong>Privacy Nutrition Labels</strong> (Apple) · <strong>Data Safety</strong> (Google) · rating 12+</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">✅ QA final antes de enviar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('12')">Fase 12 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend"><strong>Sentry</strong> de punta a punta · paseo visual (<code>checklist-visual.md</code>) · 2-5 probadores reales</li>
+      <li class="pend"><strong>TestFlight</strong>: los 3 que Apple revisa a mano — <strong>borrar cuenta · restaurar compras · Sign in with Apple</strong></li>
+      <li class="pend">Los <strong>8 tests de seguridad</strong> pre-producción (aislamiento, webhook falso, bypass de límite IA, prompt injection, rate limit, App Check, borrado)</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">⚙️ Operaciones · activar al lanzar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Fase 11 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend"><code>PUSH_ADMIN_UIDS</code> sin valor → hoy las <strong>alertas push no llegan a nadie</strong> (poner el uid del owner + redeploy de <code>sendPush</code>/<code>syncOffDeltas</code>)</li>
+      <li class="pend"><strong>Borrar los debug tokens de App Check</strong> antes de publicar (el de las capturas Playwright, el último)</li>
+      <li class="pend"><strong>Backups de Firestore</strong> (gcloud weekly + 28 d) + <strong>tope de gasto Gemini</strong> (~10 €/mes, billing aparte)</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">🧱 Deuda diferida <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no bloquea)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Fase 11 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend"><strong>SEC-8</strong> colusión de precios (<code>MIN_FIRME=5</code>) — decisión de producto · solo relevante con precios colaborativos en marcha</li>
+      <li class="pend"><strong>SEC-11</strong> sesión Firebase cifrada → migrar a <code>@react-native-firebase/auth</code> (proyecto de arquitectura · riesgo real bajo)</li>
+      <li class="pend"><strong>PERF-5</strong> thumbnail del avatar · <strong>PERF-6</strong> cachear métricas del admin (solo degrada a escala)</li>
+    </ul>
+  </div>
+
+  <div class="pend-card">
+    <div class="section-label" style="margin:10px 0 10px">🌐 Futuro / post-lanzamiento<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('13')">Fase 13 →</button><button class="ph-link" onclick="goToPhase('9')">Fase 9 →</button></div>
+    <ul class="status-banner-list">
+      <li class="pend"><strong>Web adaptada</strong> de verdad (no el RN-web actual) — al rehacerla, pasar la CSP a enforce y revisar orígenes</li>
+      <li class="pend"><strong>Animación del foco del tutorial</strong> (transforms GPU en vez de redibujar el path SVG) — juzgar fluidez solo en build <strong>release</strong> EAS</li>
+      <li class="pend"><strong>Post-launch</strong>: Analytics nativo · icono Liquid Glass iOS 26 · widgets/Watch/Live Activity · precios colaborativos · plan anual/Family Sharing · CI/CD + E2E</li>
+    </ul>
+  </div>
+
+  <p style="font-size:.66rem;color:var(--muted);margin:6px 2px 0;font-style:italic">Ya cerrado (no aparece arriba): buscador mejorado+desplegado · borrado de invitados completo+verificado · firebase-functions 7.3.0 · Sign in with Apple (código) · legal alineado (RGPD) · restaurar compras cableado · 4ª auditoría (49 hallazgos) · BUG-14 · PERF-2 · CSP en enforce · regen acumulable.</p>
+
 </div>
 
 
@@ -2768,6 +2863,19 @@ function show(id){
   document.querySelectorAll('.pane').forEach(function(p){
     p.classList.toggle('active', p.id === 'p-'+id);
   });
+}
+// Salta desde "Pendientes" a una fase concreta de la Hoja de ruta (cambia de
+// pestaña + hace scroll + resalta un instante). El data-phase puede ser 'rn', '-1', '7'...
+function goToPhase(p){
+  show('roadmap');
+  setTimeout(function(){
+    var el = document.querySelector('.phase[data-phase="' + p + '"]');
+    if(el){
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.add('phase-flash');
+      setTimeout(function(){ el.classList.remove('phase-flash'); }, 1600);
+    }
+  }, 60);
 }
 function showInicio(id){
   var container = document.getElementById('p-inicio');
