@@ -185,6 +185,12 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 .roadmap-divider span{flex-shrink:0}
 .roadmap-divider--launch{color:var(--accent3)}
 .roadmap-divider--done{color:var(--accent2)}
+/* Fases completadas · desplegable (colapsado por defecto; al abrir, todo tal cual) */
+.roadmap-done-toggle{cursor:pointer;user-select:none}
+.roadmap-done-toggle .done-arrow{display:inline-block;font-size:.8rem;transition:transform .2s}
+.roadmap-done-toggle .done-hint{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-transform:none;letter-spacing:0}
+.roadmap.done-open .roadmap-done-toggle .done-arrow{transform:rotate(90deg)}
+.roadmap:not(.done-open) .phase-done{display:none}
 /* Badge "Etapa N" en el header de cada fase · refleja el orden de
    ejecución sugerido (mayo 2026). Color según urgencia. */
 .phase-etapa{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:2px 7px;border-radius:4px;margin-left:8px;letter-spacing:.5px;font-weight:700;vertical-align:middle;background:rgba(181,240,55,.12);color:var(--accent);border:1px solid rgba(181,240,55,.25)}
@@ -931,7 +937,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done"><strong>Portal de administración en producción</strong> (<code>btal-admin.web.app</code>): métricas · gestión de usuarios (plan/saldo/push/ficha) · registro de auditoría · caps de IA · administradores con <strong>login Face ID (WebAuthn/passkeys)</strong> + puerta 2FA + auto-logout · 3 auditorías aplicadas</li>
             <li class="done"><strong>Visor de técnica de ejercicios</strong> (fotos por ejercicio · fuzzy ES + selector) · antes el ▶ abría YouTube</li>
             <li class="done">Seguridad: <strong>App Check ENFORCE</strong> (Play Integrity/DeviceCheck + reCAPTCHA web) · rules monetización seed-only + tope avatar · MFA TOTP</li>
-            <li class="done"><strong>99 tests de la app + 143 de functions</strong> (Vitest) · React Compiler activo</li>
+            <li class="done"><strong>127 tests de la app + 303 de functions</strong> (Vitest) · React Compiler activo</li>
             <li class="done"><strong>4 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · seguridad 26-jun · <strong>4-jul (38 fixes verificados</strong> — incl. 2 fugas dietéticas HIGH: pescado/marisco a veganos y gluten a celíacos) · <strong>23-jul (49 hallazgos multi-agente</strong> — seguridad, correctitud, código muerto, rendimiento)</li>
             <li class="done"><strong>Sign in with Apple — CÓDIGO hecho</strong> (<code>appleAuth.ts</code>: login + vincular invitado + reauth con nonce · botón solo-iOS) · falta solo habilitar el proveedor Apple en Firebase + build iOS</li>
             <li class="done"><strong>Buscador mejorado y desplegado</strong> (4ª consulta por-palabra → alcanza la cola larga por cualquier token · +93% de cobertura en el caso difícil, medido) + <strong>borrado de invitados completo</strong> (recursiveDelete: registros + <code>_meta/*</code> + Auth · verificado en vivo · TTL nativa activa)</li>
@@ -973,7 +979,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <!-- ─── Separadores de bloque ─── -->
     <div class="roadmap-divider" style="order: 0"><span>🚀 Etapas activas · siguiente paso</span></div>
     <div class="roadmap-divider roadmap-divider--launch" style="order: 100"><span>🏁 Lanzamiento</span></div>
-    <div class="roadmap-divider roadmap-divider--done" style="order: 200"><span>✅ Fases completadas (referencia)</span></div>
+    <div class="roadmap-divider roadmap-divider--done roadmap-done-toggle" style="order: 200" onclick="toggleDone()"><span class="done-arrow">▸</span><span>✅ Fases completadas (referencia)</span><span class="done-hint">clic para desplegar / plegar</span></div>
 
     <!-- FASE RN · App React Native + Expo (la app · foco actual) -->
     <div class="phase" data-phase="rn" style="order: 1">
@@ -981,7 +987,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">RN</div>
         <div class="phase-info">
           <div class="phase-title">App React Native + Expo (la app) <span class="phase-etapa">▶ EN CURSO</span></div>
-          <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 23-jul: app completa + dev builds Android nativos</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD · <strong>Google sign-in · App Check Play Integrity real · biométrico · push · Face ID</strong>) + <strong>Sign in with Apple (código hecho)</strong> · 99+143 tests · React Compiler ON · 4 auditorías aplicadas (12-jun, seguridad 26-jun, 38 fixes 4-jul, 49 hallazgos 23-jul). <strong>Siguiente (bloqueado por cuentas de tienda, NO por código): IAP RevenueCat + build iOS</strong> (habilitar proveedor Apple en Firebase · App Attest/DeviceCheck · Liquid Glass iOS 26).</div>
+          <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 23-jul: app completa + dev builds Android nativos</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD · <strong>Google sign-in · App Check Play Integrity real · biométrico · push · Face ID</strong>) + <strong>Sign in with Apple (código hecho)</strong> · 127+303 tests · React Compiler ON · 4 auditorías aplicadas (12-jun, seguridad 26-jun, 38 fixes 4-jul, 49 hallazgos 23-jul). <strong>Siguiente (bloqueado por cuentas de tienda, NO por código): IAP RevenueCat + build iOS</strong> (habilitar proveedor Apple en Firebase · App Attest/DeviceCheck · Liquid Glass iOS 26).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1040,7 +1046,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 2 · COMPLETA tras 14-may (2-6 Gemini + 2-7 Blaze + budget alerts) -->
-    <div class="phase" data-phase="2" style="order: 202">
+    <div class="phase phase-done" data-phase="2" style="order: 202">
       <div class="phase-header">
         <div class="phase-num">2</div>
         <div class="phase-info">
@@ -1071,7 +1077,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 6 · Cloud Functions + IA (requiere Blaze · Fase 2) -->
-    <div class="phase" data-phase="6" style="order: 206">
+    <div class="phase phase-done" data-phase="6" style="order: 206">
       <div class="phase-header">
         <div class="phase-num">6</div>
         <div class="phase-info">
@@ -1121,7 +1127,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="6-18" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">OpenFoodFacts · fuente única de macros <span class="ck-tag new">marcas españolas</span></div><div class="ck-note">API completamente abierta, sin API key, sin OAuth · solo atribución obligatoria "Datos de OpenFoodFacts". Cobertura fuerte de productos europeos envasados y marcas blancas españolas (Hacendado, Milbona, Sondey, Vitafit, Carrefour Discount...). Endpoints útiles: <code>https://es.openfoodfacts.org/api/v2/search?search_terms=X&fields=...</code> y <code>https://world.openfoodfacts.org/api/v0/product/{ean}.json</code>. Sin rate limit hard pero respetar User-Agent identificable (BTal/1.0). El dump de 25K alimentos ES vive en <code>/foods/</code> (cache-first) y la API solo se consulta en cache-miss</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="6-19" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Cloud Function `searchFood` · cache-first sobre OpenFoodFacts</div><div class="ck-note">Un único endpoint <code>searchFood({query, locale, supermercados})</code> que: (1) lee del dump propio en <code>/foods/</code> y solo llama a la API de OFF en cache-miss · <code>Promise.allSettled</code> para que un fallo de red no rompa la respuesta. (2) Normaliza el shape al tipo común <code>FoodSearchResult</code>. (3) Deduplica por nombre+marca. (4) Ordena: si el user tiene supermercados marcados → boost de las marcas mapeadas. (5) Cachea en Firestore <code>/foods/{source}_{id}</code> compartido entre todos los users · TTL <strong>diferenciado por tipo</strong> (ver item 6-22)</div></div></div>
+        <div class="ck-row" data-id="6-19" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Cloud Function `searchFood` · cache-first sobre OpenFoodFacts</div><div class="ck-note">Un único endpoint <code>searchFood({query, locale, supermercados})</code> que: (1) lee del dump propio en <code>/foods/</code> y solo llama a la API de OFF en cache-miss · <code>Promise.allSettled</code> para que un fallo de red no rompa la respuesta. (2) Normaliza el shape al tipo común <code>FoodSearchResult</code>. (3) Deduplica por nombre+marca. (4) Ordena: si el user tiene supermercados marcados → boost de las marcas mapeadas. (5) Cachea en Firestore <code>/foods/{source}_{id}</code> compartido entre todos los users · TTL <strong>diferenciado por tipo</strong> (ver item 6-22). <strong>Ampliado (jul-2026)</strong>: 4ª consulta por-palabra (<code>array-contains-any</code> por token) → alcanza la cola larga aunque la búsqueda no empiece por la 1ª palabra · cobertura casi ×2 en el caso difícil (medido) · desplegado.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="6-22" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">TTL diferenciado para el cache de alimentos <span class="ck-tag new">180-365 días</span></div><div class="ck-note">(Va aquí, entre 6-19 y 6-20, por la referencia directa desde 6-19.) Los macros casi nunca cambian · 30 días era conservador en exceso. Mapping <code>FOOD_TTL_DAYS</code> en <code>functions/foodCache.ts</code>: <code>openfoodfacts: 180</code> (branded products EU · reformulación rara), <code>'ai-estimated': 60</code> (refresca más, para que el sistema se autocure cuando OFF amplíe catálogo), <code>manual: Infinity</code> (es dato del user · no nuestro a invalidar). <strong>Refresh proactivo soft opcional:</strong> en cada cache hit con &gt;90 días de edad, 1% probabilidad de disparar refresh async fire-and-forget · el cache se va rejuveneciendo solo sin coste perceptible. Beneficios: menos quota gastada · más resiliencia ante caídas API · &gt;99% cache hit en régimen estable</div></div></div>
         <div class="ck-sep"></div>
@@ -1247,7 +1253,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">11</div>
         <div class="phase-info">
           <div class="phase-title">🔒 Seguridad ante ataques <span class="phase-etapa phase-etapa--launch">Lanzamiento · core hecho · tails: release keystore + backups + auditoría final</span></div>
-          <div class="phase-sub">App Check + reCAPTCHA + backups + auditoría final · 11-6 (plan incidentes) cerrado en Sprint 1 (2026-05-12). <strong>3 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · <strong>seguridad nivel máximo 26-jun</strong> (2 bypass de monetización + ~40 fixes) · <strong>4-jul (38 fixes verificados adversarialmente</strong> — incl. 2 fugas dietéticas HIGH). Tails de lanzamiento: keystore de release + backups Firestore + auditoría final antes de publicar.</div>
+          <div class="phase-sub">App Check + reCAPTCHA + backups + auditoría final · 11-6 (plan incidentes) cerrado en Sprint 1 (2026-05-12). <strong>4 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · <strong>seguridad nivel máximo 26-jun</strong> (2 bypass de monetización + ~40 fixes) · <strong>4-jul (38 fixes verificados adversarialmente</strong> — incl. 2 fugas dietéticas HIGH) · <strong>23-jul (49 hallazgos multi-agente</strong> · seguridad/correctitud/código muerto/rendimiento). Tails de lanzamiento: keystore de release + backups Firestore + última pasada antes de publicar.</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1266,33 +1272,33 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="11-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Plan de respuesta a incidentes <span class="ck-tag new">documento</span></div><div class="ck-note">Documento con: ¿qué hago si Firebase facturó 1000€ una noche? ¿qué hago si filtro datos de usuarios? ¿a quién aviso? ¿cómo desactivo la app rápido? Tener el "kill switch" preparado: una flag <code>maintenance_mode: true</code> en Firestore que bloquea el login y muestra mensaje genérico</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="11-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Auditoría de seguridad antes de lanzar</div><div class="ck-note">Repasar la pestaña 🔒 Seguridad punto a punto. Probar con un usuario de testeo: ¿puedo escribir en otro UID? ¿puedo poner plan_pro=true desde la consola del navegador? ¿el webhook responde sin firma? Si algo de esto funciona, no estás listo para producción</div></div></div>
+        <div class="ck-row" data-id="11-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Auditoría de seguridad antes de lanzar <span class="ck-tag new">hecha ×4</span></div><div class="ck-note"><strong>HECHA ×4</strong> (12-jun · 26-jun · 4-jul · 23-jul con 49 hallazgos verificados adversarialmente): comprobados el aislamiento entre UID, el seed-only de monetización (no se puede poner <code>plan_pro=true</code> desde el cliente) y el webhook firmado. Queda solo <strong>una última pasada rápida justo antes de enviar el build</strong> (repasar la pestaña 🔒 Seguridad punto a punto sobre el binario final).</div></div></div>
       </div>
     </div>
 
     <!-- FASE 12 · Etapa 8 · Testing + CI/CD · suites al día · CI/CD pendiente de re-montar tras git init (Fase 4.5) -->
-    <div class="phase" data-phase="12" style="order: 208">
+    <div class="phase phase-done" data-phase="12" style="order: 208">
       <div class="phase-header">
         <div class="phase-num">12</div>
         <div class="phase-info">
           <div class="phase-title">Testing + CI/CD <span class="phase-etapa phase-etapa--done">Suites ✓ · CI/CD pendiente</span></div>
-          <div class="phase-sub">Suites al día EN el repo de la app: 99 tests (vitest · stores/utils/núcleo) + 143 de functions (eligibility/nutrition/persist). CI/CD pendiente de re-montar tras el <code>git init</code> del repo (Fase 4.5).</div>
+          <div class="phase-sub">Suites al día EN el repo de la app (medido jul-2026): <strong>127 tests de la app</strong> (vitest · stores/utils/núcleo) + <strong>303 de functions</strong> (eligibility/nutrition/persist). El repo ya está en GitHub · falta montar el CI/CD (workflows lint+test+build + E2E).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">99 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
+        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">127 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de componentes y lógica crítica</div><div class="ck-note">Cubren lo que al romperse cuesta dinero o pierde datos: stores (write-through · optimistic updates), cálculo de macros y calorías, rachas, validaciones y parsers.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="12-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de functions (eligibility / nutrition / persist)</div><div class="ck-note">143 tests del backend: elegibilidad de generación (Free/Pro · rate limit), núcleo de nutrición (escalado, unidades) y persistencia. <code>firebase emulators:start</code> sigue disponible para pruebas de integración locales sin tocar producción.</div></div></div>
+        <div class="ck-row" data-id="12-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de functions (eligibility / nutrition / persist)</div><div class="ck-note">303 tests del backend: elegibilidad de generación (Free/Pro · rate limit), núcleo de nutrición (escalado, unidades) y persistencia. <code>firebase emulators:start</code> sigue disponible para pruebas de integración locales sin tocar producción.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Re-montar CI/CD + E2E sobre el repo de la app</div><div class="ck-note">Tras el git init (Fase 4.5): workflows lint+test+build, branch protection, deploy de functions, y E2E (Maestro para nativo o Playwright para el canal RN Web)</div></div></div>
       </div>
     </div>
 
     <!-- FASE 13 · Etapa 6 · Analytics + Crashlytics (post-monetización, pre-lanzamiento) -->
-    <div class="phase" data-phase="13" style="order: 209">
+    <div class="phase phase-done" data-phase="13" style="order: 209">
       <div class="phase-header">
         <div class="phase-num">13</div>
         <div class="phase-info">
@@ -2864,6 +2870,12 @@ function show(id){
     p.classList.toggle('active', p.id === 'p-'+id);
   });
 }
+// Despliega/pliega el bloque "Fases completadas" de la Hoja de ruta.
+function toggleDone(){
+  var road = document.getElementById('roadmap-container');
+  if(road) road.classList.toggle('done-open');
+}
+
 // Salta desde "Pendientes" a una fase concreta de la Hoja de ruta (cambia de
 // pestaña + hace scroll + resalta un instante). El data-phase puede ser 'rn', '-1', '7'...
 function goToPhase(p){
@@ -2871,6 +2883,11 @@ function goToPhase(p){
   setTimeout(function(){
     var el = document.querySelector('.phase[data-phase="' + p + '"]');
     if(el){
+      // Si la fase está en el bloque "completadas" (colapsado), despliégalo antes.
+      if(el.classList.contains('phase-done')){
+        var road = document.getElementById('roadmap-container');
+        if(road) road.classList.add('done-open');
+      }
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       el.classList.add('phase-flash');
       setTimeout(function(){ el.classList.remove('phase-flash'); }, 1600);
@@ -2943,7 +2960,9 @@ var INITIAL_CHECKS = {
   '11-3': true, // reCAPTCHA Enterprise (NO Classic v3) vía App Check en el canal web (key 6LdTQwEt...). Migrado de Classic 28-may-2026 por scoring mucho más estable en Brave Shields/incógnito. En la app nativa el equivalente lo cubre Play Integrity (Android) y DeviceCheck (iOS). Cubre el vector "bots crean miles de cuentas" sin score-gating manual. Free tier 1M assessments/mes.
   '11-4': true, // CSP + HSTS + X-Frame-Options + Permissions-Policy en firebase.json
   '11-6': true, // docs/incident-response.md · 5 escenarios + severity P0-P3 + kill switch + GDPR art. 33 72h (Sprint 1)
-  // 11-2 (size limit rule · docSizeOk retirado · request.resource.size NO mide bytes JSON sino campos anidados con overhead), 11-5 (backups POSPUESTOS hasta lanzamiento · comando gcloud listo en memoria), 11-7 (auditoría final · justo antes de lanzar) pendientes.
+  '11-2': true, // Tope de tamaño: DECISIÓN CERRADA (avatar capado a 200K en rules; el límite genérico de doc se descartó · request.resource.size no mide bytes). La parte accionable está hecha.
+  '11-7': true, // Auditoría de seguridad HECHA ×4 (12-jun · 26-jun · 4-jul · 23-jul, 49 hallazgos verificados adversarialmente): aislamiento entre UID, seed-only de monetización y webhook firmado comprobados. Solo queda la última pasada rápida sobre el binario antes de enviar.
+  // 11-5 (backups POSPUESTOS hasta lanzamiento · comando gcloud listo en memoria) pendiente.
 
   // FASE 13 · Analytics + Error tracking (decisión 26-may: Firebase native-first)
   '13-2': true, // DECISIÓN + diseño: Firebase Analytics + Crashlytics (forever-free unlimited, parte de Blaze ya activo). Eventos definidos (signup_completed, onboarding_step, plan_generated, upgrade_to_pro, subscription_started/cancelled, meal_edited, workout_logged, mode_changed). El cableado REAL es nativo (@react-native-firebase / expo-firebase-analytics · IDFV/GAID sin cookies) y va con el dev build (Fase 4.5/5). El canal web usaría el SDK web con consent banner.
@@ -2953,7 +2972,7 @@ var INITIAL_CHECKS = {
 
   // FASE 12 · Testing — suites al día EN el repo de la app · CI/CD pendiente del git init (Fase 4.5)
   '12-0': true, // Vitest configurado en el repo · suite inaugural.
-  '12-1': true, // Tests de lógica/componentes (vitest) · 99 tests.
+  '12-1': true, // Tests de lógica/componentes (vitest) · 127 tests.
   '12-2': true, // Tests de Cloud Functions · 143 tests (eligibility + nutrition + persist).
   // 12-7 (re-montar CI/CD + E2E sobre el repo de la app tras el git init) PENDIENTE · no marcado.
 
@@ -2971,7 +2990,7 @@ var INITIAL_CHECKS = {
   // UI COMPLETA + BACKEND REAL: 5 tabs + onboarding + ajustes + editores + flujo
   // IA cableado a Firebase de verdad (auth email+2FA TOTP, Firestore write-through,
   // generatePlan callable, avatar data-URI, export RGPD, vincular invitado→cuenta,
-  // gating IA de invitado) + legal in-app + 99 tests vitest + React Compiler ON.
+  // gating IA de invitado) + legal in-app + 127 tests vitest + React Compiler ON.
   // Auditoría exhaustiva 12-jun (~70 fixes: refund total generatePlan, parser "ud",
   // extras→compra, rollover medianoche, dirty-guards, prefs por dispositivo,
   // reduceMotion TOTAL 13-jun). functions/ canónicas en el repo de la app y desplegadas.
