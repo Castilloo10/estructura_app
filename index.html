@@ -322,7 +322,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
   <div class="pane-intro">
     <h2>Pantalla de inicio</h2>
-    <p>Cómo entra cada tipo de usuario y qué ve al arrancar: el <strong style="color:var(--text)">nuevo usuario</strong> (onboarding con IA o manual), el <strong style="color:var(--text)">ya registrado</strong> (login directo a su programa) y el <strong style="color:var(--text)">modo prueba</strong> (invitado sin cuenta · datos reales con caducidad de 3 días). Empieza por el glosario de naming para seguir el resto del documento.</p>
+    <p>Cómo entra cada tipo de usuario y qué ve al arrancar: el <strong style="color:var(--text)">nuevo usuario</strong> (onboarding con IA o manual), el <strong style="color:var(--text)">ya registrado</strong> (login directo a su programa) y el <strong style="color:var(--text)">modo invitado</strong> (sin cuenta · datos reales con caducidad de 3 días). Empieza por el glosario de naming para seguir el resto del documento.</p>
   </div>
 
   <div class="box" style="margin-bottom:24px">
@@ -341,7 +341,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <span class="dot"></span>Ya registrado
     </button>
     <button class="subtab" onclick="showInicio('guest')">
-      <span class="dot"></span>Modo prueba
+      <span class="dot"></span>Modo invitado
     </button>
   </div>
 
@@ -365,7 +365,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="step-left"><div class="num teal">01</div><div class="vline"></div></div>
         <div class="step-body">
           <div class="step-title">Página de bienvenida</div>
-          <div class="step-desc">Landing con tres opciones: <strong>Crear cuenta</strong>, <strong>Iniciar sesión</strong> y <strong>Probar sin cuenta</strong>.</div>
+          <div class="step-desc">Landing con tres opciones: <strong>Crear cuenta</strong>, <strong>Iniciar sesión</strong> y <strong>Probar como invitado</strong>.</div>
         </div>
       </div>
       <div class="step">
@@ -610,7 +610,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="step">
         <div class="step-left"><div class="num coral">01</div><div class="vline"></div></div>
         <div class="step-body">
-          <div class="step-title">Pulsa «Probar sin cuenta» <span class="step-tag tag-fb">Firebase Auth</span></div>
+          <div class="step-title">Pulsa «Probar como invitado» <span class="step-tag tag-fb">Firebase Auth</span></div>
           <div class="step-desc">Firebase crea una sesión anónima con uid temporal. Sin email ni contraseña. Funciona igual que una cuenta real en términos técnicos, pero el documento se siembra con un campo <code>expiresAt</code>: la sesión de invitado <strong>caduca a los 3 días de su creación</strong> (no se renueva con el uso).</div>
         </div>
       </div>
@@ -621,7 +621,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <div class="step-desc">Se carga la plantilla <code>demoUser.ts</code>: un perfil demo <strong>completo</strong> con datos de ejemplo (comidas, entrenos, compra, suplementos) — no el esqueleto vacío de <code>defaultUser.ts</code>. El usuario puede explorar toda la interfaz sin restricciones.</div>
           <div class="box">
             <div class="box-title">Limitaciones visibles</div>
-            <div class="box-item">Banner con cuenta atrás: la sesión de prueba caduca a los 3 días</div>
+            <div class="box-item">Banner con cuenta atrás: la sesión de invitado caduca a los 3 días</div>
             <div class="box-item">Botón siempre visible: «Crear cuenta para guardar»</div>
             <div class="box-item">No puede usar la generación con IA</div>
           </div>
@@ -630,7 +630,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="step">
         <div class="step-left"><div class="num coral">03</div><div class="vline"></div></div>
         <div class="step-body">
-          <div class="step-title">Puede editar todo en modo prueba</div>
+          <div class="step-title">Puede editar todo en modo invitado</div>
           <div class="step-desc">Los cambios se guardan en Firestore bajo el uid anónimo y persisten hasta que la sesión caduca (los 3 días del paso 1).</div>
         </div>
       </div>
@@ -945,7 +945,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done"><strong>Portal de administración en producción</strong> (<code>btal-admin.web.app</code>): métricas · gestión de usuarios (plan/saldo/push/ficha) · registro de auditoría · caps de IA · administradores con <strong>login Face ID (WebAuthn/passkeys)</strong> + puerta 2FA + auto-logout · 3 auditorías aplicadas</li>
             <li class="done"><strong>Visor de técnica de ejercicios</strong> (fotos por ejercicio · fuzzy ES + selector) · antes el ▶ abría YouTube</li>
             <li class="done">Seguridad: <strong>App Check ENFORCE</strong> (Play Integrity/DeviceCheck + reCAPTCHA web) · rules monetización seed-only + tope avatar · MFA TOTP</li>
-            <li class="done"><strong>127 tests de la app + 303 de functions</strong> (Vitest) · React Compiler activo</li>
+            <li class="done"><strong>131 tests de la app + 303 de functions</strong> (Vitest) · React Compiler activo</li>
             <li class="done"><strong>4 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · seguridad 26-jun · <strong>4-jul (38 fixes verificados</strong> — incl. 2 fugas dietéticas HIGH: pescado/marisco a veganos y gluten a celíacos) · <strong>23-jul (49 hallazgos multi-agente</strong> — seguridad, correctitud, código muerto, rendimiento)</li>
             <li class="done"><strong>Sign in with Apple — CÓDIGO hecho</strong> (<code>appleAuth.ts</code>: login + vincular invitado + reauth con nonce · botón solo-iOS) · falta solo habilitar el proveedor Apple en Firebase + build iOS</li>
             <li class="done"><strong>Buscador mejorado y desplegado</strong> (4ª consulta por-palabra → alcanza la cola larga por cualquier token · +93% de cobertura en el caso difícil, medido) + <strong>borrado de invitados completo</strong> (recursiveDelete: registros + <code>_meta/*</code> + Auth · verificado en vivo · TTL nativa activa)</li>
@@ -995,7 +995,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">RN</div>
         <div class="phase-info">
           <div class="phase-title">App React Native + Expo (la app) <span class="phase-etapa">▶ EN CURSO</span></div>
-          <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 23-jul: app completa + dev builds Android nativos</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD · <strong>Google sign-in · App Check Play Integrity real · biométrico · push · Face ID</strong>) + <strong>Sign in with Apple (código hecho)</strong> · 127+303 tests · React Compiler ON · 4 auditorías aplicadas (12-jun, seguridad 26-jun, 38 fixes 4-jul, 49 hallazgos 23-jul). <strong>Siguiente (bloqueado por cuentas de tienda, NO por código): IAP RevenueCat + build iOS</strong> (habilitar proveedor Apple en Firebase · App Attest/DeviceCheck · Liquid Glass iOS 26).</div>
+          <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 23-jul: app completa + dev builds Android nativos</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD · <strong>Google sign-in · App Check Play Integrity real · biométrico · push · Face ID</strong>) + <strong>Sign in with Apple (código hecho)</strong> · 131+303 tests · React Compiler ON · 4 auditorías aplicadas (12-jun, seguridad 26-jun, 38 fixes 4-jul, 49 hallazgos 23-jul). <strong>Siguiente (bloqueado por cuentas de tienda, NO por código): IAP RevenueCat + build iOS</strong> (habilitar proveedor Apple en Firebase · App Attest/DeviceCheck · Liquid Glass iOS 26).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1289,19 +1289,21 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="phase-header">
         <div class="phase-num">12</div>
         <div class="phase-info">
-          <div class="phase-title">Testing + CI/CD <span class="phase-etapa phase-etapa--done">Suites ✓ · CI/CD pendiente</span></div>
-          <div class="phase-sub">Suites al día EN el repo de la app (medido jul-2026): <strong>127 tests de la app</strong> (vitest · stores/utils/núcleo) + <strong>303 de functions</strong> (eligibility/nutrition/persist). El repo ya está en GitHub · falta montar el CI/CD (workflows lint+test+build + E2E).</div>
+          <div class="phase-title">Testing + CI/CD <span class="phase-etapa phase-etapa--done">Suites ✓ · CI ✓ · E2E post-launch</span></div>
+          <div class="phase-sub">Suites al día EN el repo de la app (medido jul-2026): <strong>131 tests de la app</strong> (vitest · stores/utils/núcleo) + <strong>303 de functions</strong> (eligibility/nutrition/persist). <strong>CI montado</strong> (GitHub Actions · lint+typecheck+tests+build en cada push/PR) · falta solo <strong>E2E</strong> (post-lanzamiento).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">127 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
+        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">131 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de componentes y lógica crítica</div><div class="ck-note">Cubren lo que al romperse cuesta dinero o pierde datos: stores (write-through · optimistic updates), cálculo de macros y calorías, rachas, validaciones y parsers.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de functions (eligibility / nutrition / persist)</div><div class="ck-note">303 tests del backend: elegibilidad de generación (Free/Pro · rate limit), núcleo de nutrición (escalado, unidades) y persistencia. <code>firebase emulators:start</code> sigue disponible para pruebas de integración locales sin tocar producción.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="12-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Re-montar CI/CD + E2E sobre el repo de la app</div><div class="ck-note">El repo YA está en GitHub (git init hecho). Son <strong>2 cosas distintas</strong>: <strong>(a) CI</strong> — workflow de GitHub Actions que en cada push/PR corre lint+typecheck+los 127+303 tests+build (+ opcional deploy de functions) con branch protection en <code>main</code> · <strong>barato y de alto valor · conviene hacerlo pronto</strong>; <strong>(b) E2E</strong> — tests que recorren la app como un usuario (Maestro nativo / Playwright web) · <strong>más trabajo · dejar para post-lanzamiento</strong>. Ninguno de los dos bloquea publicar.</div></div></div>
+        <div class="ck-row" data-id="12-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">CI · GitHub Actions (lint + typecheck + tests + build) <span class="ck-tag new">HECHO</span></div><div class="ck-note"><strong>HECHO</strong> · <code>.github/workflows/ci.yml</code>: en cada push/PR corre, en Node 22, la app (lint + <code>tsc --noEmit</code> + 131 tests) y las functions (lint + build + 303 tests). Los pasos se verificaron <strong>en verde en local</strong> antes de subirlo · el primer run real ocurre en el próximo push a GitHub. Opcional a futuro: branch protection en <code>main</code> + deploy automático de functions.</div></div></div>
+        <div class="ck-sep"></div>
+        <div class="ck-row" data-id="12-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">E2E — tests de flujos de usuario <span class="ck-tag warn">post-launch</span></div><div class="ck-note">Tests que recorren la app como un usuario real (login → generar plan → editar comida): <strong>Maestro</strong> para nativo o <strong>Playwright</strong> para web. Más trabajo de escribir y mantener · se deja para <strong>post-lanzamiento</strong> (no bloquea publicar).</div></div></div>
       </div>
     </div>
 
@@ -2999,15 +3001,16 @@ var INITIAL_CHECKS = {
 
   // FASE 12 · Testing — suites al día EN el repo de la app · CI/CD pendiente del git init (Fase 4.5)
   '12-0': true, // Vitest configurado en el repo · suite inaugural.
-  '12-1': true, // Tests de lógica/componentes (vitest) · 127 tests.
+  '12-1': true, // Tests de lógica/componentes (vitest) · 131 tests.
   '12-2': true, // Tests de Cloud Functions · 143 tests (eligibility + nutrition + persist).
-  // 12-7 (re-montar CI/CD + E2E sobre el repo de la app tras el git init) PENDIENTE · no marcado.
+  '12-7': true, // CI (GitHub Actions · .github/workflows/ci.yml) HECHO: lint+typecheck+tests+build de app y functions en cada push/PR · pasos verificados en verde en local (131 app + 303 functions).
+  // 12-8 (E2E · Maestro/Playwright) PENDIENTE · post-lanzamiento · no marcado.
 
   // FASE 14 · Legal — checkbox de aviso médico cableado en onboarding (bloquea avance,
   // persiste medicalDisclaimerAcceptedAt). Los textos legales viven EN la app (pantalla
   // Legal in-app · src/btal/legalContent.ts).
   '14-0': true, // Política de privacidad (GDPR es-ES + LOPDGDD) · 12 secciones · pantalla Legal in-app.
-  '14-1': true, // Términos de uso · 14 secciones (qué es BTal, edad 16+, modo prueba 3d, uso aceptable, Pro, ley ES) · pantalla Legal in-app.
+  '14-1': true, // Términos de uso · 14 secciones (qué es BTal, edad 16+, modo invitado 3d, uso aceptable, Pro, ley ES) · pantalla Legal in-app.
   '14-2': true,
   '14-3': true, // Cookie consent: SOLO aplica al canal web (las cookies _ga requieren consent GDPR) · se re-cablea con RN Web en la Fase 5. La app nativa NO usa cookies (Analytics con IDFV/GAID).
   '14-4': true, // Iconos de la app: set en assets/images/ que Expo empaqueta en el binario nativo y sirve en web (generado desde el logo BT · icono adaptativo Android, icono iOS, favicon). El bundle .icon de Liquid Glass (iOS 26) queda PENDIENTE (necesita Mac · no bloquea publicar).
@@ -3017,7 +3020,7 @@ var INITIAL_CHECKS = {
   // UI COMPLETA + BACKEND REAL: 5 tabs + onboarding + ajustes + editores + flujo
   // IA cableado a Firebase de verdad (auth email+2FA TOTP, Firestore write-through,
   // generatePlan callable, avatar data-URI, export RGPD, vincular invitado→cuenta,
-  // gating IA de invitado) + legal in-app + 127 tests vitest + React Compiler ON.
+  // gating IA de invitado) + legal in-app + 131 tests vitest + React Compiler ON.
   // Auditoría exhaustiva 12-jun (~70 fixes: refund total generatePlan, parser "ud",
   // extras→compra, rollover medianoche, dirty-guards, prefs por dispositivo,
   // reduceMotion TOTAL 13-jun). functions/ canónicas en el repo de la app y desplegadas.
