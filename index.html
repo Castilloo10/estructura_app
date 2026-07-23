@@ -1150,7 +1150,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="phase-header">
         <div class="phase-num">6</div>
         <div class="phase-info">
-          <div class="phase-title">Monetización · IAP (Apple/Google) <span class="phase-etapa">Backend (webhook) desplegado · falta cuentas de tienda + conectar RevenueCat</span></div>
+          <div class="phase-title">Monetización · IAP (Apple/Google) <span class="phase-etapa">Código completo · falta solo cuentas de tienda + conectar RevenueCat</span></div>
           <div class="phase-sub"><strong>⚠ Pagos solo por IAP</strong> — Apple/Google rechazan pasarelas externas para bienes digitales (= rechazo en review), así que la monetización es <strong>In-App Purchase</strong> (StoreKit iOS + Play Billing Android) vía <strong>RevenueCat</strong> (cross-platform · SDK React Native · free &lt;$2,5k/mes). Pago único 4,99€ + Pro 9,99€/mes · comisión 15% (Small Business Program). <strong>Ya codificado y latente</strong>: el modelo de datos <code>PlanIA</code> (free/pro/one_off), el <strong>webhook RevenueCat</strong> (fuente de verdad del plan · idempotente · firmado · <em>ya DESPLEGADO — falta pegar la URL+secreto en RevenueCat</em>), el cliente nativo (lazy + guarda) y <strong>Restaurar compras</strong> (ya cableado en Ajustes). <strong>Falta para activarlo</strong>: cuentas de tienda (Apple 99€ + Play 25$) + productos en las stores + claves RevenueCat + conectar el webhook + nuevo build.</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
@@ -1164,7 +1164,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Instalar el SDK en la app RN <span class="ck-tag cmd">npm i react-native-purchases</span></div><div class="ck-note">SDK de RevenueCat para React Native. <code>Purchases.configure({ apiKey })</code> con la API key pública de RevenueCat al arrancar. Se integra como Expo config plugin en el development build (no funciona en Expo Go al ser módulo nativo).</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Paywall + compra cuando se agota el Free</div><div class="ck-note">Al alcanzar el límite Free (1 gen/30d), mostrar el paywall con las Offerings de RevenueCat → <code>Purchases.purchasePackage()</code>. La UI refleja el entitlement «pro» (ilimitado) leyendo <code>customerInfo.entitlements.active</code>.</div></div></div>
+        <div class="ck-row" data-id="7-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Paywall + compra cuando se agota el Free <span class="ck-tag new">código ✓</span></div><div class="ck-note">Al alcanzar el límite Free (1 gen/30d), mostrar el paywall con las Offerings de RevenueCat → <code>Purchases.purchasePackage()</code>. La UI refleja el entitlement «pro» (ilimitado) leyendo <code>customerInfo.entitlements.active</code>.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Backend · webhook RevenueCat → Firestore <span class="ck-tag warn">la verdad del lado servidor</span> <span class="ck-tag new">código+deploy ✓</span></div><div class="ck-note"><strong>CÓDIGO hecho y DESPLEGADO</strong> (<code>revenueCatWebhook</code> · secret enlazado) — falta pegar la URL+secreto en RevenueCat para conectarlo. Cloud Function que recibe el webhook de RevenueCat (compra/renovación/cancelación/reembolso) y actualiza <code>plan</code>/<code>plan_pro</code>/<code>generaciones</code> en Firestore con Admin SDK (ignora rules). NUNCA fiarse del cliente. Idempotencia por event id. El modelo de datos <code>PlanIA</code> (free/pro/one_off) ya existe de la Fase 6.</div></div></div>
         <div class="ck-sep"></div>
@@ -1349,11 +1349,11 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="14-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Iconos y splash screens <span class="ck-tag new">hechos · set del logo BT</span></div><div class="ck-note">Los iconos actuales son los de <code>assets/images/</code> que empaqueta Expo (set generado desde el logo BT · iOS + Android + web). Pendiente opcional: bundle <code>.icon</code> Liquid Glass iOS 26 (requiere Icon Composer en Mac · no bloquea publicar)</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="14-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Capturas de pantalla para las stores</div><div class="ck-note">App Store pide 6,5" (iPhone) y 12,9" (iPad) en mínimo 3 idiomas si publicas internacional. Play Store pide ~5 capturas. Usa el simulador de Xcode y emulador Android para tomarlas. Tarda más de lo que parece</div></div></div>
+        <div class="ck-row" data-id="14-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Capturas de pantalla para las stores <span class="ck-tag new">HECHAS</span></div><div class="ck-note"><strong>HECHAS</strong> con <code>scripts/store-screenshots.mjs</code> → <code>store-assets/appstore</code> (8 · App Store 6,9" 1320×2868) + <code>store-assets/play</code> (8 · 1080×1920), con marco de móvil y anotaciones. App <strong>solo-iPhone</strong> → no hacen falta capturas de iPad. Solo queda subirlas a las fichas.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="14-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">App Store Privacy Nutrition Labels <span class="ck-tag warn">obligatorio Apple</span></div><div class="ck-note">App Store Connect te pregunta exactamente qué datos recolectas, si los enlazas con identidad, si haces tracking. Mentir aquí = baneo permanente. Ser específico con Firebase Auth (email + UID), Firestore (datos del plan) y Gemini (qué info envías)</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="14-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Verificar que botón Eliminar cuenta funciona en nativo</div><div class="ck-note">Apple revisa explícitamente que se puede borrar la cuenta DESDE la app móvil sin tener que ir a la web. Probar en TestFlight antes de submission</div></div></div>
+        <div class="ck-row" data-id="14-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Verificar que botón Eliminar cuenta funciona en nativo <span class="ck-tag new">verificado ✓</span></div><div class="ck-note"><strong>VERIFICADO por el owner en nativo</strong>: el botón borra TODOS los datos (deleteAccount RGPD + subcolecciones). Apple revisa que se pueda borrar la cuenta DESDE la app móvil · re-comprobar en TestFlight antes de enviar.</div></div></div>
       </div>
     </div>
 
@@ -2879,6 +2879,7 @@ function show(id){
   document.querySelectorAll('.pane').forEach(function(p){
     p.classList.toggle('active', p.id === 'p-'+id);
   });
+  try { localStorage.setItem('btal_tab', id); } catch(e) {}  // recordar pestaña entre recargas
 }
 // Despliega/pliega el bloque "Fases finalizadas" de la Hoja de ruta.
 function toggleDone(){
@@ -2979,6 +2980,7 @@ var INITIAL_CHECKS = {
   // FASE -1 · Pre-trabajo (parcial)
   '-1-0': true, // Decidir marca → BTal
   '-1-5': true, // Logo y paleta (BT lima sobre negro)
+  '-1-6': true, // Target geográfico DECIDIDO: España (es-ES · EUR · súpers ES · BEDCA · GDPR es-ES). Toda la app lo asume.
 
   // FASE 2 · Firebase (auth + Firestore con reglas + Blaze + Gemini cerrados 14-may · MISMO proyecto, sigue vigente)
   '2-0': true, '2-1': true, '2-2': true, '2-2b': true, '2-3': true,
@@ -3038,7 +3040,9 @@ var INITIAL_CHECKS = {
   '14-2': true,
   '14-3': true, // Cookie consent: SOLO aplica al canal web (las cookies _ga requieren consent GDPR) · se re-cablea con RN Web en la Fase 5. La app nativa NO usa cookies (Analytics con IDFV/GAID).
   '14-4': true, // Iconos de la app: set en assets/images/ que Expo empaqueta en el binario nativo y sirve en web (generado desde el logo BT · icono adaptativo Android, icono iOS, favicon). El bundle .icon de Liquid Glass (iOS 26) queda PENDIENTE (necesita Mac · no bloquea publicar).
-  // 14-5, 14-6, 14-7 pendientes para el lanzamiento (necesitan app nativa + cuenta App Store / TestFlight).
+  '14-5': true, // Capturas de tienda HECHAS (scripts/store-screenshots.mjs → store-assets/appstore + play). App solo-iPhone → sin capturas de iPad.
+  '14-7': true, // Borrado de cuenta VERIFICADO por el owner en nativo: borra TODOS los datos (deleteAccount RGPD + subcolecciones). Apple lo revisa en TestFlight.
+  // 14-6 (Privacy Nutrition Labels · App Store Connect) pendiente · necesita cuenta Apple.
 
   // FASE RN · La app React Native + Expo (estado 13-jun-2026).
   // UI COMPLETA + BACKEND REAL: 5 tabs + onboarding + ajustes + editores + flujo
@@ -3063,10 +3067,15 @@ var INITIAL_CHECKS = {
   // Google, App Attest/DeviceCheck), IAP RevenueCat (cuentas de tienda), Crashlytics.
   // rn-10 (QA final en dispositivos) al cierre.
 
-  // FASE 7 · Monetización — código latente; solo el webhook está 100% cerrado.
-  '7-5': true,  // webhook RevenueCat → Firestore: CÓDIGO escrito + DESPLEGADO en producción (revenueCatWebhook · secret v2 enlazado). Sin trabajo de ingeniería pendiente; solo falta pegar la URL+secreto en RevenueCat (acción externa). 7-6 (restaurar) NO se marca: restaurar depende del SDK nativo de RevenueCat (7-3), aún sin integrar en un build.
+  // FASE 7 · Monetización — TODO el código está hecho (latente hasta tener cuentas/claves).
+  // Pendientes solo los externos: 7-0 (cuentas), 7-1 (productos en stores), 7-2 (offerings RC), 7-7 (test sandbox).
+  '7-3': true,  // SDK react-native-purchases instalado + configureRevenueCat/Purchases.configure codificado (lazy import anti-crash · src/btal/revenueCat.ts).
+  '7-4': true,  // Paywall + compra: UpgradeSheet (4,99€ regen / 9,99€ Pro) + promptLockedAi al agotar el Free + promptPurchase→purchasePackage. Codificado (latente hasta claves).
+  '7-5': true,  // webhook RevenueCat → Firestore: CÓDIGO escrito + DESPLEGADO en producción (revenueCatWebhook · secret v2 enlazado). Solo falta pegar la URL+secreto en RevenueCat.
+  '7-6': true,  // Restaurar compras cableado en Ajustes (settings.tsx · restorePurchases) + Sign in with Apple código (ver 9-7). Requisitos de Apple, ya codificados.
 
   // FASE 9 · Lanzamiento + extras nativos
+  '9-10': true, // Notificaciones en Apple Watch / Wear OS: CERO código extra · el push remoto (ya hecho) se refleja solo en el reloj emparejado por el SO.
   '9-19': true, // Visor de técnica de ejercicios HECHO 29-jun (fotos free-exercise-db + fuzzy ES + ▶ selector). Antes el ▶ abría YouTube.
   '9-18': true, // Biométrico IMPLEMENTADO como LOGIN biométrico (el owner descartó el patrón "App Lock" · bancos). Android probado. iOS con el build iOS.
   '9-7': true,  // Sign in with Apple: CÓDIGO hecho 23-jul (appleAuth.ts · login + vincular invitado + reauth con nonce · botón solo-iOS). Solo falta habilitar el proveedor Apple en Firebase + build iOS (config/cuentas, NO código). Se marca como los demás items "código hecho / falta wiring externo" (p.ej. 13-2 con su implementación nativa pendiente).
@@ -3158,6 +3167,12 @@ function initRoadmap(){
 
 initRoadmap();
 initPhaseCollapse();
+
+// Al recargar, volver a la pestaña que estaba abierta (por defecto: Pantalla inicio).
+try {
+  var savedTab = localStorage.getItem('btal_tab');
+  if (savedTab && document.getElementById('p-' + savedTab)) show(savedTab);
+} catch(e) {}
 </script>
 </body>
 </html>
