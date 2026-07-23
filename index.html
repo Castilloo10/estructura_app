@@ -189,8 +189,9 @@ h3{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.4px}
 .roadmap-done-toggle{cursor:pointer;user-select:none}
 .roadmap-done-toggle .done-arrow{display:inline-block;font-size:.8rem;transition:transform .2s}
 .roadmap-done-toggle .done-hint{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);text-transform:none;letter-spacing:0}
+.roadmap-done-toggle .done-count{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--accent2);text-transform:none;letter-spacing:0}
 .roadmap.done-open .roadmap-done-toggle .done-arrow{transform:rotate(90deg)}
-.roadmap:not(.done-open) .phase-done{display:none}
+.roadmap:not(.done-open) .phase-complete{display:none}
 /* Badge "Etapa N" en el header de cada fase · refleja el orden de
    ejecución sugerido (mayo 2026). Color según urgencia. */
 .phase-etapa{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:2px 7px;border-radius:4px;margin-left:8px;letter-spacing:.5px;font-weight:700;vertical-align:middle;background:rgba(181,240,55,.12);color:var(--accent);border:1px solid rgba(181,240,55,.25)}
@@ -723,7 +724,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       </div>
     </div>
     <div class="stack-card">
-      <div class="stack-layer">Métricas <span style="color:var(--accent);font-size:.65rem;font-family:'JetBrains Mono',monospace;margin-left:4px">(diseño · Fase 10)</span></div>
+      <div class="stack-layer">Métricas <span style="color:var(--accent);font-size:.65rem;font-family:'JetBrains Mono',monospace;margin-left:4px">(diseño · Panel Admin)</span></div>
       <div class="stack-name">Admin Panel + RevenueCat + Stores</div>
       <div class="stack-why"><strong>Diseño futuro (Fase 10 · post-monetización) — aún no construido.</strong> Las métricas vendrán de fuentes que ya existen: Firestore para datos de usuarios (registros, generaciones), el <strong>dashboard de RevenueCat</strong> (MRR, conversión, churn, LTV unificados de ambas stores) y App Store Connect / Play Console para ingresos por plataforma. El panel de admin será una ruta privada del <strong>canal web</strong> (React Native Web), protegida por un campo <code>role</code> en el documento del usuario — no por UID hardcodeado. Sin coste adicional.</div>
       <div class="stack-items">
@@ -985,14 +986,13 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <div class="roadmap" id="roadmap-container">
 
     <!-- ─── Separadores de bloque ─── -->
-    <div class="roadmap-divider" style="order: 0"><span>🚀 Etapas activas · siguiente paso</span></div>
-    <div class="roadmap-divider roadmap-divider--launch" style="order: 100"><span>🏁 Lanzamiento</span></div>
-    <div class="roadmap-divider roadmap-divider--done roadmap-done-toggle" style="order: 200" onclick="toggleDone()"><span class="done-arrow">▸</span><span>✅ Fases completadas (referencia)</span><span class="done-hint">clic para desplegar / plegar</span></div>
+    <div class="roadmap-divider" style="order: 0"><span>🚀 En curso · por orden de construcción</span></div>
+    <div class="roadmap-divider roadmap-divider--done roadmap-done-toggle" style="order: 500" onclick="toggleDone()"><span class="done-arrow">▸</span><span>✅ Fases finalizadas</span><span class="done-count"></span><span class="done-hint">clic para desplegar / plegar</span></div>
 
     <!-- FASE RN · App React Native + Expo (la app · foco actual) -->
-    <div class="phase" data-phase="rn" style="order: 1">
+    <div class="phase" data-phase="rn" data-num="4">
       <div class="phase-header">
-        <div class="phase-num">RN</div>
+        <div class="phase-num">4</div>
         <div class="phase-info">
           <div class="phase-title">App React Native + Expo (la app) <span class="phase-etapa">▶ EN CURSO</span></div>
           <div class="phase-sub"><strong>BTal es una app React Native + Expo</strong> (carpeta <code>btal-v2</code>): <strong>1 codebase TS/React → iOS + Android nativos</strong> (120Hz, gestos, Liquid Glass iOS 26) <strong>+ web DOM</strong> (React Native Web · SEO). Backend Firebase (<code>functions/</code>, rules) en el mismo repo. Respaldo Meta + New Architecture + Expo/EAS. <strong style="color:var(--accent)">Estado 23-jul: app completa + dev builds Android nativos</strong> (auth/2FA/invitado TTL · Firestore write-through · generatePlan · avatar · export RGPD · <strong>Google sign-in · App Check Play Integrity real · biométrico · push · Face ID</strong>) + <strong>Sign in with Apple (código hecho)</strong> · 131+303 tests · React Compiler ON · 4 auditorías aplicadas (12-jun, seguridad 26-jun, 38 fixes 4-jul, 49 hallazgos 23-jul). <strong>Siguiente (bloqueado por cuentas de tienda, NO por código): IAP RevenueCat + build iOS</strong> (habilitar proveedor Apple en Firebase · App Attest/DeviceCheck · Liquid Glass iOS 26).</div>
@@ -1025,9 +1025,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE -1 · Etapa 10 · Trámites pre-lanzamiento -->
-    <div class="phase" data-phase="-1" style="order: 102">
+    <div class="phase" data-phase="-1" data-num="1">
       <div class="phase-header">
-        <div class="phase-num">−1</div>
+        <div class="phase-num">1</div>
         <div class="phase-info">
           <div class="phase-title">Pre-trabajo (marca, dominio, cuentas) <span class="phase-etapa phase-etapa--launch">Pre-lanzamiento · parcial</span></div>
           <div class="phase-sub">Tareas que tardan días/semanas en aprobarse — en paralelo a la Fase 4.5 / pre-lanzamiento (hecho: logo/iconos · pendiente: cuentas Apple Dev/Play Console, dominio)</div>
@@ -1054,7 +1054,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 2 · COMPLETA tras 14-may (2-6 Gemini + 2-7 Blaze + budget alerts) -->
-    <div class="phase phase-done" data-phase="2" style="order: 202">
+    <div class="phase" data-phase="2" data-num="2">
       <div class="phase-header">
         <div class="phase-num">2</div>
         <div class="phase-info">
@@ -1078,16 +1078,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="2-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Configurar Firestore Security Rules</div><div class="ck-note">Solo cada usuario puede leer y escribir sus propios datos: allow read, write: if request.auth.uid == userId</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="2-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Obtener la API key de Gemini <span class="ck-tag new">gratis</span></div><div class="ck-note">Ir a aistudio.google.com → Get API key → Copiar la clave. Se usará en la Fase 6 como secreto de Firebase</div></div></div>
+        <div class="ck-row" data-id="2-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Obtener la API key de Gemini <span class="ck-tag new">gratis</span></div><div class="ck-note">Ir a aistudio.google.com → Get API key → Copiar la clave. Se usará en Cloud Functions como secreto de Firebase</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="2-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Actualizar Firebase al plan Blaze (pay-as-you-go) <span class="ck-tag warn">obligatorio antes de la Fase 6</span></div><div class="ck-note">El plan gratuito Spark no permite que las Cloud Functions hagan llamadas a APIs externas (Gemini, OpenFoodFacts, webhook RevenueCat). Sin Blaze las funciones fallan en cuanto intentan conectar con internet. Coste: 0€ hasta superar los límites gratuitos (2M invocaciones/mes). Solo pagas si los superas — y con tu modelo de 1 gen/mes eso requiere más de 2 millones de usuarios activos al mes. Consola Firebase → Configuración → Uso y facturación → Cambiar plan → Blaze.</div></div></div>
       </div>
     </div>
 
     <!-- FASE 6 · Cloud Functions + IA (requiere Blaze · Fase 2) -->
-    <div class="phase phase-done" data-phase="6" style="order: 206">
+    <div class="phase" data-phase="6" data-num="3">
       <div class="phase-header">
-        <div class="phase-num">6</div>
+        <div class="phase-num">3</div>
         <div class="phase-info">
           <div class="phase-title">Cloud Functions + IA <span class="phase-etapa phase-etapa--done">✓ Hecho · 6A + 6B (macros reales OFF)</span></div>
           <div class="phase-sub">NÚCLEO 6A cerrado 29-may: generatePlan (Gemini 3.1 Flash-Lite) genera menú objetivo-driven + rellena los 7 planes builtin · App Check enforce + rate limit + cap global + validación Zod + borrado RGPD. <strong>Refinado 30-may:</strong> suplementos coherentes (la IA decide el check «creatina en batido» · creatina diaria sin doble dosis), récords del usuario (top 8 PRs) inyectados en el prompt de entreno para progresiones realistas, <code>maxOutputTokens</code> 16384→65536 (arregla JSON truncado en scope «Todo» con los 7 planes), y fix de cliente nativo (timeout callable 120s + refresh del doc siempre tras generar). 6B (macros reales) cerrado 31-may con OpenFoodFacts: dump de ~25K alimentos ES en Firestore + buscador + barcode + ajuste de gramos al objetivo (6-10..6-22)</div>
@@ -1146,9 +1146,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 7 · Etapa 4 · Monetización IAP / RevenueCat (depende de Fase 6) -->
-    <div class="phase" data-phase="7" style="order: 3">
+    <div class="phase" data-phase="7" data-num="6">
       <div class="phase-header">
-        <div class="phase-num">7</div>
+        <div class="phase-num">6</div>
         <div class="phase-info">
           <div class="phase-title">Monetización · IAP (Apple/Google) <span class="phase-etapa">Backend (webhook) desplegado · falta cuentas de tienda + conectar RevenueCat</span></div>
           <div class="phase-sub"><strong>⚠ Pagos solo por IAP</strong> — Apple/Google rechazan pasarelas externas para bienes digitales (= rechazo en review), así que la monetización es <strong>In-App Purchase</strong> (StoreKit iOS + Play Billing Android) vía <strong>RevenueCat</strong> (cross-platform · SDK React Native · free &lt;$2,5k/mes). Pago único 4,99€ + Pro 9,99€/mes · comisión 15% (Small Business Program). <strong>Ya codificado y latente</strong>: el modelo de datos <code>PlanIA</code> (free/pro/one_off), el <strong>webhook RevenueCat</strong> (fuente de verdad del plan · idempotente · firmado · <em>ya DESPLEGADO — falta pegar la URL+secreto en RevenueCat</em>), el cliente nativo (lazy + guarda) y <strong>Restaurar compras</strong> (ya cableado en Ajustes). <strong>Falta para activarlo</strong>: cuentas de tienda (Apple 99€ + Play 25$) + productos en las stores + claves RevenueCat + conectar el webhook + nuevo build.</div>
@@ -1175,9 +1175,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 9 · Etapa 9 · Lanzamiento en stores + extras nativos post-launch (iOS vía EAS · sin Mac) -->
-    <div class="phase" data-phase="9" style="order: 2">
+    <div class="phase" data-phase="9" data-num="11">
       <div class="phase-header">
-        <div class="phase-num">9</div>
+        <div class="phase-num">11</div>
         <div class="phase-info">
           <div class="phase-title">Lanzamiento en stores + extras nativos post-launch <span class="phase-etapa">Parcial · Google/biométrico/visor hechos · publicar tras cuentas</span></div>
           <div class="phase-sub"><strong>EAS Build ya compila builds Android nativos</strong> (rn-8 · en la nube · iOS sin Mac cuando se haga). <strong>Hecho:</strong> Google sign-in Android, login biométrico y visor de ejercicios. <strong>Falta:</strong> cuentas de desarrollador (Play Console 25$ + Apple Dev 99€/año) → subir a Play Store / App Store (Android release + iOS/TestFlight). Auth Apple, IAP (RevenueCat), smartwatch/widgets → módulos nativos / config plugins de Expo (post-cuentas).</div>
@@ -1219,9 +1219,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 10 · Etapa 7 · Panel Admin (mejor tras Fase 7 para MRR/churn) -->
-    <div class="phase" data-phase="10" style="order: 4">
+    <div class="phase" data-phase="10" data-num="7">
       <div class="phase-header">
-        <div class="phase-num">10</div>
+        <div class="phase-num">7</div>
         <div class="phase-info">
           <div class="phase-title">Panel de administración <span class="phase-etapa phase-etapa--done">✓ Hecho · en producción</span></div>
           <div class="phase-sub"><strong>Portal admin construido y desplegado</strong> (<code>btal-admin.web.app</code> · Vite + React standalone, no RN Web): métricas (usuarios/pro/activos/invitados/registrados/altas por mes) · gestión de usuarios (plan, saldo, push, borrar, deshabilitar, ficha completa) · registro de auditoría · caps de IA (mensual/diario sin redeploy) · administradores con <strong>login Face ID (WebAuthn/passkeys)</strong> + puerta 2FA + auto-logout 60&nbsp;min · nivel OWNER por claim. App Check enforce + CSP. 3 auditorías aplicadas. <em>Pendiente: enlazar RevenueCat (MRR/churn) y tiempo de uso cuando estén IAP/Analytics conectados.</em></div>
@@ -1249,16 +1249,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Calcular churn rate (% que cancela Pro)</div><div class="ck-note">(Cancelaciones del mes / Suscriptores al inicio del mes) × 100. RevenueCat lo da con su API y su webhook. Si superas 10% mensual hay un problema de retención (UX, valor percibido, bug). Mostrar gráfica de evolución</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="10-10" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tiempo medio de uso por sesión</div><div class="ck-note">Si tienes Analytics integrado (Fase 13), exponer aquí también: cuánto tiempo media pasan los usuarios en la app, qué pestaña usan más, % que vuelve al día siguiente (retention day-1)</div></div></div>
+        <div class="ck-row" data-id="10-10" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tiempo medio de uso por sesión</div><div class="ck-note">Si tienes Analytics integrado, exponer aquí también: cuánto tiempo media pasan los usuarios en la app, qué pestaña usan más, % que vuelve al día siguiente (retention day-1)</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-11" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Alertas de presupuesto Firebase <span class="ck-tag warn">crítico</span></div><div class="ck-note">Firebase Console → Settings → Budgets. Configurar alerta por email cuando el coste supera <strong>5€/día</strong>. Sin esto, un bug en una Cloud Function que entre en bucle puede generar facturas de cientos de € antes de que te enteres</div></div></div>
       </div>
     </div>
 
     <!-- FASE 11 · Etapa 5 · Seguridad post Fase 6 (11-4/11-6 hechos, resto requiere App Check + Blaze) -->
-    <div class="phase" data-phase="11" style="order: 100">
+    <div class="phase" data-phase="11" data-num="5">
       <div class="phase-header">
-        <div class="phase-num">11</div>
+        <div class="phase-num">5</div>
         <div class="phase-info">
           <div class="phase-title">🔒 Seguridad ante ataques <span class="phase-etapa phase-etapa--launch">Lanzamiento · core hecho · tails: release keystore + backups + auditoría final</span></div>
           <div class="phase-sub">App Check + reCAPTCHA + backups + auditoría final · 11-6 (plan incidentes) cerrado en Sprint 1 (2026-05-12). <strong>4 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · <strong>seguridad nivel máximo 26-jun</strong> (2 bypass de monetización + ~40 fixes) · <strong>4-jul (38 fixes verificados adversarialmente</strong> — incl. 2 fugas dietéticas HIGH) · <strong>23-jul (49 hallazgos multi-agente</strong> · seguridad/correctitud/código muerto/rendimiento). Tails de lanzamiento: keystore de release + backups Firestore + última pasada antes de publicar.</div>
@@ -1285,9 +1285,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 12 · Etapa 8 · Testing + CI/CD · suites al día · CI/CD pendiente de re-montar tras git init (Fase 4.5) -->
-    <div class="phase phase-done" data-phase="12" style="order: 208">
+    <div class="phase" data-phase="12" data-num="10">
       <div class="phase-header">
-        <div class="phase-num">12</div>
+        <div class="phase-num">10</div>
         <div class="phase-info">
           <div class="phase-title">Testing + CI/CD <span class="phase-etapa phase-etapa--done">Suites ✓ · CI ✓ · E2E post-launch</span></div>
           <div class="phase-sub">Suites al día EN el repo de la app (medido jul-2026): <strong>131 tests de la app</strong> (vitest · stores/utils/núcleo) + <strong>303 de functions</strong> (eligibility/nutrition/persist). <strong>CI montado</strong> (GitHub Actions · lint+typecheck+tests+build en cada push/PR) · falta solo <strong>E2E</strong> (post-lanzamiento).</div>
@@ -1308,9 +1308,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
 
     <!-- FASE 13 · Etapa 6 · Analytics + Crashlytics (post-monetización, pre-lanzamiento) -->
-    <div class="phase phase-done" data-phase="13" style="order: 209">
+    <div class="phase" data-phase="13" data-num="9">
       <div class="phase-header">
-        <div class="phase-num">13</div>
+        <div class="phase-num">9</div>
         <div class="phase-info">
           <div class="phase-title">Analytics + Error tracking <span class="phase-etapa phase-etapa--done">Crashes = Sentry ✓ · Analytics nativo pendiente</span></div>
           <div class="phase-sub"><strong>Error tracking = Sentry, YA integrado</strong> end-to-end (app RN + panel + source maps · región EU · sin PII · gratis 5k errores/mes) — sustituye al Crashlytics que se planeó en v1 (nunca se cableó en RN). <strong>Firebase Analytics</strong> (métricas de producto · saber qué hacen los users) sigue con la decisión cerrada + eventos diseñados, pero el cableado nativo (<code>@react-native-firebase</code> · IDFV/GAID sin cookies) queda <strong>pendiente</strong> (post-lanzamiento, no bloquea).</div>
@@ -1324,14 +1324,14 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="13-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Alertas por email cuando algo se rompe <span class="ck-tag new">Sentry ✓</span></div><div class="ck-note"><strong>Sentry</strong> manda alertas automáticas de crashes/errores nuevos y regresiones (email · integrable con Slack). Ya integrado en app y panel con source maps, así que los stacks salen legibles. Sin esto te enteras tarde.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="13-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Dashboard de salud en la pantalla Admin</div><div class="ck-note">Pantalla Admin del canal web (RN Web) · Fase 10. Embedir las gráficas clave (errores 24h, MAU, MRR, churn) en una sola pantalla. Lo abres por la mañana y sabes en 10 segundos si todo va bien</div></div></div>
+        <div class="ck-row" data-id="13-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Dashboard de salud en la pantalla Admin</div><div class="ck-note">Pantalla Admin del canal web (RN Web) · Panel Admin. Embedir las gráficas clave (errores 24h, MAU, MRR, churn) en una sola pantalla. Lo abres por la mañana y sabes en 10 segundos si todo va bien</div></div></div>
       </div>
     </div>
 
     <!-- FASE 14 · Etapa 2 · Legal + Iconos (14-0/14-1/14-2/14-3 hechos 12-may; 14-4 iconos de la app hechos · 14-5/6/7 requieren app nativa) -->
-    <div class="phase" data-phase="14" style="order: 101">
+    <div class="phase" data-phase="14" data-num="8">
       <div class="phase-header">
-        <div class="phase-num">14</div>
+        <div class="phase-num">8</div>
         <div class="phase-info">
           <div class="phase-title">Legal + GDPR + Iconos y splash <span class="phase-etapa phase-etapa--launch">Lanzamiento · core legal hecho · tails: assets store + TestFlight</span></div>
           <div class="phase-sub">14-0 privacidad + 14-1 términos + 14-2 aviso médico cerrados · los textos legales viven EN la app (pantalla Legal in-app · <code>src/btal/legalContent.ts</code>) · 14-4 iconos de la app hechos (set del logo BT) · 14-5/6/7 son pre-launch de stores</div>
@@ -1370,7 +1370,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">🔴 Bloqueantes · Cuentas y fiscal<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('-1')">Fase -1 →</button><button class="ph-link" onclick="goToPhase('7')">Fase 7 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">🔴 Bloqueantes · Cuentas y fiscal<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('-1')">Trámites →</button><button class="ph-link" onclick="goToPhase('7')">Monetización →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><strong>Apple Developer</strong> 99 €/año — verifica identidad <strong>1-7 días</strong> ← camino crítico, arrancar primero</li>
       <li class="pend"><strong>Google Play Console</strong> 25 $ (pago único · se activa en horas)</li>
@@ -1380,7 +1380,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">🍏 iOS · credenciales y config <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no es código)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('rn')">Fase RN →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">🍏 iOS · credenciales y config <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no es código)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('rn')">App (RN) →</button></div>
     <ul class="status-banner-list">
       <li class="pend">Habilitar el <strong>proveedor Apple en Firebase</strong> (Service ID + <code>.p8</code>) para que funcione Sign in with Apple (código ya hecho)</li>
       <li class="pend">Certificados/perfiles iOS en <strong>EAS</strong> + rellenar los <code>REPLACE_…</code> de <code>eas.json</code> <em>(verificado: siguen sin rellenar)</em></li>
@@ -1390,7 +1390,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">💰 Monetización <span style="color:var(--accent2);text-transform:none;letter-spacing:0">(código + webhook YA desplegados)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('7')">Fase 7 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">💰 Monetización <span style="color:var(--accent2);text-transform:none;letter-spacing:0">(código + webhook YA desplegados)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('7')">Monetización →</button></div>
     <ul class="status-banner-list">
       <li class="pend">Crear los 2 productos en <strong>App Store Connect + Play Console</strong> (<code>pro_monthly</code> 9,99 € · <code>regen_immediate</code> 4,99 €)</li>
       <li class="pend">En RevenueCat: entitlement <code>pro</code> + offering <code>current</code> + <strong>pegar la URL+secreto del webhook</strong></li>
@@ -1401,7 +1401,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">🤖 Android release + publicar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('9')">Fase 9 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">🤖 Android release + publicar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('9')">Lanzamiento →</button></div>
     <ul class="status-banner-list">
       <li class="pend">Keystore de release + registrar el <strong>SHA-256</strong> de Google Play en Firebase (Google sign-in en producción)</li>
       <li class="pend">Subir el <strong>AAB</strong> a internal testing → producción</li>
@@ -1410,7 +1410,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">✅ QA final antes de enviar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('12')">Fase 12 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">✅ QA final antes de enviar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('12')">Testing →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><strong>Sentry</strong> de punta a punta · paseo visual (<code>checklist-visual.md</code>) · 2-5 probadores reales</li>
       <li class="pend"><strong>TestFlight</strong>: los 3 que Apple revisa a mano — <strong>borrar cuenta · restaurar compras · Sign in with Apple</strong></li>
@@ -1419,7 +1419,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">⚙️ Operaciones · activar al lanzar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Fase 11 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">⚙️ Operaciones · activar al lanzar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Seguridad →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><code>PUSH_ADMIN_UIDS</code> sin valor → hoy las <strong>alertas push no llegan a nadie</strong> (poner el uid del owner + redeploy de <code>sendPush</code>/<code>syncOffDeltas</code>)</li>
       <li class="pend"><strong>Borrar los debug tokens de App Check</strong> antes de publicar (el de las capturas Playwright, el último)</li>
@@ -1428,7 +1428,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">🧱 Deuda diferida <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no bloquea)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Fase 11 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">🧱 Deuda diferida <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no bloquea)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Seguridad →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><strong>SEC-8</strong> colusión de precios (<code>MIN_FIRME=5</code>) — decisión de producto · solo relevante con precios colaborativos en marcha</li>
       <li class="pend"><strong>SEC-11</strong> sesión Firebase cifrada → migrar a <code>@react-native-firebase/auth</code> (proyecto de arquitectura · riesgo real bajo)</li>
@@ -1437,7 +1437,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div class="pend-card">
-    <div class="section-label" style="margin:10px 0 10px">🌐 Futuro / post-lanzamiento<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('13')">Fase 13 →</button><button class="ph-link" onclick="goToPhase('9')">Fase 9 →</button></div>
+    <div class="section-label" style="margin:10px 0 10px">🌐 Futuro / post-lanzamiento<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('13')">Analytics →</button><button class="ph-link" onclick="goToPhase('9')">Lanzamiento →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><strong>Web adaptada</strong> de verdad (no el RN-web actual) — al rehacerla, pasar la CSP a enforce y revisar orígenes</li>
       <li class="pend"><strong>Animación del foco del tutorial</strong> (transforms GPU en vez de redibujar el path SVG) — juzgar fluidez solo en build <strong>release</strong> EAS</li>
@@ -2832,7 +2832,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="step">
       <div class="step-left"><div class="num amber">06</div><div class="vline"></div></div>
       <div class="step-body">
-        <div class="step-title">Annual Plan IAP + Family Sharing strategy <span class="step-tag tag-new">Fase 7</span></div>
+        <div class="step-title">Annual Plan IAP + Family Sharing strategy <span class="step-tag tag-new">Monetización</span></div>
         <div class="step-desc">Estrategia futura: plan anual con descuento en App Store / Play Store con auto-renew + <strong style="color:var(--accent)">Apple Family Sharing</strong> (1 sub Pro = compartida con hasta 5 family members · marketing "Plan familiar incluido" reduce fricción de conversión) para subir retención y ARPU. <strong style="color:var(--accent)">Auto-renew nativo</strong>: churn bajísimo (Apple/Google avisan al user de la renovación con su flujo nativo de gestión de suscripciones). <strong style="color:var(--accent3)">Re-precio pendiente</strong>: hoy Pro es 9,99 €/mes sin plan anual · el precio del anual se decidirá con datos reales de conversión.</div>
       </div>
     </div>
@@ -2880,10 +2880,34 @@ function show(id){
     p.classList.toggle('active', p.id === 'p-'+id);
   });
 }
-// Despliega/pliega el bloque "Fases completadas" de la Hoja de ruta.
+// Despliega/pliega el bloque "Fases finalizadas" de la Hoja de ruta.
 function toggleDone(){
   var road = document.getElementById('roadmap-container');
   if(road) road.classList.toggle('done-open');
+}
+
+// Coloca cada fase en su bloque según su estado: si TODOS sus pasos están hechos va a
+// "Finalizadas" (order 500+num); si no, a "En curso" (order = num). Dentro de cada bloque
+// quedan ordenadas por su número de construcción (data-num). Se recalcula al cargar y cada
+// vez que se marca/desmarca un paso, así que al completar la última casilla de una fase,
+// esta salta sola al bloque de finalizadas.
+function reflowPhases(){
+  var road = document.getElementById('roadmap-container');
+  if(!road) return;
+  var checks = loadChecks();
+  var complete = 0;
+  road.querySelectorAll('.phase').forEach(function(ph){
+    var rows = ph.querySelectorAll('.ck-row');
+    var done = 0;
+    rows.forEach(function(r){ if(checks[r.getAttribute('data-id')]) done++; });
+    var full = rows.length > 0 && done === rows.length;
+    var num = parseInt(ph.getAttribute('data-num'), 10) || 99;
+    ph.classList.toggle('phase-complete', full);
+    ph.style.order = full ? (500 + num) : num;
+    if(full) complete++;
+  });
+  var cnt = document.querySelector('.done-count');
+  if(cnt) cnt.textContent = complete ? '(' + complete + ')' : '';
 }
 
 // Cada fase de la Hoja de ruta es plegable · colapsadas por defecto (pantalla limpia:
@@ -2911,8 +2935,8 @@ function goToPhase(p){
   setTimeout(function(){
     var el = document.querySelector('.phase[data-phase="' + p + '"]');
     if(el){
-      // Si la fase está en el bloque "completadas" (colapsado), despliégalo antes.
-      if(el.classList.contains('phase-done')){
+      // Si la fase está finalizada (bloque colapsado), despliégalo antes.
+      if(el.classList.contains('phase-complete')){
         var road = document.getElementById('roadmap-container');
         if(road) road.classList.add('done-open');
       }
@@ -3080,6 +3104,7 @@ function toggle(row){
   saveChecks(checks);
   applyState(row, checks[id]);
   updateProgress();
+  reflowPhases();
 }
 
 function applyState(row, done){
@@ -3128,6 +3153,7 @@ function initRoadmap(){
     else r.classList.remove('done');
   });
   updateProgress();
+  reflowPhases();
 }
 
 initRoadmap();
