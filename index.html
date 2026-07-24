@@ -1422,7 +1422,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="section-label" style="margin:10px 0 10px">⚙️ Operaciones · activar al lanzar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Seguridad →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><code>PUSH_ADMIN_UIDS</code> sin valor → hoy las <strong>alertas push no llegan a nadie</strong> (poner el uid del owner + redeploy de <code>sendPush</code>/<code>syncOffDeltas</code>)</li>
-      <li class="pend"><strong>Borrar los debug tokens de App Check</strong> antes de publicar (el de las capturas Playwright, el último)</li>
+      <li class="pend"><strong>App Check · registrar debug tokens NUEVOS</strong> (24-jul) en las apps <strong>Android</strong> y <strong>iOS</strong> de la consola. El que había estaba en la app <em>web</em> porque lo pedía el camino REST, que ya no existe tras SEC-11 → <code>EXPO_PUBLIC_APPCHECK_DEBUG_ANDROID</code> / <code>_IOS</code> en <code>.env.local</code></li>
+      <li class="pend"><strong>Borrar los debug tokens de App Check</strong> antes de publicar (los de dev + el de las capturas Playwright)</li>
       <li class="pend"><strong>Backups de Firestore</strong> (gcloud weekly + 28 d) + <strong>tope de gasto Gemini</strong> (~10 €/mes, billing aparte)</li>
     </ul>
   </div>
@@ -1441,8 +1442,8 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <div class="pend-card">
     <div class="section-label" style="margin:10px 0 10px">🌐 Futuro / post-lanzamiento<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('13')">Analytics →</button><button class="ph-link" onclick="goToPhase('9')">Lanzamiento →</button></div>
     <ul class="status-banner-list">
-      <li class="pend"><strong>Web adaptada</strong> de verdad (no el RN-web actual) — al rehacerla, pasar la CSP a enforce y revisar orígenes</li>
-      <li class="pend"><strong>Animación del foco del tutorial</strong> (transforms GPU en vez de redibujar el path SVG) — juzgar fluidez solo en build <strong>release</strong> EAS</li>
+      <li class="pend"><strong>Web adaptada</strong> de verdad — el canal react-native-web <strong>ya no existe</strong> (retirado en SEC-11: <code>@react-native-firebase</code> no funciona en navegador). Se rehará como web propia sobre el <strong>SDK JS</strong>, con <code>admin/</code> de molde y reutilizando la capa pura de <code>core/</code> (27 ficheros, ~7.100 líneas, sin Firebase ni react-native). Al rehacerla, pasar la CSP a enforce y revisar orígenes</li>
+      <li class="pend"><strong>Animación del foco del tutorial</strong> — el trabajo ya está hecho (commit <code>3aed997</code>: 8 <code>useAnimatedStyle</code>, 0 paths SVG redibujados · verificado en código el 24-jul). Solo queda <em>juzgar la fluidez</em> en un build <strong>release</strong> EAS, que es donde se nota</li>
       <li class="pend"><strong>Post-launch</strong>: Analytics nativo · icono Liquid Glass iOS 26 · widgets/Watch/Live Activity · precios colaborativos · plan anual/Family Sharing · CI/CD + E2E</li>
     </ul>
   </div>
