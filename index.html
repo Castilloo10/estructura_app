@@ -1431,8 +1431,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="section-label" style="margin:10px 0 10px">🧱 Deuda diferida <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no bloquea)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Seguridad →</button></div>
     <ul class="status-banner-list">
       <li class="pend"><strong>SEC-8</strong> colusión de precios (<code>MIN_FIRME=5</code>) — decisión de producto · solo relevante con precios colaborativos en marcha</li>
-      <li class="pend"><strong>SEC-11</strong> sesión Firebase cifrada → migrar a <code>@react-native-firebase/auth</code> (proyecto de arquitectura · riesgo real bajo)</li>
-      <li class="pend"><strong>PERF-5</strong> thumbnail del avatar · <strong>PERF-6</strong> cachear métricas del admin (solo degrada a escala)</li>
+      <li class="done"><strong>SEC-11</strong> ✅ <em>24-jul</em> — app migrada al SDK <strong>nativo</strong> de Firebase (<code>@react-native-firebase</code> auth+firestore+functions). Sesión al <strong>Keychain en iOS</strong>; en Android sale de AsyncStorage pero <strong>no</strong> queda cifrada (el titular de SEC-11 solo se cumple en iOS). Lo grande es arquitectónico: Firestore con persistencia en disco, App Check nativo sin CustomProvider REST, SDK JS fuera del bundle móvil. <strong>Retira el canal react-native-web</strong> (RNFB no va en navegador) → la web se rehará sobre el SDK JS</li>
+      <li class="done"><strong>PERF-5</strong> ✅ <em>24-jul</em> — miniatura 256px en el doc, foto 1024px en <code>_meta/avatar</code> (arranque ~200KB → ~30KB)</li>
+      <li class="pend"><strong>PERF-6</strong> cachear métricas del admin (solo degrada a escala)</li>
+      <li class="pend"><strong>Probar en dispositivo</strong> lo que la migración deja abierto: 2FA completo, Google/Apple, y App Check antes de la 1ª petición. Ojo: la migración <strong>desloguea una vez</strong> a todos</li>
     </ul>
   </div>
 
