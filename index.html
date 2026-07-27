@@ -706,7 +706,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <div class="stack-card">
       <div class="stack-layer">Inteligencia artificial</div>
       <div class="stack-name">Gemini 3.1 Flash-Lite</div>
-      <div class="stack-why">Modelo en producción: <strong>gemini-3.1-flash-lite</strong> (desde 30-jun-2026 · 2,4× más rápido y 2,21× más barato que 2.5-flash, elegido tras probar 16 modelos modernos). API <strong>de pago, sin free tier</strong>: una generación completa ≈ <strong>€0,023</strong> (un Pro de 9,99€ cubre ~430) — el desglose de tokens y la comparativa de modelos están en Modelo de negocio. <code>maxOutputTokens</code> a 65536 para que el scope «Todo» no se trunque. La API key nunca sale del servidor (secreto en Cloud Functions) y el perfil se sanitiza antes del prompt para evitar <strong>prompt injection</strong>.</div>
+      <div class="stack-why">Modelo en producción: <strong>gemini-3.1-flash-lite</strong> (desde 30-jun-2026 · 2,4× más rápido y 2,21× más barato que 2.5-flash, elegido tras probar 16 modelos modernos). API <strong>de pago, sin free tier</strong>: una generación completa ≈ <strong>€0,0265</strong> (un Pro de 4,99 € cubre ~160 generaciones «Todo») — el desglose de tokens y la comparativa de modelos están en Modelo de negocio. <code>maxOutputTokens</code> a 65536 para que el scope «Todo» no se trunque. La API key nunca sale del servidor (secreto en Cloud Functions) y el perfil se sanitiza antes del prompt para evitar <strong>prompt injection</strong>.</div>
       <div class="stack-items">
         <div class="stack-item">Prompt dinámico por perfil</div>
         <div class="stack-item">Output JSON estructurado (validado con Zod)</div>
@@ -718,19 +718,19 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="stack-name">RevenueCat + IAP Apple/Google</div>
       <div class="stack-why">En una app nativa, Apple y Google <strong>obligan</strong> a cobrar los bienes digitales con su IAP (rechazan pasarelas de pago externas). <strong>RevenueCat</strong> es la capa que unifica StoreKit (iOS) y Play Billing (Android): defines <em>products</em> en App Store Connect y Play Console, los agrupas en <em>offerings</em> con <em>entitlements</em>, y el SDK <code>react-native-purchases</code> resuelve compras, restauración y receipts sin servidor propio. Comisión <strong>15% (Small Business Program</strong>, &lt;1M$/año). RevenueCat es gratis hasta 2,5K$/mes de ingresos. Su <strong>webhook</strong> firma cada evento (compra, renovación, cancelación, reembolso) → Cloud Function lo verifica e idempotente actualiza Firestore.</div>
       <div class="stack-items">
-        <div class="stack-item">Pago único 4,99€ — adelantar mes (consumible IAP)</div>
-        <div class="stack-item">Suscripción 9,99€/mes — Pro (auto-renewable)</div>
+        <div class="stack-item">Pago único 1,99€ — adelantar generación (consumible IAP) · saldo acumulable</div>
+        <div class="stack-item">Suscripción 4,99€/mes o 34,99€/año — Pro (auto-renewable) · + 6,99€ un mes suelto (no renovable)</div>
         <div class="stack-item">RevenueCat webhook → Firebase actualiza plan</div>
       </div>
     </div>
     <div class="stack-card">
-      <div class="stack-layer">Métricas <span style="color:var(--accent);font-size:.65rem;font-family:'JetBrains Mono',monospace;margin-left:4px">(diseño · Panel Admin)</span></div>
+      <div class="stack-layer">Métricas <span style="color:var(--accent);font-size:.65rem;font-family:'JetBrains Mono',monospace;margin-left:4px">(panel EN PRODUCCIÓN · negocio al conectar RevenueCat)</span></div>
       <div class="stack-name">Admin Panel + RevenueCat + Stores</div>
-      <div class="stack-why"><strong>Diseño futuro (Fase 10 · post-monetización) — aún no construido.</strong> Las métricas vendrán de fuentes que ya existen: Firestore para datos de usuarios (registros, generaciones), el <strong>dashboard de RevenueCat</strong> (MRR, conversión, churn, LTV unificados de ambas stores) y App Store Connect / Play Console para ingresos por plataforma. El panel de admin será una ruta privada del <strong>canal web</strong> (React Native Web), protegida por un campo <code>role</code> en el documento del usuario — no por UID hardcodeado. Sin coste adicional.</div>
+      <div class="stack-why"><strong>El panel de admin YA está construido y en producción</strong> (<code>btal-admin.web.app</code> · web propia sobre el SDK JS con login por passkeys/Face ID + puerta 2FA — la idea original de hacerlo ruta del canal RN Web murió con SEC-11) y muestra las métricas de USUARIOS desde Firestore (registros, generaciones, planes, auditoría). Lo que queda para post-monetización son las métricas de NEGOCIO: conectar el <strong>dashboard de RevenueCat</strong> (MRR, conversión, churn, LTV unificados de ambas stores) y App Store Connect / Play Console para ingresos por plataforma. Sin coste adicional.</div>
       <div class="stack-items">
         <div class="stack-item">Firestore → métricas de usuarios</div>
         <div class="stack-item">RevenueCat → MRR / churn / LTV de pagos</div>
-        <div class="stack-item">/admin vía canal RN Web · campo role en /users/{uid}</div>
+        <div class="stack-item">btal-admin.web.app · Passkeys/Face ID + puerta 2FA (en producción)</div>
         <div class="stack-item">0€ de coste adicional</div>
       </div>
     </div>
@@ -930,7 +930,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <details class="status-banner">
     <summary class="status-banner-summary">
       <span class="status-banner-title">● Estado actual del proyecto</span>
-      <span class="status-banner-sub">23-jul-2026 · App completa + <strong>dev builds Android nativos</strong> (Google sign-in · App Check Play Integrity real · biométrico · push · Face ID) + <strong>Sign in with Apple (código hecho)</strong> + <strong>portal admin en producción</strong> + <strong>Sentry (crashes) integrado end-to-end</strong> + <strong>4ª auditoría (49 hallazgos) aplicada</strong> · ya NO queda código de lanzamiento pendiente · siguiente: <strong>cuentas de tienda → IAP RevenueCat + build iOS</strong> · <em>clic para ver el detalle</em></span>
+      <span class="status-banner-sub">27-jul-2026 · App completa + <strong>dev builds Android nativos</strong> (Google sign-in · App Check Play Integrity real · biométrico · push · Face ID) + <strong>Sign in with Apple (código hecho)</strong> + <strong>portal admin en producción</strong> + <strong>Sentry (crashes) integrado end-to-end</strong> + <strong>4ª auditoría (49 hallazgos) aplicada</strong> + <strong>SDK nativo de Firebase (SEC-11)</strong> + <strong>4 productos IAP con precios finales</strong> + <strong>coste real de IA medido</strong> + <strong>guard de restricciones endurecido tras batería adversarial (27-jul)</strong> · ya NO queda código de lanzamiento pendiente · siguiente: <strong>cuentas de tienda → IAP RevenueCat + build iOS</strong> · <em>clic para ver el detalle</em></span>
     </summary>
     <div class="status-banner-body">
       <p class="status-banner-date">La app <strong>React Native + Expo está completa y funcionando contra el backend real</strong> (5 tabs + onboarding + ajustes + editores + flujo IA · auth, Firestore y Cloud Functions en producción) y corre ya en <strong>dev/preview builds Android nativos</strong> con los módulos nativos cableados (Google sign-in, App Check Play Integrity, biométrico, push, Face ID). El <strong>portal de administración está construido y en producción</strong> (<code>btal-admin.web.app</code>) y <strong>Sentry captura crashes</strong> de app y panel (source maps subiéndose en cada build de EAS). <strong>Sign in with Apple ya está implementado en código</strong> (<code>appleAuth.ts</code>) — con esto <strong>NO queda ningún hueco de código de lanzamiento</strong>: todo lo pendiente son <strong>cuentas y configuración</strong> (tiendas, RevenueCat, credenciales iOS), no programación. La <strong>4ª auditoría (23-jul · 49 hallazgos)</strong> ya está aplicada y desplegada, y en la misma fecha se desplegó y verificó en vivo la <strong>mejora del buscador</strong> (+93% en el caso difícil) y el <strong>borrado completo de invitados</strong> (recursiveDelete · probado end-to-end). El detalle está en <code>docs/lanzamiento.md</code> (checklist maestro pendiente-only), el checklist de abajo y las memorias del proyecto.</p>
@@ -946,7 +946,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
             <li class="done"><strong>Portal de administración en producción</strong> (<code>btal-admin.web.app</code>): métricas · gestión de usuarios (plan/saldo/push/ficha) · registro de auditoría · caps de IA · administradores con <strong>login Face ID (WebAuthn/passkeys)</strong> + puerta 2FA + auto-logout · 3 auditorías aplicadas</li>
             <li class="done"><strong>Visor de técnica de ejercicios</strong> (fotos por ejercicio · fuzzy ES + selector) · antes el ▶ abría YouTube</li>
             <li class="done">Seguridad: <strong>App Check ENFORCE</strong> (Play Integrity/DeviceCheck + reCAPTCHA web) · rules monetización seed-only + tope avatar · MFA TOTP</li>
-            <li class="done"><strong>131 tests de la app + 303 de functions</strong> (Vitest) · React Compiler activo</li>
+            <li class="done"><strong>168 tests de la app + 364 de functions</strong> (Vitest) · React Compiler activo</li>
             <li class="done"><strong>4 auditorías exhaustivas aplicadas</strong>: 12-jun (~70 fixes) · seguridad 26-jun · <strong>4-jul (38 fixes verificados</strong> — incl. 2 fugas dietéticas HIGH: pescado/marisco a veganos y gluten a celíacos) · <strong>23-jul (49 hallazgos multi-agente</strong> — seguridad, correctitud, código muerto, rendimiento)</li>
             <li class="done"><strong>Sign in with Apple — CÓDIGO hecho</strong> (<code>appleAuth.ts</code>: login + vincular invitado + reauth con nonce · botón solo-iOS) · falta solo habilitar el proveedor Apple en Firebase + build iOS</li>
             <li class="done"><strong>Buscador mejorado y desplegado</strong> (4ª consulta por-palabra → alcanza la cola larga por cualquier token · +93% de cobertura en el caso difícil, medido) + <strong>borrado de invitados completo</strong> (recursiveDelete: registros + <code>_meta/*</code> + Auth · verificado en vivo · TTL nativa activa)</li>
@@ -966,10 +966,10 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <ul class="status-banner-list">
             <li class="pend"><strong>Cuentas de tienda</strong> (Apple Developer 99€/año · verifica identidad 1-7 días ← camino crítico · Play Console 25$ · cuenta RevenueCat gratis) — <strong>bloqueante nº1</strong> · <em>sin código pendiente: todo el carril iOS de programación está hecho</em></li>
             <li class="pend"><strong>iOS · credenciales/config</strong> (no es código): habilitar el proveedor Apple en Firebase (Service ID + <code>.p8</code>) + certificados EAS + rellenar <code>eas.json</code> + key APNs + registrar App Check App Attest/DeviceCheck (.p8 · iPhone real)</li>
-            <li class="pend"><strong>Monetización (código YA escrito)</strong>: crear los productos en Play Console + App Store Connect · entitlement <code>pro</code> + offering en RevenueCat · pegar las claves + desplegar el webhook (con su secreto) + test de compra en sandbox</li>
+            <li class="pend"><strong>Monetización (código YA escrito)</strong>: crear los productos en Play Console + App Store Connect · entitlement <code>pro</code> + offering en RevenueCat · pegar las claves + la URL+secreto del webhook (YA desplegado) + test de compra en sandbox</li>
             <li class="pend"><strong>Android release</strong>: keystore de release + registrar el SHA-256 de la firma de Google Play + subir AAB a internal testing</li>
             <li class="pend"><strong>Fichas de tienda</strong>: capturas + <strong>Privacy Nutrition Labels</strong> (Apple) + <strong>Data Safety</strong> (Google) + rating ~12+</li>
-            <li class="pend"><strong>Post-launch</strong> (no bloquea): Firebase <strong>Analytics</strong> nativo · canal web (RN Web) · widgets iOS/Android · Apple Watch · Live Activity · precios colaborativos · plan anual/Family Sharing</li>
+            <li class="pend"><strong>Post-launch</strong> (no bloquea): Firebase <strong>Analytics</strong> nativo · canal web (RN Web) · widgets iOS/Android · Apple Watch · Live Activity · precios colaborativos · Family Sharing</li>
           </ul>
           <p style="font-size:.66rem;color:var(--muted);margin-top:8px;font-style:italic">Stack: crashes = <strong>Sentry</strong> (ya integrado, EU, sin PII) · métricas de producto = Firebase Analytics (pendiente nativo) · macros = OpenFoodFacts + BEDCA · pagos = IAP (RevenueCat).</p>
         </div>
@@ -1006,7 +1006,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Core de lógica TS (utils + templates) + functions/ compartidos con el backend <span class="ck-tag new">platform-agnostic</span></div><div class="ck-note">El core TS (cálculo de macros, calorías, rachas, validaciones, parsers de cantidad/hora, templates) vive en <code>src/core/</code> · <code>functions/</code> (Cloud Functions, IA Gemini, App Check, deleteAccount, macros 6B) en el mismo repo · lógica compartida entre app y backend.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="rn-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Firebase en React Native</div><div class="ck-note">JS SDK de Firebase + persistencia AsyncStorage · Auth (email/contraseña + 2FA TOTP + invitado anónimo con TTL 3 días) · Firestore con write-through desde los stores · callables (generatePlan / searchFood / deleteAccount / revokeOtherSessions). Google/Apple sign-in van aparte (rn-9 · Fase 4.5).</div></div></div>
+        <div class="ck-row" data-id="rn-3" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Firebase en React Native</div><div class="ck-note"><strong>SDK NATIVO</strong> <code>@react-native-firebase</code> (auth+firestore+functions) desde SEC-11 el 24-jul — antes era el SDK JS con la sesión en AsyncStorage. Auth (email/contraseña + 2FA TOTP + invitado anónimo con TTL 3 días) · Firestore con write-through desde los stores y <strong>persistencia en disco</strong> · callables (generatePlan / searchFood / deleteAccount / revokeOtherSessions). Google/Apple sign-in van aparte (rn-9 · Fase 4.5).</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="rn-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Las 5 tabs + onboarding + ajustes + editores</div><div class="ck-note">Hoy · Menú · Compra · Entreno · Registro + onboarding, perfil/ajustes y editores → componentes React Native con navegación nativa (Expo Router / react-navigation · transiciones nativas + swipe-back). Modales/sheets como componentes nativos (BSheet).</div></div></div>
         <div class="ck-sep"></div>
@@ -1030,7 +1030,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">1</div>
         <div class="phase-info">
           <div class="phase-title">Pre-trabajo (marca, dominio, cuentas) <span class="phase-etapa phase-etapa--launch">Pre-lanzamiento · parcial</span></div>
-          <div class="phase-sub">Tareas que tardan días/semanas en aprobarse — en paralelo a la Fase 4.5 / pre-lanzamiento (hecho: logo/iconos · pendiente: cuentas Apple Dev/Play Console, dominio)</div>
+          <div class="phase-sub">Tareas que tardan días/semanas en aprobarse — en paralelo a la Fase 4.5 / pre-lanzamiento (hecho: logo/iconos · Dominio <strong>btal.app</strong> comprado 27-jul · Pendiente: cuentas Apple Dev/Play Console)</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
@@ -1151,14 +1151,14 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">6</div>
         <div class="phase-info">
           <div class="phase-title">Monetización · IAP (Apple/Google) <span class="phase-etapa">Código completo · falta solo cuentas de tienda + conectar RevenueCat</span></div>
-          <div class="phase-sub"><strong>⚠ Pagos solo por IAP</strong> — Apple/Google rechazan pasarelas externas para bienes digitales (= rechazo en review), así que la monetización es <strong>In-App Purchase</strong> (StoreKit iOS + Play Billing Android) vía <strong>RevenueCat</strong> (cross-platform · SDK React Native · free &lt;$2,5k/mes). Pago único 4,99€ + Pro 9,99€/mes · comisión 15% (Small Business Program). <strong>Ya codificado y latente</strong>: el modelo de datos <code>PlanIA</code> (free/pro/one_off), el <strong>webhook RevenueCat</strong> (fuente de verdad del plan · idempotente · firmado · <em>ya DESPLEGADO — falta pegar la URL+secreto en RevenueCat</em>), el cliente nativo (lazy + guarda) y <strong>Restaurar compras</strong> (ya cableado en Ajustes). <strong>Falta para activarlo</strong>: cuentas de tienda (Apple 99€ + Play 25$) + productos en las stores + claves RevenueCat + conectar el webhook + nuevo build.</div>
+          <div class="phase-sub"><strong>⚠ Pagos solo por IAP</strong> — Apple/Google rechazan pasarelas externas para bienes digitales (= rechazo en review), así que la monetización es <strong>In-App Purchase</strong> (StoreKit iOS + Play Billing Android) vía <strong>RevenueCat</strong> (cross-platform · SDK React Native · free &lt;$2,5k/mes). Pago único 1,99€ + Pro 4,99€/mes (34,99€/año · Mes suelto 6,99€ no renovable) · comisión 15% (Small Business Program). <strong>Ya codificado y latente</strong>: el modelo de datos <code>PlanIA</code> (free/pro/one_off), el <strong>webhook RevenueCat</strong> (fuente de verdad del plan · idempotente · firmado · <em>ya DESPLEGADO — falta pegar la URL+secreto en RevenueCat</em>), el cliente nativo (lazy + guarda) y <strong>Restaurar compras</strong> (ya cableado en Ajustes). <strong>Falta para activarlo</strong>: cuentas de tienda (Apple 99€ + Play 25$) + productos en las stores + claves RevenueCat + conectar el webhook + nuevo build.</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
                 <div class="ck-row" data-id="7-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Cuentas de las stores <span class="ck-tag warn">requisito previo</span></div><div class="ck-note">Apple Developer Program (99€/año) + Google Play Console (25$ pago único). Registrar la app con bundle/package <code>com.btal.app</code>. Sin estas cuentas no hay IAP que probar ni publicar. Es trabajo de fase de lanzamiento.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="7-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear los productos IAP en ambas stores <span class="ck-tag new">2 productos</span></div><div class="ck-note">App Store Connect + Play Console: (1) suscripción auto-renovable <strong>Pro 9,99€/mes</strong>, (2) producto consumible <strong>«Generar ahora» 4,99€</strong>. Mismos IDs lógicos en ambas plataformas para que RevenueCat los agrupe.</div></div></div>
+        <div class="ck-row" data-id="7-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear los productos IAP en ambas stores <span class="ck-tag new">4 productos</span></div><div class="ck-note">App Store Connect + Play Console: (1) suscripción auto-renovable <strong>Pro 4,99€/mes</strong>, (2) suscripción anual <strong>34,99€</strong>, (3) <strong>mes suelto 6,99€</strong> (no renovable), (4) consumible <strong>«Generar ahora» 1,99€</strong>. Mismos IDs lógicos en ambas plataformas para que RevenueCat los agrupe (ids exactos en la pestaña Pendientes).</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="7-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">RevenueCat · configurar offerings + entitlement <span class="ck-tag warn">paso clave</span></div><div class="ck-note">Cuenta en RevenueCat (free &lt;$2,5k/mes). Vincular App Store Connect + Play Console (claves de servidor). Crear un <strong>Entitlement «pro»</strong> que agrupe los productos de ambas stores + una <strong>Offering</strong> (lo que muestra el paywall). RevenueCat gestiona validación de recibos y estado cross-platform.</div></div></div>
         <div class="ck-sep"></div>
@@ -1239,13 +1239,13 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-4" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Crear queries de Firestore para las métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana/mes (filtrar por createdAt) · Usuarios Pro activos (plan_pro=true) · Generaciones realizadas (fecha_ultima_generacion != null) · Usuarios activos 30 días (lastActive)</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="10-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir la pantalla Admin con tarjetas de métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana · Nuevos este mes · Usuarios Pro activos · Pagos únicos 4,99€ · Generaciones realizadas · Usuarios activos 30 días · Ratio conversión Free→Pro. Todo en tiempo real desde Firestore</div></div></div>
+        <div class="ck-row" data-id="10-5" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Construir la pantalla Admin con tarjetas de métricas</div><div class="ck-note">Total usuarios · Nuevos esta semana · Nuevos este mes · Usuarios Pro activos · Pagos únicos 1,99€ · Generaciones realizadas · Usuarios activos 30 días · Ratio conversión Free→Pro. Todo en tiempo real desde Firestore</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-6" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Añadir enlace directo al dashboard de RevenueCat</div><div class="ck-note">RevenueCat ya muestra ingresos, MRR, suscripciones activas, cancelaciones y churn con gráficas (unificando Apple + Google). No hay que replicarlo — solo enlazarlo desde la pantalla Admin</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Actualizar Firestore Security Rules para lectura admin</div><div class="ck-note">Permitir leer todos los documentos de /users solo a quien tenga <code>role: 'admin'</code> en su doc · NUNCA UID hardcodeado en el cliente (ver Capa 8). Sin esto cualquier usuario autenticado podría consultar datos de otros</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="10-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Calcular MRR (Monthly Recurring Revenue)</div><div class="ck-note">Total de usuarios con <code>plan_pro: true</code> × 9,99€. Es el indicador clave de salud del negocio. El dashboard de RevenueCat ya lo muestra pero conviene tenerlo también en la pantalla Admin para verlo de un vistazo</div></div></div>
+        <div class="ck-row" data-id="10-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Calcular MRR (Monthly Recurring Revenue)</div><div class="ck-note">Total de usuarios con <code>plan_pro: true</code> × 4,99€ (aprox.: el anual equivale a ~2,92€/mes y el mes suelto no cuenta como MRR). Es el indicador clave de salud del negocio. El dashboard de RevenueCat ya lo muestra pero conviene tenerlo también en la pantalla Admin para verlo de un vistazo</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="10-9" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Calcular churn rate (% que cancela Pro)</div><div class="ck-note">(Cancelaciones del mes / Suscriptores al inicio del mes) × 100. RevenueCat lo da con su API y su webhook. Si superas 10% mensual hay un problema de retención (UX, valor percibido, bug). Mostrar gráfica de evolución</div></div></div>
         <div class="ck-sep"></div>
@@ -1290,18 +1290,18 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="phase-num">10</div>
         <div class="phase-info">
           <div class="phase-title">Testing + CI/CD <span class="phase-etapa phase-etapa--done">Suites ✓ · CI ✓ · E2E post-launch</span></div>
-          <div class="phase-sub">Suites al día EN el repo de la app (medido jul-2026): <strong>131 tests de la app</strong> (vitest · stores/utils/núcleo) + <strong>303 de functions</strong> (eligibility/nutrition/persist). <strong>CI montado</strong> (GitHub Actions · lint+typecheck+tests+build en cada push/PR) · falta solo <strong>E2E</strong> (post-lanzamiento).</div>
+          <div class="phase-sub">Suites al día EN el repo de la app (medido 28-jul-2026): <strong>168 tests de la app</strong> (vitest · stores/utils/núcleo) + <strong>364 de functions</strong> (eligibility/nutrition/persist · Incl. batería adversarial del guard de restricciones). <strong>CI montado</strong> (GitHub Actions · lint+typecheck+tests+build en cada push/PR) · falta solo <strong>E2E</strong> (post-lanzamiento).</div>
         </div>
         <div class="phase-progress"><div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div><div class="prog-label">0%</div></div>
       </div>
       <div class="phase-steps">
-        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">131 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
+        <div class="ck-row" data-id="12-0" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Suite de tests de la app · Vitest <span class="ck-tag cmd">npm test</span></div><div class="ck-note">168 tests en verde. Configuración en <code>vitest.config.ts</code> + stubs de módulos nativos en <code>test/stubs/</code> para correr en Node.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-1" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de componentes y lógica crítica</div><div class="ck-note">Cubren lo que al romperse cuesta dinero o pierde datos: stores (write-through · optimistic updates), cálculo de macros y calorías, rachas, validaciones y parsers.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-2" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">Tests de functions (eligibility / nutrition / persist)</div><div class="ck-note">303 tests del backend: elegibilidad de generación (Free/Pro · rate limit), núcleo de nutrición (escalado, unidades) y persistencia. <code>firebase emulators:start</code> sigue disponible para pruebas de integración locales sin tocar producción.</div></div></div>
         <div class="ck-sep"></div>
-        <div class="ck-row" data-id="12-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">CI · GitHub Actions (lint + typecheck + tests + build) <span class="ck-tag new">HECHO</span></div><div class="ck-note"><strong>HECHO</strong> · <code>.github/workflows/ci.yml</code>: en cada push/PR corre, en Node 22, la app (lint + <code>tsc --noEmit</code> + 131 tests) y las functions (lint + build + 303 tests). Los pasos se verificaron <strong>en verde en local</strong> antes de subirlo · el primer run real ocurre en el próximo push a GitHub. Opcional a futuro: branch protection en <code>main</code> + deploy automático de functions.</div></div></div>
+        <div class="ck-row" data-id="12-7" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">CI · GitHub Actions (lint + typecheck + tests + build) <span class="ck-tag new">HECHO</span></div><div class="ck-note"><strong>HECHO</strong> · <code>.github/workflows/ci.yml</code>: en cada push/PR corre, en Node 22, la app (lint + <code>tsc --noEmit</code> + 131 tests) y las functions (lint + build + 303 tests). <strong>Verificado EN VERDE en GitHub Actions</strong> (24-jul · app ✓ + functions ✓). El primer run destapó un bug real: el <code>tsconfig.json</code> raíz typecheaba también <code>admin/</code> y <code>functions/</code> (proyectos aparte con sus propias deps) → arreglado con un <code>exclude</code>. Opcional a futuro: branch protection en <code>main</code> + deploy automático de functions.</div></div></div>
         <div class="ck-sep"></div>
         <div class="ck-row" data-id="12-8" onclick="toggle(this)"><div class="ck-box"><span class="ck-check">✓</span></div><div class="ck-content"><div class="ck-title">E2E — tests de flujos de usuario <span class="ck-tag warn">post-launch</span></div><div class="ck-note">Tests que recorren la app como un usuario real (login → generar plan → editar comida): <strong>Maestro</strong> para nativo o <strong>Playwright</strong> para web. Más trabajo de escribir y mantener · se deja para <strong>post-lanzamiento</strong> (no bloquea publicar).</div></div></div>
       </div>
@@ -1366,7 +1366,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
   <div class="pane-intro">
     <h2>⏳ Pendientes generales</h2>
-    <p><strong>Lista de trabajo operativa</strong> — complemento de la <strong>Hoja de ruta</strong>: aquí está TODO lo que queda a día de hoy (<strong>23-jul-2026</strong>), verificado contra el código real. Ya <strong>no queda programación de lanzamiento</strong>; lo que falta son <strong>cuentas, configuración de tiendas y QA con dispositivo</strong>. Cada bloque enlaza a su fase — pulsa <code>Fase → </code> para saltar a la Hoja de ruta.</p>
+    <p><strong>Lista de trabajo operativa</strong> — complemento de la <strong>Hoja de ruta</strong>: aquí está TODO lo que queda a día de hoy (<strong>28-jul-2026</strong>), verificado contra el código real. Ya <strong>no queda programación de lanzamiento</strong>; lo que falta son <strong>cuentas, configuración de tiendas y QA con dispositivo</strong>. Cada bloque enlaza a su fase — pulsa <code>Fase → </code> para saltar a la Hoja de ruta.</p>
   </div>
 
   <div class="pend-card">
@@ -1374,7 +1374,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <ul class="status-banner-list">
       <li class="pend"><strong>Apple Developer</strong> 99 €/año — verifica identidad <strong>1-7 días</strong> ← camino crítico, arrancar primero</li>
       <li class="pend"><strong>Google Play Console</strong> 25 $ (pago único · se activa en horas)</li>
-      <li class="pend"><strong>Email de soporte</strong> visible (Apple y Google lo exigen en la ficha)</li>
+      <li class="pend"><strong>Email de soporte</strong> visible (Apple y Google lo exigen en la ficha) · Con el dominio <strong>btal.app</strong> (comprado 27-jul) puede ser <code>soporte@btal.app</code>, o btalapp@gmail.com directamente</li>
       <li class="pend"><strong>Fiscal</strong>: gestor/autónomo (tarifa plana) · alta censal Hacienda 036/037 (al encender compras) · NIF + IBAN</li>
     </ul>
   </div>
@@ -1392,10 +1392,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <div class="pend-card">
     <div class="section-label" style="margin:10px 0 10px">💰 Monetización <span style="color:var(--accent2);text-transform:none;letter-spacing:0">(código + webhook YA desplegados)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('7')">Monetización →</button></div>
     <ul class="status-banner-list">
-      <li class="pend">Crear los 2 productos en <strong>App Store Connect + Play Console</strong> (<code>pro_monthly</code> 9,99 € · <code>regen_immediate</code> 4,99 €)</li>
+      <li class="pend">Crear los 4 productos en <strong>App Store Connect + Play Console</strong> (ids de TIENDA: <code>btal_pro_mensual</code> 4,99 €/mes · <code>btal_pro_anual</code> 34,99 € · <code>btal_pro_1mes</code> 6,99 € · <code>btal_regen_inmediata</code> 1,99 € — los ids de paquete RC son otros: <code>pro_monthly</code>/<code>pro_yearly</code>/<code>pro_one_month</code>/<code>regen_immediate</code>)</li>
       <li class="pend">En RevenueCat: entitlement <code>pro</code> + offering <code>current</code> + <strong>pegar la URL+secreto del webhook</strong></li>
       <li class="pend">Meter <code>EXPO_PUBLIC_RC_IOS_KEY</code> / <code>…_ANDROID_KEY</code> en EAS</li>
-      <li class="pend"><strong>Alinear <code>REGEN_PRODUCT_IDS</code></strong> con los product IDs reales de las stores (hoy <code>btal_regen</code> / <code>regen_inmediata</code>)</li>
       <li class="pend"><strong>Test en sandbox</strong>: compra → webhook → Firestore → entitlement, en iOS y Android</li>
     </ul>
   </div>
@@ -1405,7 +1404,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     <ul class="status-banner-list">
       <li class="pend">Keystore de release + registrar el <strong>SHA-256</strong> de Google Play en Firebase (Google sign-in en producción)</li>
       <li class="pend">Subir el <strong>AAB</strong> a internal testing → producción</li>
-      <li class="pend"><strong>Fichas de tienda</strong> (textos + capturas ✅ hechos): <strong>Privacy Nutrition Labels</strong> (Apple) · <strong>Data Safety</strong> (Google) · rating 12+</li>
+      <li class="pend"><strong>Fichas de tienda</strong> (textos ✅ redactados · Capturas ⛔ hay que REHACERLAS: se recapturan del A32 y se recomponen): <strong>Privacy Nutrition Labels</strong> (Apple) · <strong>Data Safety</strong> (Google) · rating 12+</li>
     </ul>
   </div>
 
@@ -1421,8 +1420,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <div class="pend-card">
     <div class="section-label" style="margin:10px 0 10px">⚙️ Operaciones · activar al lanzar<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Seguridad →</button></div>
     <ul class="status-banner-list">
-      <li class="pend"><code>PUSH_ADMIN_UIDS</code> sin valor → hoy las <strong>alertas push no llegan a nadie</strong> (poner el uid del owner + redeploy de <code>sendPush</code>/<code>syncOffDeltas</code>)</li>
-      <li class="pend"><strong>Borrar los debug tokens de App Check</strong> antes de publicar (el de las capturas Playwright, el último)</li>
+      <li class="done"><code>PUSH_ADMIN_UIDS</code> — <strong>HECHO</strong> <em>(26-jul)</em>: uid del owner configurado + redeploy de <code>sendPush</code>/<code>syncOffDeltas</code> verificado · Las alertas push del panel ya llegan</li>
+      <li class="pend"><strong>App Check · registrar debug tokens NUEVOS</strong> (24-jul) en las apps <strong>Android</strong> y <strong>iOS</strong> de la consola. El que había estaba en la app <em>web</em> porque lo pedía el camino REST, que ya no existe tras SEC-11 → <code>EXPO_PUBLIC_APPCHECK_DEBUG_ANDROID</code> / <code>_IOS</code> en <code>.env.local</code></li>
+      <li class="pend"><strong>Borrar los debug tokens de App Check</strong> antes de publicar (los de dev + el de las capturas Playwright)</li>
       <li class="pend"><strong>Backups de Firestore</strong> (gcloud weekly + 28 d) + <strong>tope de gasto Gemini</strong> (~10 €/mes, billing aparte)</li>
     </ul>
   </div>
@@ -1430,22 +1430,27 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   <div class="pend-card">
     <div class="section-label" style="margin:10px 0 10px">🧱 Deuda diferida <span style="color:var(--muted);text-transform:none;letter-spacing:0">(no bloquea)</span><span style="flex:1"></span><button class="ph-link" onclick="goToPhase('11')">Seguridad →</button></div>
     <ul class="status-banner-list">
-      <li class="pend"><strong>SEC-8</strong> colusión de precios (<code>MIN_FIRME=5</code>) — decisión de producto · solo relevante con precios colaborativos en marcha</li>
-      <li class="pend"><strong>SEC-11</strong> sesión Firebase cifrada → migrar a <code>@react-native-firebase/auth</code> (proyecto de arquitectura · riesgo real bajo)</li>
-      <li class="pend"><strong>PERF-5</strong> thumbnail del avatar · <strong>PERF-6</strong> cachear métricas del admin (solo degrada a escala)</li>
+      <li class="done"><strong>SEC-8</strong> colusión de precios — <strong>DESCARTADO con motivo</strong> <em>(24-jul, revisado sobre el código)</em>. Subir <code>MIN_FIRME</code> <strong>empeoraría</strong> el producto: la regla ya exige 5 usuarios con el precio <em>exacto al céntimo</em>, y los precios varían por súper, región y promoción → subirlo haría que no se fijara <strong>ningún</strong> precio nunca. El muro real no es ese número, es <code>enforceAppCheck</code> (atestación de dispositivo, no scripteable) + anónimos bloqueados + 1 voto por uid + rate limit 120/10 min. Impacto si el ataque sale: un precio orientativo erróneo en una lista de la compra. «Exigir cuentas verificadas» tampoco: buzones desechables son gratis y choca con la decisión de no forzar verificación</li>
+      <li class="done"><strong>SEC-11</strong> <em>24-jul</em> — app migrada al SDK <strong>nativo</strong> de Firebase (<code>@react-native-firebase</code> auth+firestore+functions). Sesión al <strong>Keychain en iOS</strong>; en Android sale de AsyncStorage pero <strong>no</strong> queda cifrada (el titular de SEC-11 solo se cumple en iOS). Lo grande es arquitectónico: Firestore con persistencia en disco, App Check nativo sin CustomProvider REST, SDK JS fuera del bundle móvil. <strong>Retira el canal react-native-web</strong> (RNFB no va en navegador) → la web se rehará sobre el SDK JS</li>
+      <li class="done"><strong>PERF-5</strong> <em>24-jul</em> — miniatura 256px en el doc, foto 1024px en <code>_meta/avatar</code> (arranque ~200KB → ~30KB)</li>
+      <li class="pend"><strong>PERF-6</strong> cachear métricas del admin — <em>hacer cuando duela, no antes</em>: no se encarece con el tiempo (sin migración ni cambio de esquema) y es el panel, que abres tú. Ojo al tope de 20k usuarios de <code>listAllAuthUsers</code>: a partir de ahí las métricas salen <strong>incompletas</strong> (queda un warning en logs) — eso es correctitud, no lentitud</li>
+      <li class="done"><strong>Precios colaborativos · por supermercado</strong> — <strong>NO hace falta</strong> <em>(revisado 24-jul)</em>. <code>priceKey</code> usa el <strong>código de barras</strong> cuando lo hay: la marca blanca de cada súper tiene el suyo propio, así que <strong>ya está segmentado</strong>; y una marca nacional cuesta casi lo mismo en todas partes. Si no cuadra, el precio del usuario manda siempre. <strong>Y la regla de los 5 exactos está bien puesta</strong>: en los alimentos SIN código (genéricos BEDCA, o escritos a mano) la clave <code>g_{identityKey}</code> quita la marca y agrupa todo, y ahí manda la <strong>cantidad</strong> (texto libre, no viaja con el precio: 1 kg vs 500 g) — exigir 5 céntimos idénticos hace que sencillamente no se muestre nada, que es lo correcto. Relajarlo a una mediana fallaría <em>abierto</em>: mezclaría formatos y daría un número sin sentido</li>
+      <li class="done"><strong>SEC-11 · verificado en dispositivo</strong> <em>(24-jul, Samsung A32, build local)</em>: App Check nativo antes de la 1ª petición ✓ · login + carga de sesión ✓ · <strong>2FA completo</strong> ✓ · <strong>offline con persistencia en disco</strong> ✓ (funcionalidad nueva) · callables ✓ — <strong>confirmado en el log del servidor</strong>: <code>Callable request verification passed { app: VALID, auth: VALID }</code> en una generación <code>scope:"all"</code> (menú + entrenos + compra) resuelta en <strong>22,6 s</strong> con HTTP 200. Se cazó y arregló un bug propio: la purga de la cache local necesitaba <code>terminate()</code> antes de <code>clearPersistence</code> — no purgaba nunca, y en silencio</li>
+      <li class="done"><strong>BUG de la IA · el menú fallaba SIEMPRE con comidas libres</strong> <em>(24-jul · encontrado y arreglado)</em>. El prompt enumeraba los campos de una comida libre como «<code>"slot" null + "titulo" + "hora"</code>» en tres sitios; el modelo lo tomaba por la lista COMPLETA y omitía <code>nombrePlato</code>, que es obligatorio → Zod tumbaba la semana entera. Afectaba a <strong>todo perfil con kcal altas</strong> (6 comidas/día → libres en los índices 1 y 5) y llevaba ahí desde que existen las comidas libres. Arreglado en el prompt + cinturón <code>fillMissingDishNames</code> con warn, y 5 tests nuevos (uno reproduce el fallo real). <strong>Verificado en producción.</strong> Salió del log de Zod que se añadió minutos antes: <code>generatePlan</code> descartaba el error de validación y el fallo era indiagnosticable</li>
+      <li class="pend"><strong>Queda por probar:</strong> <strong>Google</strong> (falla solo en builds LOCALES por la firma del keystore de la plantilla RN — con EAS funciona, ver docs/lanzamiento.md) y <strong>Apple</strong> (requiere iOS). Ojo: la migración <strong>desloguea una vez</strong> a todos</li>
     </ul>
   </div>
 
   <div class="pend-card">
     <div class="section-label" style="margin:10px 0 10px">🌐 Futuro / post-lanzamiento<span style="flex:1"></span><button class="ph-link" onclick="goToPhase('13')">Analytics →</button><button class="ph-link" onclick="goToPhase('9')">Lanzamiento →</button></div>
     <ul class="status-banner-list">
-      <li class="pend"><strong>Web adaptada</strong> de verdad (no el RN-web actual) — al rehacerla, pasar la CSP a enforce y revisar orígenes</li>
-      <li class="pend"><strong>Animación del foco del tutorial</strong> (transforms GPU en vez de redibujar el path SVG) — juzgar fluidez solo en build <strong>release</strong> EAS</li>
-      <li class="pend"><strong>Post-launch</strong>: Analytics nativo · icono Liquid Glass iOS 26 · widgets/Watch/Live Activity · precios colaborativos · plan anual/Family Sharing · CI/CD + E2E</li>
+      <li class="pend"><strong>Web adaptada</strong> de verdad — el canal react-native-web <strong>ya no existe</strong> (retirado en SEC-11: <code>@react-native-firebase</code> no funciona en navegador). Se rehará como web propia sobre el <strong>SDK JS</strong>, con <code>admin/</code> de molde y reutilizando la capa pura de <code>core/</code> (27 ficheros, ~7.100 líneas, sin Firebase ni react-native). Al rehacerla, pasar la CSP a enforce y revisar orígenes</li>
+      <li class="pend"><strong>Animación del foco del tutorial</strong> — el trabajo ya está hecho (commit <code>3aed997</code>: 8 <code>useAnimatedStyle</code>, 0 paths SVG redibujados · verificado en código el 24-jul). Solo queda <em>juzgar la fluidez</em> en un build <strong>release</strong> EAS, que es donde se nota</li>
+      <li class="pend"><strong>Post-launch</strong>: Analytics nativo · icono Liquid Glass iOS 26 · widgets/Watch/Live Activity · precios colaborativos · Family Sharing · CI/CD + E2E</li>
     </ul>
   </div>
 
-  <p style="font-size:.66rem;color:var(--muted);margin:6px 2px 0;font-style:italic">Ya cerrado (no aparece arriba): buscador mejorado+desplegado · borrado de invitados completo+verificado · firebase-functions 7.3.0 · Sign in with Apple (código) · legal alineado (RGPD) · restaurar compras cableado · 4ª auditoría (49 hallazgos) · BUG-14 · PERF-2 · CSP en enforce · regen acumulable.</p>
+  <p style="font-size:.66rem;color:var(--muted);margin:6px 2px 0;font-style:italic">Ya cerrado (no aparece arriba): <strong>SEC-11</strong> (SDK nativo de Firebase, verificado en dispositivo) · <strong>bug de la IA: el menú fallaba siempre con comidas libres</strong> (arreglado y verificado en producción) · <strong>PERF-5</strong> (avatar fuera del doc) · <strong>SEC-8</strong> descartado con motivo · precios por supermercado (ya lo resuelve el código de barras) · animación del tutorial · CI en GitHub Actions · buscador mejorado+desplegado · borrado de invitados completo+verificado · firebase-functions 7.3.0 · Sign in with Apple (código) · legal alineado (RGPD) · restaurar compras cableado · 4ª auditoría (49 hallazgos) · BUG-14 · PERF-2 · CSP en enforce · regen acumulable · <strong>PUSH_ADMIN_UIDS configurado y desplegado</strong> (26-jul) · <strong>Ids del webhook alineados</strong> (<code>btal_regen_inmediata</code> / <code>btal_pro_1mes</code>) · <strong>4 productos IAP con precios finales</strong> (27-jul: 1,99 · 4,99/mes · 6,99 mes suelto · 34,99/año) · <strong>Coste real por generación MEDIDO</strong> (con/sin IVA) · <strong>Guard de restricciones endurecido</strong> (batería adversarial: 13 fugas → 0) · <strong>15 arreglos de reactividad</strong> · <strong>Índice de alimentos +5 productos sin gluten/lactosa</strong> (cobertura celíaca 80%→96%).</p>
 
 </div>
 
@@ -1669,12 +1674,12 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
   <div class="pane-intro">
     <h2>Modelo de negocio</h2>
-    <p>App nativa <strong style="color:var(--text)">mobile-first</strong> (99% móvil / 1% web) monetizada por <strong style="color:var(--text)">IAP de Apple/Google</strong>: plan <strong style="color:var(--text)">Pro 9,99 €/mes</strong> (≈3% del MAU) + <strong style="color:var(--text)">regeneración puntual 4,99 €</strong> (≈5% del MAU). El único coste que escala con el uso es la IA (Gemini): pesa ~87% del gasto a escala pero solo ~5% de los ingresos → <strong style="color:var(--accent)">margen ~94% estable a cualquier escala</strong>.</p>
+    <p>App nativa <strong style="color:var(--text)">mobile-first</strong> (99% móvil / 1% web) monetizada por <strong style="color:var(--text)">IAP de Apple/Google</strong>: plan <strong style="color:var(--text)">Pro 4,99 €/mes (o 34,99 €/año · O un mes suelto 6,99 € sin renovación)</strong> (≈3% del MAU) + <strong style="color:var(--text)">regeneración puntual 1,99 €</strong> (≈5% del MAU). El único coste que escala con el uso es la IA (Gemini): pesa ~90% del gasto a escala pero solo ~11% de los ingresos → <strong style="color:var(--accent)">margen ~86% estable a cualquier escala</strong>.</p>
     <div class="pi-stats">
-      <div class="pi-stat"><div class="v accent">~94%</div><div class="l">Margen neto · toda escala</div></div>
-      <div class="pi-stat"><div class="v">~10 DAU</div><div class="l">Break-even</div></div>
-      <div class="pi-stat"><div class="v">€0,023</div><div class="l">Coste IA/generación · medido</div></div>
-      <div class="pi-stat"><div class="v accent">+14.617 €</div><div class="l">Beneficio/mes a 10K DAU</div></div>
+      <div class="pi-stat"><div class="v accent">~86%</div><div class="l">Margen neto · toda escala</div></div>
+      <div class="pi-stat"><div class="v">~15 DAU</div><div class="l">Break-even</div></div>
+      <div class="pi-stat"><div class="v">€0,0265</div><div class="l">Coste IA/generación «Todo» · medido</div></div>
+      <div class="pi-stat"><div class="v accent">+6.044 €</div><div class="l">Beneficio/mes a 10K DAU</div></div>
     </div>
   </div>
 
@@ -1695,22 +1700,23 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
     </div>
     <div class="plan-card-wrap plan-single">
       <div class="stack-layer">Pago único</div>
-      <div class="stack-name" style="color:var(--accent3)">4,99 € ahora</div>
-      <div class="stack-why">Genera inmediatamente sin esperar al mes. Una vez pagado y generado, el contador de 30 días vuelve a empezar desde ese momento. No es una suscripción.</div>
+      <div class="stack-name" style="color:var(--accent3)">1,99 € ahora</div>
+      <div class="stack-why">Genera inmediatamente sin esperar al mes. El saldo se ACUMULA y no caduca: comprar dos veces son dos generaciones guardadas. No es una suscripción.</div>
       <div class="stack-items">
-        <div class="stack-item item-single">Genera ahora + reinicia el mes</div>
+        <div class="stack-item item-single">Genera ahora · saldo acumulable</div>
         <div class="stack-item item-single">Pago puntual, sin suscripción</div>
-        <div class="stack-item item-single">Vuelve a Free tras el ciclo</div>
+        <div class="stack-item item-single">El saldo no caduca</div>
       </div>
     </div>
     <div class="plan-card-wrap plan-pro">
-      <div class="stack-layer">Suscripción mensual</div>
-      <div class="stack-name" style="color:var(--accent)">Pro — 9,99 €/mes</div>
-      <div class="stack-why">Consultas a la IA ilimitadas durante ese mes. Útil si el usuario cambia su objetivo, peso o alimentos con frecuencia. Al cancelar o expirar vuelve automáticamente al plan Free.</div>
+      <div class="stack-layer">Suscripción (mensual o anual) · O mes suelto sin renovar</div>
+      <div class="stack-name" style="color:var(--accent)">Pro — 4,99 €/mes · 34,99 €/año · 6,99 € un mes suelto</div>
+      <div class="stack-why">Consultas a la IA ilimitadas durante ese mes. Útil si el usuario cambia su objetivo, peso o alimentos con frecuencia. Al cancelar o expirar vuelve automáticamente al plan Free. El <strong>mes suelto</strong> (6,99 €) da el mismo PRO durante 30 días como pago único, sin renovación — para quien no quiere suscribirse.</div>
       <div class="stack-items">
         <div class="stack-item item-pro">IA ilimitada ese mes</div>
         <div class="stack-item item-pro">Cancela cuando quieras</div>
         <div class="stack-item item-pro">Al expirar → vuelve a Free</div>
+        <div class="stack-item item-pro">Mes suelto 6,99 € · Mismo PRO sin renovación</div>
       </div>
     </div>
   </div>
@@ -1724,9 +1730,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <span style="color:var(--muted)">↓</span><br>
       <span style="color:var(--accent2)">USUARIO FREE</span><br>
       <span style="color:var(--muted)">├──</span> Genera → espera 30 días → genera gratis otra vez<br>
-      <span style="color:var(--muted)">└──</span> Quiere antes → <span style="color:var(--accent3)">paga 4,99€</span> → genera + reinicia contador 30 días<br>
+      <span style="color:var(--muted)">└──</span> Quiere antes → <span style="color:var(--accent3)">paga 1,99€</span> → genera + reinicia contador 30 días<br>
       <span style="color:var(--muted)">↓</span><br>
-      <span style="color:var(--accent)">USUARIO PRO</span> (9,99€/mes)<br>
+      <span style="color:var(--accent)">USUARIO PRO</span> (4,99€/mes · 34,99€/año · 6,99€ un mes suelto)<br>
       <span style="color:var(--muted)">├──</span> Genera cuando quiera, sin límite ese mes<br>
       <span style="color:var(--muted)">└──</span> Al cancelar → vuelve a Free con 1 generación/mes
     </div>
@@ -1823,11 +1829,11 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(240,168,56,.04)">
           <td style="padding:10px 12px;color:var(--text);font-weight:600">Gemini 3.1 Flash-Lite (IA) <span style="color:var(--accent3);font-weight:400;font-size:.7rem">⚠ SIN free tier · paga desde la 1ª generación</span></td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">&lt;1€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~4€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~42€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~420€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~4.175€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">&lt;2€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~5€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~48€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~484€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~4.808€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(55,240,168,.03)">
           <td style="padding:10px 12px;color:var(--accent2);font-weight:600">OpenFoodFacts <span style="color:var(--muted);font-weight:400;font-size:.7rem">(macros reales · BD propia en Firestore + API solo en cache-miss · ODbL gratis)</span></td>
@@ -1847,26 +1853,26 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
           <td style="padding:10px 12px;color:var(--muted);font-weight:600">Comisión IAP Apple/Google (15% de los ingresos brutos)</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~1,40€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~14€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~138€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~1.375€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~13.755€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~0,60€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~6€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~62€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~624€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent3)">~6.242€</td>
         </tr>
         <tr style="background:rgba(181,240,55,.04)">
           <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">TOTAL COSTES /mes (infra + IAP)</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~2€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~19€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~182€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~1.830€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~18.363€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~11€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~106€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~1.079€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~10.850€</td>
         </tr>
-        <tr><td colspan="6" style="padding:6px 12px;font-size:.66rem;color:var(--muted);font-style:italic">⚠ Tabla "por usuarios totales" (registrados · MAU ≈ 16,7% · 1 gen/MAU). <strong style="color:var(--accent2)">Modelo MOBILE-FIRST (IAP) · MISMO supuesto que la proyección de abajo (rev. 13-jun):</strong> paga el <strong>3% del MAU</strong> (Pro 9,99€) + el <strong>5% del MAU</strong> (regeneración 4,99€) — grupos disjuntos, nadie paga las dos cosas. La comisión IAP <strong>15%</strong> va sobre los ingresos brutos (~9€/92€/920€/9.170€/91.700€) → ~1,40€/14€/138€/1.375€/13.755€, incluida en el TOTAL COSTES. La <strong>infra pura</strong> (sin IAP) es prácticamente solo Gemini (IA) a escala (~1€/5€/44€/455€/4.608€). 15% es Small Business Program (&lt;1M$/año) · 30% por encima. 1M registrados ≈ 50K DAU.</td></tr>
+        <tr><td colspan="6" style="padding:6px 12px;font-size:.66rem;color:var(--muted);font-style:italic">⚠ Tabla "por usuarios totales" (registrados · MAU ≈ 16,7% · 1 gen/MAU). <strong style="color:var(--accent2)">Modelo MOBILE-FIRST (IAP) · MISMO supuesto que la proyección de abajo (rev. 13-jun):</strong> paga el <strong>3% del MAU</strong> (Pro 4,99€) + el <strong>5% del MAU</strong> (regeneración 1,99€) — grupos disjuntos, nadie paga las dos cosas. La comisión IAP <strong>15%</strong> va sobre los ingresos brutos (~4,16€/42€/416€/4.162€/41.616€) → ~0,60€/6€/62€/624€/6.242€, incluida en el TOTAL COSTES. La <strong>infra pura</strong> (sin IAP) es prácticamente solo Gemini (IA) a escala (~1€/6€/51€/524€/5.310€). 15% es Small Business Program (&lt;1M$/año) · 30% por encima. 1M registrados ≈ 50K DAU.</td></tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--text)">Glosario:</strong> <strong>Registrados</strong> = cuentas creadas en total (las columnas). <strong>MAU</strong> = usuarios activos al mes ≈ <strong>16,7% de los registrados</strong>. <strong>DAU</strong> = usuarios activos al día ≈ 30% del MAU. Ej.: 10.000 registrados → ~1.670 MAU → ~500 DAU. No incluye backups (pospuestos) ni los fijos Apple Dev/Play/dominio (~19€/mes) — la proyección por DAU de abajo sí los cuenta.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--text)">Glosario:</strong> <strong>Registrados</strong> = cuentas creadas en total (las columnas). <strong>MAU</strong> = usuarios activos al mes ≈ <strong>16,7% de los registrados</strong>. <strong>DAU</strong> = usuarios activos al día ≈ 30% del MAU. Ej.: 10.000 registrados → ~1.670 MAU → ~500 DAU. No incluye backups (pospuestos) ni los fijos Apple Dev/Play/dominio (~9€/mes) — la proyección por DAU de abajo sí los cuenta.</div>
     <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent2)">0 € a cualquier escala:</strong> App Check (DeviceCheck/Play Integrity), Analytics, Sentry (crashes · free 5k/mes), Auth + 2FA, reCAPTCHA (web · 1M/mes gratis) y OpenFoodFacts (BD propia en <code>foods/</code>, API solo en cache-miss) son gratis ilimitados · el <strong>avatar</strong> viaja como data-URI dentro del doc Firestore → 0 € de Storage para siempre (solo egress marginal, ya en "Firebase Descarga").</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">La IA (Gemini) es el único coste que escala con el uso</strong> — ~€0,023/generación con Gemini 3.1 Flash-Lite (medido). Desglose de tokens y comparativa de modelos en las dos secciones siguientes.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">La IA (Gemini) es el único coste que escala con el uso</strong> — ~€0,0265/generación «Todo» con Gemini 3.1 Flash-Lite (MEDIDO el 27-jul con 36 llamadas reales · scripts/coste-real-generacion.mjs). Por tipo, SIN IVA / CON IVA 21%: Todo €0,0265 / €0,0321 (3 llamadas) · solo comidas €0,0158 / €0,0192 (2) · solo entrenos €0,0113 / €0,0137 (1). <strong>OJO AL IVA:</strong> Google cobra el IVA español a las cuentas de facturación de PARTICULAR («Individual Entrepreneur Accounts: VAT is charged at your country's local applicable rate», cloud.google.com/billing/docs/resources/vat-overview), así que HOY el saldo baja un 21% más rápido que la tarifa. Al darse de alta como autónomo y poner el NIF-IVA en la cuenta pasa a cuenta de empresa: Google deja de cobrarlo y se autoliquida (deducible → coste efectivo cero). No hace falta sociedad; el alta de autónomo ya es obligatoria para cobrar en las tiendas. Las tablas de esta página van SIN IVA, que es el coste que hay que comparar con los ingresos una vez dado de alta. Desglose de tokens y comparativa de modelos en las dos secciones siguientes.</div>
   </div>
 
   <div class="section-label">Comparativa modelo IA · Gemini antes vs ahora (jun-2026) · coste POR GENERACIÓN (no mensual)</div>
@@ -1904,16 +1910,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="padding:10px 12px;color:var(--accent);font-weight:700">gemini-3.1-flash-lite <span style="font-weight:400;font-size:.7rem">(AHORA · 30-jun)</span></td>
           <td style="text-align:center;padding:10px 12px;color:var(--text)">$0,25</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text)">$1,50</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent)">€0,023</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent)">€0,0265</td>
           <td style="text-align:center;padding:10px 12px;color:var(--accent)">€23</td>
           <td style="padding:10px 12px;color:var(--accent2)">✅ 2.4× más RÁPIDO (~21s) · 2.21× más barato · kcal final 100% (enrichMenu)</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Coste/gen <strong style="color:var(--accent)">MEDIDO con tokens reales</strong> (usageMetadata de Gemini, no estimado · precios oficiales ai.google.dev/gemini-api/docs/pricing jun-2026). Una generación «Todo» = <strong>~11.765 tokens de entrada + 14.933 de salida</strong> en 3.1-flash-lite (2.5-flash gasta 21.030 de salida, es más verboso) → <strong style="color:var(--accent)">3.1-flash-lite = €0,023/gen, 2,21× más barato que 2.5-flash (€0,052)</strong> Y ~2,4× más rápido (~21s vs ~50s). <strong style="color:var(--accent)">enrichMenu (Fase 6B) clava las kcal con cualquier modelo</strong>, así que la decisión fue velocidad + precio. Se probaron <strong>16 modelos modernos</strong> (OpenAI, Anthropic, xAI, Mistral, Qwen, DeepSeek, Llama, GLM, Kimi vía OpenRouter): NINGUNO igualó a Gemini en velocidad. Trade-off de 3.1-fl: variedad de platos algo menor (~0,85 vs ~0,97), reforzada con guardas deterministas. Un Pro de 9,99€ ≈ ~430 generaciones.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Coste/gen <strong style="color:var(--accent)">MEDIDO con tokens reales</strong> (usageMetadata de Gemini, no estimado · precios oficiales ai.google.dev/gemini-api/docs/pricing jun-2026). Una generación «Todo» = <strong>~11.765 tokens de entrada + 14.933 de salida</strong> en 3.1-flash-lite (2.5-flash gasta 21.030 de salida, es más verboso) → <strong style="color:var(--accent)">3.1-flash-lite = €0,0265/gen «Todo» (por token, 2,21× más barato que 2.5-flash)</strong> Y ~2,4× más rápido (~21s vs ~50s). <strong style="color:var(--accent)">enrichMenu (Fase 6B) clava las kcal con cualquier modelo</strong>, así que la decisión fue velocidad + precio. Se probaron <strong>16 modelos modernos</strong> (OpenAI, Anthropic, xAI, Mistral, Qwen, DeepSeek, Llama, GLM, Kimi vía OpenRouter): NINGUNO igualó a Gemini en velocidad. Trade-off de 3.1-fl: variedad de platos algo menor (~0,85 vs ~0,97), reforzada con guardas deterministas. Un Pro de 4,99€ ≈ ~160 generaciones «Todo» antes de perder dinero (coste MEDIDO €0,0265/gen, comisión 15%).</div>
   </div>
 
-  <div class="section-label">Coste de la IA por volumen de peticiones · rango amplio (10 DAU → 1M DAU) · gemini-3.1-flash-lite a €0,023/gen (medido)</div>
+  <div class="section-label">Coste de la IA por volumen de peticiones · rango amplio (10 DAU → 1M DAU) · gemini-3.1-flash-lite a €0,0265/gen «Todo» (medido 27-jul · el valor anterior, €0,023, se quedaba un 15% corto: contaba UNA llamada y producción hace TRES)</div>
 
   <div style="overflow-x:auto;margin-bottom:8px">
     <table style="width:100%;border-collapse:collapse;font-size:.78rem">
@@ -1929,16 +1935,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       </thead>
       <tbody>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">10</td><td style="text-align:center;padding:7px;color:var(--text2)">~33</td><td style="text-align:center;padding:7px;color:var(--text2)">~33</td><td style="text-align:center;padding:7px;color:var(--text2)">~66</td><td style="text-align:center;padding:7px;color:var(--accent)">&lt;1 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~2 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">50</td><td style="text-align:center;padding:7px;color:var(--text2)">~170</td><td style="text-align:center;padding:7px;color:var(--text2)">~170</td><td style="text-align:center;padding:7px;color:var(--text2)">~340</td><td style="text-align:center;padding:7px;color:var(--accent)">~4 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~9 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">100</td><td style="text-align:center;padding:7px;color:var(--text2)">~330</td><td style="text-align:center;padding:7px;color:var(--text2)">~330</td><td style="text-align:center;padding:7px;color:var(--text2)">~660</td><td style="text-align:center;padding:7px;color:var(--accent)">~8 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~17 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">500 <span style="color:var(--accent3);font-size:.62rem">★ break-even</span></td><td style="text-align:center;padding:7px;color:var(--text2)">~1.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~1.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.400</td><td style="text-align:center;padding:7px;color:var(--accent)">~39 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~88 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">1.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.300</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.300</td><td style="text-align:center;padding:7px;color:var(--text2)">~6.600</td><td style="text-align:center;padding:7px;color:var(--accent)">~76 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~172 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">2.000 <span style="color:var(--accent3);font-size:.62rem">★ sweet spot</span></td><td style="text-align:center;padding:7px;color:var(--text2)">~6.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~6.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~13.400</td><td style="text-align:center;padding:7px;color:var(--accent)">~154 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~348 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">5.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~17.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~17.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~34.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~391 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~884 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(181,240,55,.06)"><td style="padding:7px 10px;color:var(--accent);font-weight:700">10.000 <span style="font-size:.62rem">(Scale)</span></td><td style="text-align:center;padding:7px;color:var(--text)">~33.000</td><td style="text-align:center;padding:7px;color:var(--text)">~33.000</td><td style="text-align:center;padding:7px;color:var(--text)">~66.000</td><td style="text-align:center;padding:7px;color:var(--accent);font-weight:700">~759 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~1.716 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">25.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~83.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~83.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~166.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~1.910 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~4.320 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">50.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~167.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~167.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~334.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~3.840 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~8.680 €</td></tr>
-        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">100.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~333.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~333.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~666.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~7.660 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~17.320 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">50 <span style="color:var(--accent3);font-size:.62rem">★ break-even ~15</span></td><td style="text-align:center;padding:7px;color:var(--text2)">~170</td><td style="text-align:center;padding:7px;color:var(--text2)">~170</td><td style="text-align:center;padding:7px;color:var(--text2)">~340</td><td style="text-align:center;padding:7px;color:var(--accent)">~5 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~9 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">100</td><td style="text-align:center;padding:7px;color:var(--text2)">~330</td><td style="text-align:center;padding:7px;color:var(--text2)">~330</td><td style="text-align:center;padding:7px;color:var(--text2)">~660</td><td style="text-align:center;padding:7px;color:var(--accent)">~9 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~17 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">500</td><td style="text-align:center;padding:7px;color:var(--text2)">~1.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~1.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.400</td><td style="text-align:center;padding:7px;color:var(--accent)">~45 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~88 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">1.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.300</td><td style="text-align:center;padding:7px;color:var(--text2)">~3.300</td><td style="text-align:center;padding:7px;color:var(--text2)">~6.600</td><td style="text-align:center;padding:7px;color:var(--accent)">~88 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~172 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">2.000 <span style="color:var(--accent3);font-size:.62rem">★ sweet spot</span></td><td style="text-align:center;padding:7px;color:var(--text2)">~6.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~6.700</td><td style="text-align:center;padding:7px;color:var(--text2)">~13.400</td><td style="text-align:center;padding:7px;color:var(--accent)">~177 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~348 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">5.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~17.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~17.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~34.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~450 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~884 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(181,240,55,.06)"><td style="padding:7px 10px;color:var(--accent);font-weight:700">10.000 <span style="font-size:.62rem">(Scale)</span></td><td style="text-align:center;padding:7px;color:var(--text)">~33.000</td><td style="text-align:center;padding:7px;color:var(--text)">~33.000</td><td style="text-align:center;padding:7px;color:var(--text)">~66.000</td><td style="text-align:center;padding:7px;color:var(--accent);font-weight:700">~874 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~1.716 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">25.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~83.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~83.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~166.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~2.200 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~4.320 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">50.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~167.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~167.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~334.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~4.423 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~8.680 €</td></tr>
+        <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">100.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~333.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~333.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~666.000</td><td style="text-align:center;padding:7px;color:var(--accent)">~8.824 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~17.320 €</td></tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">250.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~833.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~833.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~1,67 M</td><td style="text-align:center;padding:7px;color:var(--accent)">~19.160 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~43.320 €</td></tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)"><td style="padding:7px 10px;color:var(--text2);font-weight:600">500.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~1,67 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~1,67 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~3,34 M</td><td style="text-align:center;padding:7px;color:var(--accent)">~38.400 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~86.840 €</td></tr>
         <tr><td style="padding:7px 10px;color:var(--text2);font-weight:600">1.000.000</td><td style="text-align:center;padding:7px;color:var(--text2)">~3,33 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~3,33 M</td><td style="text-align:center;padding:7px;color:var(--text2)">~6,66 M</td><td style="text-align:center;padding:7px;color:var(--accent)">~76.600 €</td><td style="text-align:center;padding:7px;color:var(--muted)">~173.160 €</td></tr>
@@ -1977,7 +1983,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
               <td style="padding:8px;color:var(--accent)">Total / generación «Todo»</td>
               <td style="text-align:center;padding:8px;color:var(--text)">~11.765</td>
               <td style="text-align:center;padding:8px;color:var(--accent)">~14.933</td>
-              <td style="padding:8px;color:var(--text2);font-size:.7rem">~26.700 tokens (medido) → €0,0224 salida + €0,0029 entrada ≈ <strong>€0,023/gen</strong></td>
+              <td style="padding:8px;color:var(--text2);font-size:.7rem">~28.800 tokens (medido · 3 llamadas: menú A+B en paralelo y entreno) → €0,0239 salida + €0,0027 entrada ≈ <strong>€0,0265/gen «Todo»</strong></td>
             </tr>
           </tbody>
         </table>
@@ -1987,12 +1993,12 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <div style="margin-bottom:32px">
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Supuestos:</strong> DAU/MAU = 30% (MAU ≈ DAU × 3,3) · <strong>1 generación IA / MAU / mes</strong> (conservador: Free = 1/mes, pero Pro 3% es ilimitado y tira del promedio hacia arriba) · coste/gen <strong>€0,023</strong> medido. La columna "vs 2.5-flash" muestra el ahorro de <strong>~2,21×</strong> desde el cambio del 30-jun. <strong style="color:var(--accent3)">Sin free tier</strong> (Gemini cobra desde la 1ª petición) pero marginal frente a los ingresos (~5% a 10K DAU). <strong style="color:var(--accent3)">Palancas de ahorro:</strong> prompt de menú más corto (hoy 9.431 tokens de entrada), batch API (−50%) o cache de generaciones similares.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Supuestos:</strong> DAU/MAU = 30% (MAU ≈ DAU × 3,3) · <strong>1 generación IA / MAU / mes</strong> (conservador: Free = 1/mes, pero Pro 3% es ilimitado y tira del promedio hacia arriba) · coste/gen <strong>€0,0265</strong> «Todo» medido. La columna "vs 2.5-flash" muestra el ahorro de <strong>~2,21×</strong> desde el cambio del 30-jun. <strong style="color:var(--accent3)">Sin free tier</strong> (Gemini cobra desde la 1ª petición) pero marginal frente a los ingresos (~5% a 10K DAU). <strong style="color:var(--accent3)">Palancas de ahorro:</strong> prompt de menú más corto (hoy 9.431 tokens de entrada), batch API (−50%) o cache de generaciones similares.</div>
   </div>
 
   <div class="group-header"><span class="gh-num">3</span> Ingresos y proyección <span class="gh-sub">De dónde sale el dinero, hoja de ruta de monetización y proyección por escala</span></div>
 
-  <div class="section-label">Ingresos vs costes — 3% MAU Pro 9,99€ + 5% MAU regeneración 4,99€ (supuesto unificado 13-jun) · cifras MENSUALES (€/mes)</div>
+  <div class="section-label">Ingresos vs costes — 3% MAU Pro 4,99€ + 5% MAU regeneración 1,99€ (precios revisados 27-jul) · cifras MENSUALES (€/mes)</div>
 
   <div style="overflow-x:auto;margin-bottom:32px">
     <table style="width:100%;border-collapse:collapse;font-size:.8rem">
@@ -2008,56 +2014,56 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       </thead>
       <tbody>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:10px 12px;color:var(--text);font-weight:600">Ingresos Pro 9,99€ <span style="color:var(--muted);font-weight:400;font-size:.7rem">(3% del MAU)</span></td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~5€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~50€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~500€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~5.000€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~50.000€</td>
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Ingresos Pro 4,99€ <span style="color:var(--muted);font-weight:400;font-size:.7rem">(3% del MAU)</span></td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~2,5€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~25€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~250€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~2.500€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~25.000€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:10px 12px;color:var(--text);font-weight:600">Regeneraciones 4,99€ <span style="color:var(--muted);font-weight:400;font-size:.7rem">(5% del MAU · grupo distinto del Pro)</span></td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~4€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~42€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~420€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~4.170€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~41.700€</td>
+          <td style="padding:10px 12px;color:var(--text);font-weight:600">Regeneraciones 1,99€ <span style="color:var(--muted);font-weight:400;font-size:.7rem">(5% del MAU · grupo distinto del Pro)</span></td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~1,7€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~17€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~166€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~1.660€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~16.620€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
           <td style="padding:10px 12px;color:var(--text);font-weight:600">Total ingresos /mes (bruto)</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~9€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~92€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~920€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~9.170€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~91.700€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~4€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~42€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~416€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~4.160€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~41.620€</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
           <td style="padding:10px 12px;color:var(--text);font-weight:600">Total costes /mes (infra + IAP 15%)</td>
           <td style="text-align:center;padding:10px 12px;color:var(--text2)">~2€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~19€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~182€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~1.830€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~18.363€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~11€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~112€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~1.143€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--text2)">~11.480€</td>
         </tr>
         <tr style="background:rgba(181,240,55,.04)">
           <td style="padding:10px 12px;color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.4px">BENEFICIO NETO /mes</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~7€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~73€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~738€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~7.340€</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~73.337€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~2€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~31€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~304€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~3.020€</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent);font-weight:700">~30.140€</td>
         </tr>
         <tr>
           <td style="padding:10px 12px;color:var(--text2)">Margen (sobre ingresos brutos)</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~78%</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~79%</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~80%</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~80%</td>
-          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~80%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~57%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~74%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~73%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~73%</td>
+          <td style="text-align:center;padding:10px 12px;color:var(--accent2)">~72%</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Columnas = usuarios REGISTRADOS totales. Los % de pago se aplican sobre el <strong>MAU</strong> (usuarios activos al mes ≈ 16,7% de los registrados): de 10.000 registrados solo ~1.670 usan la app cada mes → 3% Pro = ~50 suscriptores y 5% regeneración = ~84 compras/mes. El margen sale ~80% (no 94% como abajo) solo porque aquí el 15% de IAP se cuenta como COSTE contra ingresos BRUTOS; en la proyección por DAU se descuenta del ARPU (ingresos NETOS) — es la misma economía con otro encuadre.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* Columnas = usuarios REGISTRADOS totales. Los % de pago se aplican sobre el <strong>MAU</strong> (usuarios activos al mes ≈ 16,7% de los registrados): de 10.000 registrados solo ~1.670 usan la app cada mes → 3% Pro = ~50 suscriptores y 5% regeneración = ~84 compras/mes. El margen sale ~73% (no ~86% como abajo) solo porque aquí el 15% de IAP se cuenta como COSTE contra ingresos BRUTOS; en la proyección por DAU se descuenta del ARPU (ingresos NETOS) — es la misma economía con otro encuadre.</div>
   </div>
 
   <div class="section-label">Hoja de ruta de monetización</div>
@@ -2084,14 +2090,14 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <div class="step-title">Fase 2 — Monetización <span class="step-tag tag-new">Siguiente · Fase 4.5</span></div>
         <div class="step-desc">Publicar en stores (EAS) → activar IAP. Los dos modelos de pago con RevenueCat.</div>
         <div class="box">
-          <div class="box-title">Pago único 4,99€</div>
-          <div class="box-item">Aparece botón "Generar ahora por 4,99€" cuando el usuario no puede regenerar aún</div>
+          <div class="box-title">Pago único 1,99€</div>
+          <div class="box-item">Aparece botón "Generar ahora por 1,99€" cuando el usuario no puede regenerar aún</div>
           <div class="box-item">La hoja de pago de Apple/Google procesa la compra → webhook RevenueCat → Firebase resetea <code>fecha_ultima_generacion</code></div>
           <div class="box-item">Genera inmediatamente y reinicia el ciclo de 30 días</div>
         </div>
         <div class="box" style="margin-top:8px">
-          <div class="box-title">Plan Pro 9,99€/mes</div>
-          <div class="box-item">Apple/Google gestionan la suscripción mensual auto-renovable (RevenueCat unifica el estado)</div>
+          <div class="box-title">Plan Pro 4,99€/mes (o 34,99€/año · O mes suelto 6,99€ no renovable)</div>
+          <div class="box-item">Apple/Google gestionan la suscripción auto-renovable (mensual o anual); el mes suelto es compra única de 30 días (RevenueCat unifica el estado)</div>
           <div class="box-item">Firebase guarda: <code>plan_pro: true</code> + <code>fecha_expiracion</code></div>
           <div class="box-item">Mientras activo → IA ilimitada ese mes</div>
           <div class="box-item">Al cancelar o expirar → vuelve a Free automáticamente</div>
@@ -2118,13 +2124,13 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
   </div>
 
   <!-- ── PROYECCIÓN FINANCIERA · mobile-first · revisión 13-jun 2026 (precios reales) ───── -->
-  <div class="section-label">Proyección financiera por escala · mobile-first (rev. 13-jun 2026 · precios reales implementados: Pro 9,99 · one-off 4,99) · cifras MENSUALES (€/mes salvo donde se indique el periodo)</div>
+  <div class="section-label">Proyección financiera por escala · mobile-first (rev. 27-jul-2026 · precios: Pro 4,99 €/mes · 34,99 €/año · Mes suelto 6,99 € · Regeneración 1,99 €) · cifras MENSUALES (€/mes salvo donde se indique el periodo)</div>
 
   <div class="arch-card" style="margin-bottom:16px;border-left:3px solid var(--accent)">
     <div class="arch-card-header"><div class="arch-card-title">Assumptions del modelo · canal primario nativo</div></div>
     <div style="padding:16px 20px;font-size:.78rem;color:var(--text2);line-height:1.7">
-      <strong style="color:var(--text)">Pro vía IAP:</strong> 9,99 €/mes → <strong>ARPU neto 8,49 €</strong> (Apple/Google retienen el 15% Small Business) · ~3% del MAU (rango realista 2-5%)<br>
-      <strong style="color:var(--text)">One-off Regeneración inmediata:</strong> 4,99 € → <strong>4,24 € neto</strong> tras IAP · ~5% del MAU/mes (grupo distinto del Pro)<br>
+      <strong style="color:var(--text)">Pro vía IAP:</strong> 4,99 €/mes → <strong>ARPU neto 4,24 €</strong> (Apple/Google retienen el 15% Small Business) · ~3% del MAU (rango realista 2-5%)<br>
+      <strong style="color:var(--text)">One-off Regeneración inmediata:</strong> 1,99 € → <strong>1,69 € neto</strong> tras IAP · ~5% del MAU/mes (grupo distinto del Pro) · El PRO anual (34,99 €) y el mes suelto (6,99 €) no se modelan aparte: se asumen dentro del ~3% Pro (conservador)<br>
       <strong style="color:var(--text)">DAU vs MAU:</strong> los tramos de la tabla van por <strong>DAU</strong> (tamaño real de la app); los pagos se calculan sobre el <strong>MAU</strong>. Ratio 30% (fitness = alta retención) → MAU ≈ DAU × 3,3 · retención 30 días ~15%<br>
       <strong style="color:var(--accent3)">Elasticidad NO modelada:</strong> a mayor precio la conversión real puede quedar por debajo del 3%/5% asumido · vigilar con datos reales tras el lanzamiento<br>
       <strong style="color:var(--accent)">Infra y seguridad ≈ 0 €:</strong> App Check nativo, Analytics, Sentry (crashes), 2FA y reglas de monetización blindadas son gratis (detalle en la tabla de costes y el panel de Seguridad) · pagos solo por IAP, sin pasarelas externas · <strong>canal 99% nativo</strong> (web ~1% residual).
@@ -2197,40 +2203,40 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">5.000</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:6px 8px;color:var(--muted);font-size:.7rem;font-style:italic">Ingresos Pro IAP (8,49 € ARPU)</td>
+          <td style="padding:6px 8px;color:var(--muted);font-size:.7rem;font-style:italic">Ingresos Pro IAP (4,24 € ARPU neto)</td>
           <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">0 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">42 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">425 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">849 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">1.698 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">4.245 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">8.490 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">16.980 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">42.450 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">21 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">212 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">424 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">848 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">2.120 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">4.240 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">8.480 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">21.200 €</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
-          <td style="padding:6px 8px;color:var(--muted);font-size:.7rem;font-style:italic">One-off IAP neto (5% MAU × 4,24 €)</td>
+          <td style="padding:6px 8px;color:var(--muted);font-size:.7rem;font-style:italic">One-off IAP neto (5% MAU × 1,69 €)</td>
           <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">0 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">36 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">360 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">700 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">1.420 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">3.604 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">6.996 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">14.204 €</td>
-          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">35.404 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">14 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">144 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">279 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">566 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">1.437 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">2.789 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">5.662 €</td>
+          <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">14.112 €</td>
         </tr>
         <tr style="border-bottom:1px solid var(--border);background:rgba(55,240,168,.04)">
           <td style="padding:10px 8px;color:var(--accent2);font-weight:700">🟢 Ingresos netos /mes</td>
           <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">0 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">78 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">785 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">1.549 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">3.118 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">7.849 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">15.486 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">31.184 €</td>
-          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">77.854 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">35 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">356 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">703 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">1.414 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">3.557 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">7.029 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">14.142 €</td>
+          <td style="text-align:center;padding:10px 6px;color:var(--accent2);font-weight:700">35.312 €</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
           <td style="padding:8px;color:var(--muted);font-size:.72rem">Firestore reads + writes <span style="color:var(--accent2);font-size:.66rem">(app optimizada · getDoc, ~90 reads/sesión)</span></td>
@@ -2281,16 +2287,16 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <td style="text-align:center;padding:6px;color:var(--text2);font-size:.7rem">~167.000</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5);background:rgba(240,168,56,.05)">
-          <td style="padding:8px;color:var(--text);font-size:.72rem;font-weight:600">Gemini 3.1 Flash-Lite (IA · €0,023/gen medido · sin free tier)</td>
+          <td style="padding:8px;color:var(--text);font-size:.72rem;font-weight:600">Gemini 3.1 Flash-Lite (IA · €0,0265/gen «Todo» medido · sin free tier)</td>
           <td style="text-align:center;padding:8px 6px;color:var(--text2)">&lt;1 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--text2)">4 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--text2)">39 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--text2)">76 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">154 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">391 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">759 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">1.540 €</td>
-          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">3.840 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--text2)">5 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--text2)">45 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--text2)">87 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">178 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">451 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">875 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">1.776 €</td>
+          <td style="text-align:center;padding:8px 6px;color:var(--accent3)">4.426 €</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(42,46,43,.5)">
           <td style="padding:8px;color:var(--muted);font-size:.72rem">Cloud Functions (cómputo · generatePlan + searchFood)</td>
@@ -2379,44 +2385,44 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <tr style="border-bottom:1px solid var(--border);background:rgba(240,55,55,.04)">
           <td style="padding:10px 8px;color:#f87171;font-weight:700">🔴 Costes totales /mes</td>
           <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">9 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">13 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">50 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">90 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">186 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">455 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">869 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">1.744 €</td>
-          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">4.307 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">14 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">56 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">101 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">210 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">515 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">985 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">1.980 €</td>
+          <td style="text-align:center;padding:10px 6px;color:#f87171;font-weight:700">4.893 €</td>
         </tr>
         <tr style="background:rgba(181,240,55,.06)">
           <td style="padding:12px 8px;color:var(--accent);font-weight:700">💰 Beneficio neto /mes</td>
           <td style="text-align:center;padding:12px 6px;color:var(--accent3);font-weight:700">−9 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+65 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+735 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+1.459 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+2.932 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+7.394 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+14.617 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+29.440 €</td>
-          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+73.547 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+21 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+300 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+602 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+1.204 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+3.042 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+6.044 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+12.162 €</td>
+          <td style="text-align:center;padding:12px 6px;color:var(--accent);font-weight:700">+30.419 €</td>
         </tr>
         <tr>
           <td style="padding:6px 8px;color:var(--muted);font-size:.66rem">Margen</td>
           <td style="text-align:center;padding:6px;color:var(--muted);font-size:.66rem">–</td>
-          <td style="text-align:center;padding:6px;color:var(--muted);font-size:.66rem">83%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
-          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">94%</td>
+          <td style="text-align:center;padding:6px;color:var(--muted);font-size:.66rem">60%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">84%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">86%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">85%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">86%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">86%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">86%</td>
+          <td style="text-align:center;padding:6px;color:var(--accent);font-size:.66rem;font-weight:700">86%</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste IA (Gemini 3.1 Flash-Lite · €0,023/generación MEDIDO, jun-2026):</strong> generaciones/mes ≈ <strong>1 × MAU</strong> (estimación CONSERVADORA, algo por encima para ir sobre seguro). Modelo: Free = 1 gen/30 días + onboarding + <strong>Pro (3% MAU) = ILIMITADO</strong> (tira del promedio hacia arriba, los 3 botones "Generar con IA" se pueden usar muchas veces) + one-off (5% MAU). El buscador de alimentos NO usa Gemini (usa la BD de OpenFoodFacts). A 10K DAU ≈ 33.000 generaciones/mes → <strong style="color:var(--accent3)">~759 €/mes (≈5% de los ingresos)</strong> · 2,21× más barato que 2.5-flash (que costaría ~€1.716/mes a esa escala).</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">⚠ Gemini NO tiene free tier:</strong> la API de pago cobra desde la PRIMERA generación (a diferencia de Firestore, Functions, Auth, App Check… que SÍ son gratis hasta un umbral). Por eso el coste IA <strong>nunca es 0 €</strong> mientras haya generaciones — solo es ~0 en Pre-launch (1 gen = €0,023). Con 5.000 generaciones ya pagas ~115 €, con 17.000 ~391 €, etc.</div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Margen ~94% sostenido a CUALQUIER escala.</strong> Con la app optimizada (getDoc · racha capada a 30 · sin listeners), Firestore es MARGINAL (~€26/mes a 10K DAU, no €1.165 del modelo viejo). El coste lo domina <strong style="color:var(--accent3)">la IA: Gemini = ~87% del coste a escala</strong> (es lo único que escala con el uso y no tiene free tier). El cambio a 3.1-flash-lite (30-jun) <strong>ahorra ~2,21×</strong> en coste IA vs 2.5-flash (que habría dejado el margen en ~88%) — el margen se mantiene y baja el riesgo a escala. Beneficio positivo desde Beta. Palanca #1 de optimización = <strong>prompt de menú más corto</strong> (hoy 9.431 tokens de entrada) + modelo más barato para Free.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:8px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Coste IA (Gemini 3.1 Flash-Lite · €0,0265/generación «Todo» MEDIDO, 27-jul-2026):</strong> generaciones/mes ≈ <strong>1 × MAU</strong> (estimación CONSERVADORA, algo por encima para ir sobre seguro). Modelo: Free = 1 gen/30 días + onboarding + <strong>Pro (3% MAU) = ILIMITADO</strong> (tira del promedio hacia arriba, los 3 botones "Generar con IA" se pueden usar muchas veces) + one-off (5% MAU). El buscador de alimentos NO usa Gemini (usa la BD de OpenFoodFacts). A 10K DAU ≈ 33.000 generaciones/mes → <strong style="color:var(--accent3)">~759 €/mes (≈5% de los ingresos)</strong> · 2,21× más barato que 2.5-flash (que costaría ~€1.716/mes a esa escala).</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent3)">⚠ Gemini NO tiene free tier:</strong> la API de pago cobra desde la PRIMERA generación (a diferencia de Firestore, Functions, Auth, App Check… que SÍ son gratis hasta un umbral). Por eso el coste IA <strong>nunca es 0 €</strong> mientras haya generaciones — solo es ~0 en Pre-launch (1 gen «Todo» = €0,0265). Con 5.000 generaciones ya pagas ~133 €, con 17.000 ~451 €, etc.</div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace">* <strong style="color:var(--accent)">Margen ~86% sostenido a CUALQUIER escala.</strong> Con la app optimizada (getDoc · racha capada a 30 · sin listeners), Firestore es MARGINAL (~€26/mes a 10K DAU, no €1.165 del modelo viejo). El coste lo domina <strong style="color:var(--accent3)">la IA: Gemini = ~87% del coste a escala</strong> (es lo único que escala con el uso y no tiene free tier). El cambio a 3.1-flash-lite (30-jun) <strong>ahorra ~2,21×</strong> en coste IA vs 2.5-flash (que habría dejado el margen en ~88%) — el margen se mantiene y baja el riesgo a escala. Beneficio positivo desde Beta. Palanca #1 de optimización = <strong>prompt de menú más corto</strong> (hoy 9.431 tokens de entrada) + modelo más barato para Free.</div>
   </div>
 
   <!-- ── GRÁFICO 1 · Ingresos vs Costes vs Beneficio por escala (9 tiers) -->
@@ -2560,7 +2566,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
 
   <!-- ── GRÁFICO 2 · Breakdown de costes a 10K DAU ──────────────────── -->
-  <div class="section-label">Gráfico · breakdown de costes a 10K DAU (869 €/mes · mobile-first 99% · la IA domina · 3.1-flash-lite €0,023/gen medido)</div>
+  <div class="section-label">Gráfico · breakdown de costes a 10K DAU (985 €/mes · mobile-first 99% · la IA domina · 3.1-flash-lite €0,0265/gen «Todo» medido)</div>
 
   <div class="arch-card" style="margin-bottom:24px">
     <div style="padding:20px">
@@ -2717,9 +2723,9 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
           <circle cx="915" cy="33" r="5"/>
         </g>
 
-        <!-- Margen PLANO ~94% a toda escala (3.1-flash-lite · la IA escala lineal) -->
+        <!-- Margen PLANO ~86% a toda escala (3.1-flash-lite · la IA escala lineal) -->
         <rect x="320" y="28" width="450" height="10" fill="rgba(181,240,55,.08)" stroke="rgba(181,240,55,.3)" stroke-dasharray="3 3"/>
-        <text x="545" y="20" fill="var(--accent)" font-size="9" text-anchor="middle" font-weight="700">MARGEN PLANO ~94% (la IA escala lineal con ingresos)</text>
+        <text x="545" y="20" fill="var(--accent)" font-size="9" text-anchor="middle" font-weight="700">MARGEN PLANO ~86% (la IA escala lineal con ingresos)</text>
 
         <!-- Etiquetas valores mobile -->
         <g fill="var(--accent)" font-size="11" font-weight="700" text-anchor="middle">
@@ -2737,7 +2743,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
         <g font-size="11">
           <line x1="60"  y1="244" x2="80" y2="244" stroke="var(--accent)" stroke-width="3"/>
           <text x="86" y="248" fill="var(--text2)">Margen mobile-first (app nativa · 99% móvil)</text>
-          <text x="430" y="248" fill="var(--muted)" font-style="italic">Se mantiene plano ~94% a toda escala · la IA escala lineal con ingresos</text>
+          <text x="430" y="248" fill="var(--muted)" font-style="italic">Se mantiene plano ~86% a toda escala · la IA escala lineal con ingresos</text>
         </g>
       </svg>
     </div>
@@ -2745,14 +2751,14 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
 
   <div class="cols" style="margin-bottom:32px">
     <div class="arch-card">
-      <div class="arch-card-header"><div class="arch-card-title">Lecturas clave · mobile-first (rev. 13-jun · precios reales Pro 9,99 / one-off 4,99)</div></div>
+      <div class="arch-card-header"><div class="arch-card-title">Lecturas clave · mobile-first (rev. 27-jul · precios Pro 4,99/mes · 34,99/año · Mes suelto 6,99 · Regen 1,99)</div></div>
       <div style="padding:16px 20px;font-size:.78rem;color:var(--text2);line-height:1.7">
-        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Break-even ~10 DAU</strong> · 1 Pro (8,49 € neto) + 1-2 regeneraciones (4,24 € netas) cubren los ~9 € de fijos (Apple+Google+dominio)</p>
-        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Margen ~94% PLANO a cualquier escala</strong> · con la app optimizada (getDoc), Firestore es marginal (~€26/mes a 10K DAU). El coste lo domina la IA (Gemini, ~87%), que escala lineal con los ingresos → el margen no se cae al crecer. El cambio a 3.1-flash-lite (30-jun) ahorra ~2,21× en IA vs 2.5-flash. Beneficio positivo desde Beta</p>
+        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Break-even ~15 DAU</strong> · 1 Pro (4,24 € neto) + ~3 regeneraciones (1,69 € netas) cubren los ~9 € de fijos (Apple+Google+dominio)</p>
+        <p style="margin-bottom:10px"><strong style="color:var(--accent)">Margen ~86% PLANO a cualquier escala</strong> · con la app optimizada (getDoc), Firestore es marginal (~€26/mes a 10K DAU). El coste lo domina la IA (Gemini, ~87%), que escala lineal con los ingresos → el margen no se cae al crecer. El cambio a 3.1-flash-lite (30-jun) ahorra ~2,21× en IA vs 2.5-flash. Beneficio positivo desde Beta</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">App Check nativo = 0 €/mes ilimitado</strong> · DeviceCheck (iOS) / Play Integrity (Android) hardware-attested · UX cero fricción · sin coste de reCAPTCHA Enterprise (solo lo usaría el 1% web)</p>
         <p style="margin-bottom:10px"><strong style="color:var(--accent)">Crash + analytics = 0 €/mes</strong> · crashes en <strong>Sentry</strong> (plan free 5k errores/mes, región EU, sin PII) + Firebase Analytics forever-free unlimited para métricas de producto (parte del Blaze) · sin cookies via IDFV/GAID</p>
-        <p style="margin-bottom:10px"><strong style="color:var(--accent3)">App NATIVA, no web (99% móvil / 1% web)</strong> · pagos por IAP Apple/Google (15% ya en el ARPU neto 8,49 €) · <strong>0 € de comisiones de pasarela externa</strong>, App Check nativo gratis, hosting casi nulo (la app empaqueta sus assets). El canal es el móvil.</p>
-        <p><strong style="color:var(--accent3)">La IA (Gemini) es el ~87% del coste a 10K DAU</strong> (~€759 con 3.1-flash-lite · €0,023/gen medido · sin free tier · escala con el uso). Firestore corregido a ~€26 (app optimizada · getDoc). Palanca #1 = prompt de menú más corto (9.431 tokens entrada) + modelo más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo)</p>
+        <p style="margin-bottom:10px"><strong style="color:var(--accent3)">App NATIVA, no web (99% móvil / 1% web)</strong> · pagos por IAP Apple/Google (15% ya en el ARPU neto 4,24 €) · <strong>0 € de comisiones de pasarela externa</strong>, App Check nativo gratis, hosting casi nulo (la app empaqueta sus assets). El canal es el móvil.</p>
+        <p><strong style="color:var(--accent3)">La IA (Gemini) es el ~87% del coste a 10K DAU</strong> (~€759 con 3.1-flash-lite · €0,0265/gen «Todo» medido · sin free tier · escala con el uso). Firestore corregido a ~€26 (app optimizada · getDoc). Palanca #1 = prompt de menú más corto (9.431 tokens entrada) + modelo más barato para Free (el aporte lo garantiza el ajuste de gramos con OpenFoodFacts, no el modelo)</p>
       </div>
     </div>
     <div class="arch-card">
@@ -2833,7 +2839,7 @@ details[open].status-banner>summary.status-banner-summary::before{content:'▾ '
       <div class="step-left"><div class="num amber">06</div><div class="vline"></div></div>
       <div class="step-body">
         <div class="step-title">Annual Plan IAP + Family Sharing strategy <span class="step-tag tag-new">Monetización</span></div>
-        <div class="step-desc">Estrategia futura: plan anual con descuento en App Store / Play Store con auto-renew + <strong style="color:var(--accent)">Apple Family Sharing</strong> (1 sub Pro = compartida con hasta 5 family members · marketing "Plan familiar incluido" reduce fricción de conversión) para subir retención y ARPU. <strong style="color:var(--accent)">Auto-renew nativo</strong>: churn bajísimo (Apple/Google avisan al user de la renovación con su flujo nativo de gestión de suscripciones). <strong style="color:var(--accent3)">Re-precio pendiente</strong>: hoy Pro es 9,99 €/mes sin plan anual · el precio del anual se decidirá con datos reales de conversión.</div>
+        <div class="step-desc">Estrategia futura: <strong style="color:var(--accent)">Apple Family Sharing</strong> (1 sub Pro = compartida con hasta 5 family members · marketing "Plan familiar incluido" reduce fricción de conversión) para subir retención y ARPU. <strong style="color:var(--accent)">Auto-renew nativo</strong>: churn bajísimo (Apple/Google avisan al user de la renovación con su flujo nativo de gestión de suscripciones). <strong style="color:var(--accent)">Re-precio HECHO (27-jul)</strong>: Pro 4,99 €/mes + anual 34,99 € (−42%) + mes suelto 6,99 € · regeneración 1,99 €. Se decidió con el coste medido, sin esperar datos de conversión.</div>
       </div>
     </div>
 
@@ -3070,7 +3076,7 @@ var INITIAL_CHECKS = {
   // FASE 7 · Monetización — TODO el código está hecho (latente hasta tener cuentas/claves).
   // Pendientes solo los externos: 7-0 (cuentas), 7-1 (productos en stores), 7-2 (offerings RC), 7-7 (test sandbox).
   '7-3': true,  // SDK react-native-purchases instalado + configureRevenueCat/Purchases.configure codificado (lazy import anti-crash · src/btal/revenueCat.ts).
-  '7-4': true,  // Paywall + compra: UpgradeSheet (4,99€ regen / 9,99€ Pro) + promptLockedAi al agotar el Free + promptPurchase→purchasePackage. Codificado (latente hasta claves).
+  '7-4': true,  // Paywall + compra: UpgradeSheet (1,99€ regen / 4,99€ Pro mes / 34,99€ año / 6,99€ mes suelto) + promptLockedAi al agotar el Free + promptPurchase→purchasePackage. Codificado (latente hasta claves).
   '7-5': true,  // webhook RevenueCat → Firestore: CÓDIGO escrito + DESPLEGADO en producción (revenueCatWebhook · secret v2 enlazado). Solo falta pegar la URL+secreto en RevenueCat.
   '7-6': true,  // Restaurar compras cableado en Ajustes (settings.tsx · restorePurchases) + Sign in with Apple código (ver 9-7). Requisitos de Apple, ya codificados.
 
